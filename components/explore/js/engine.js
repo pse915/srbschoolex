@@ -19,7 +19,8 @@
   function resize() {
     if (!cv) return;
     var w = cv.clientWidth || window.innerWidth, h = cv.clientHeight || window.innerHeight;
-    E.zoom = Math.max(1, Math.floor(h / 560));
+    // close-up: at least 2x on normal screens (characters were too small at 1x); 3x on tall (1080p+) screens
+    E.zoom = h < 480 ? 1 : Math.max(2, Math.floor(h / 400));
     cv.width = Math.ceil(w / E.zoom); cv.height = Math.ceil(h / E.zoom);
     ctx.imageSmoothingEnabled = false;
   }

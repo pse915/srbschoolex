@@ -23,6 +23,7 @@ const OUT='docs/screenshots-explore', URL_=(process.env.EXPLORE_URL||'http://127
  await page.locator('#btnStart').click();
  await page.waitForFunction(()=>__explore.E.map&&__explore.E.map.id==='school'&&!__explore.E.paused);
  await shot('02-school-start');
+ assert.ok(await page.evaluate(()=>__explore.E.zoom)>=2,'close-up zoom');
  // no story / quest / guide UI anywhere
  for(const sel of ['#mission','#guideBtn','#storyBtn','#diaryBtn','#activityBtn'])assert.equal(await page.locator(sel).count(),0,sel);
  const body=await page.locator('body').innerText();
@@ -73,6 +74,21 @@ const OUT='docs/screenshots-explore', URL_=(process.env.EXPLORE_URL||'http://127
  assert.match(await page.locator('#mapInfo h3').innerText(),/글빛도서관/);
  await page.check('#routeToggle');await shot('16-map-search-route');
  assert.ok((await page.locator('#routeSteps li').count())>=2);
+ await page.locator('#mapClose').click();
+ // 1 minute without input -> school map (교정 tab)
+ await page.evaluate(()=>{__explore.G.idle.last=Date.now()-61000;});
+ await page.waitForFunction(()=>!document.getElementById('mapview').hidden&&document.querySelector('#mapTabs button[aria-selected=true]').dataset.tab==='0',null,{timeout:5000});
+ await shot('18-idle-to-school-map');
+ // tap 본관 on the 교정 map -> 1층 plan with the main wing highlighted
+ const xy=await page.evaluate(()=>{const S=__explore.data.school,sc=S.displayScale,a=S.areas.find(a=>a.name==='본관');
+   const imgs=S.images.filter(i=>i.image.indexOf('gate')<0);let X0=1e9,Y0=1e9,X1=-1e9;imgs.forEach(i=>{X0=Math.min(X0,i.x*32);Y0=Math.min(Y0,i.y*32);X1=Math.max(X1,i.x*32+i.w);});X0-=40;Y0-=30;X1+=40;
+   const c=document.getElementById('mapCanvas'),r=c.getBoundingClientRect(),k=c.width/((X1-X0)/sc);
+   const xs=a.outline.map(t=>t[0]),ys=a.outline.map(t=>t[1]),tx=(Math.min(...xs)+Math.max(...xs))/2+4,ty=(Math.min(...ys)+Math.max(...ys))/2;
+   return {x:r.left+(tx*32-X0)/sc*k*r.width/c.width,y:r.top+(ty*32-Y0)/sc*k*r.height/c.height};});
+ await page.mouse.click(xy.x,xy.y);
+ await page.waitForFunction(()=>document.querySelector('#mapTabs button[aria-selected=true]').dataset.tab==='1');
+ assert.match(await page.locator('#mapInfo h3').innerText(),/본관 1층/);
+ await shot('19-tap-main-wing-to-1f');
  await page.locator('#mapClose').click();
  // standalone map (?map): signage / Streamlit map mode
  await page.goto(URL_+'/?map');await page.waitForFunction(()=>window.__explore&&!document.getElementById('mapview').hidden);

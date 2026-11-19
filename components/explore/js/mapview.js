@@ -30,13 +30,13 @@
 
   MV.show = function (opts) {
     opts = opts || {};
-    MV.open = true; MV.standalone = !!opts.standalone; MV.pin = opts.pin || null;
+    MV.open = true; MV.standalone = !!opts.standalone; MV.pin = opts.pin || null; MV.wing = null;
     U.$('mapview').hidden = false; U.$('mapClose').hidden = MV.standalone;
     U.$('routeToggle').checked = false; U.$('routeSteps').innerHTML = '';
     var tab = opts.tab != null ? opts.tab : (MV.pin ? MV.pin.floor : 1);
     MV.setTab(tab);
     if (opts.focus) MV.select(byId(opts.focus));
-    loop();
+    cancelAnimationFrame(raf); loop();
   };
   MV.close = function () {
     MV.open = false; U.$('mapview').hidden = true; cancelAnimationFrame(raf);
@@ -50,7 +50,7 @@
   };
   function byId(id) { for (var i = 0; i < D.places.length; i++) if (D.places[i].id === id) return D.places[i]; return null; }
   MV.byId = byId;
-  function loop() { blink += 1; if (MV.selected && blink % 20 === 0) render(); raf = requestAnimationFrame(loop); }
+  function loop() { blink += 1; if ((MV.selected || MV.wing) && blink % 20 === 0) render(); raf = requestAnimationFrame(loop); }
 
   /* ---------- layout & drawing ---------- */
   function fitScale(w, h) {
@@ -161,6 +161,14 @@
       var box = U.$('mapNumbers'); box.appendChild(U.el('b', null, '번호로 표시한 좁은 칸'));
       nums.forEach(function (it) { var d = U.el('div', null, it[0] + '. ' + it[1].label); d.onclick = function () { MV.select(it[1]); }; box.appendChild(d); });
     }
+    if (MV.wing && !MV.selected && MV.wing.floor === f) {
+      var bx0 = 1e9, by0 = 1e9, bx1 = -1e9, by1 = -1e9;
+      D.places.forEach(function (p) {
+        if (p.floor !== f || p.wing !== MV.wing.wing || !p.polygon) return;
+        bx0 = Math.min(bx0, p.polygon[0][0]); by0 = Math.min(by0, p.polygon[0][1]); bx1 = Math.max(bx1, p.polygon[2][0]); by1 = Math.max(by1, p.polygon[2][1]);
+      });
+      if (bx1 > bx0) { ctx.strokeStyle = blink % 40 < 20 ? '#96483a' : '#c08070'; ctx.lineWidth = 4; ctx.strokeRect(X(bx0) - 3, X(by0) - 3, X(bx1) - X(bx0) + 6, X(by1) - X(by0) + 6); }
+    }
     drawRoute(f, X);
     if (MV.pin && MV.pin.floor === f && MV.pin.m) pinAt(X(MV.pin.m[0]), X(MV.pin.m[1]), k);
   }
@@ -205,12 +213,36 @@
         var d = Math.hypot(view.px(p.tile[0] + 0.5) - x, view.py(p.tile[1]) - y);
         if (d < bd) { bd = d; hit = p; }
       });
+      if (!hit) {                                     // tapped a wing of the building -> its floor-1 plan
+        var areas = D.school.areas || [];
+        for (var i = 0; i < areas.length; i++) {
+          var poly = areas[i].outline.map(function (t) { return [view.px(t[0]), view.py(t[1])]; });
+          if (inside(poly, x, y)) { MV.showWing(areas[i]); return; }
+        }
+      }
     }
     if (hit) MV.select(hit);
   }
+  function inside(poly, x, y) {
+    var c = false;
+    for (var i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      var a = poly[i], b = poly[j];
+      if ((a[1] > y) !== (b[1] > y) && x < (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1]) + a[0]) c = !c;
+    }
+    return c;
+  }
+  MV.showWing = function (area) {
+    MV.selected = null; MV.wing = area; MV.lastFloor = area.floor;
+    U.$('routeSteps').innerHTML = ''; MV.route = null;
+    MV.setTab(area.floor);
+    var box = U.$('mapInfo'); box.innerHTML = '';
+    box.appendChild(U.el('h3', null, area.name + ' ' + area.floor + '층'));
+    var n = D.places.filter(function (p) { return p.floor === area.floor && p.wing === area.wing && (p.kind === 'room' || p.kind === 'restroom') && p.visible; }).length;
+    box.appendChild(U.el('p', null, area.name + ' ' + area.floor + '층에는 실이 ' + n + '곳 있어요. 지도에서 실을 누르면 정보가 나와요. 다른 층은 위 탭에서 고르세요.'));
+  };
   MV.select = function (p) {
     if (!p) return;
-    MV.selected = p;
+    MV.selected = p; MV.wing = null;
     if (p.floor >= 1) MV.lastFloor = p.floor;
     if (MV.tab !== 'stack' && MV.tab !== p.floor) MV.tab = p.floor;
     MV.setTab(MV.tab);

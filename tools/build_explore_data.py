@@ -243,6 +243,25 @@ def build():
     def w2t(x, y, z=0):
         return [round(so_t['x'] + pr['s'] * (x - pr['kx'] * y) * sc / 32, 2), round(so_t['y'] + pr['s'] * (pr['ky'] * y - z) * sc / 32, 2)]
     g = fp['geometry']
+    def hull(pts):
+        pts = sorted(set(map(tuple, pts)))
+        cross = lambda o, a, b: (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+        lo, up = [], []
+        for p_ in pts:
+            while len(lo) >= 2 and cross(lo[-2], lo[-1], p_) <= 0: lo.pop()
+            lo.append(p_)
+        for p_ in reversed(pts):
+            while len(up) >= 2 and cross(up[-2], up[-1], p_) <= 0: up.pop()
+            up.append(p_)
+        return [list(p_) for p_ in lo[:-1] + up[:-1]]
+
+    def box_outline(x0, x1, y0, y1, h):   # screen outline (tile coords) of a building box, walls + roof
+        return hull([w2t(x, y, z) for x in (x0, x1) for y in (y0, y1) for z in (0, h)])
+    # tap areas on the 교정 map: the wing opens its floor-1 plan (본관 / 서쪽 동 / 목련관 is a place)
+    data['school']['areas'] = [
+        {'name': '본관', 'floor': 1, 'wing': 'main', 'outline': box_outline(g['D'], g['L1'], 0, g['D'], g['H4'])},
+        {'name': '서쪽 동', 'floor': 1, 'wing': 'west', 'outline': box_outline(0, g['D'], 0, g['D'] + g['L2'], g['H4'])},
+    ]
     data['school']['labels'] = [
         {'text': '본관', 'tile': w2t(g['D'] + 44, g['D'] * 0.5, g['H4'] + 1)},
         {'text': '서쪽 동', 'tile': w2t(g['D'] * 0.5, g['D'] + 22, g['H4'] + 1)},
