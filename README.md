@@ -120,6 +120,10 @@ python tests/check_connectivity.py
 
 Node 20 이상을 권장합니다. 테스트에는 243개 선택 조합, 중복 선택 방지, 충돌 경로, 저장 인증·revision·전송 실패와 재시도, 맵 연결 검사가 포함됩니다. 브라우저 검사에는 Playwright와 Chrome/WebKit을 사용했습니다. 세부 한계는 `docs/QA.md`를 확인하세요.
 
+## 서라벌 탐방 (새 게임) + 학교 전체 지도
+
+`components/explore/`는 기존 생애설계 게임과 분리된 학교 탐방 게임입니다. 스토리·퀴즈·길 안내 화살표 없이 장소 카드를 모으고 찾아가기 미션을 하며, 학교 전체 지도(교정·1~4층·입체, 검색, 현관에서 가는 길)를 볼 수 있습니다. Streamlit 사이드바의 기본 화면이며, 정적 서버에서 `?map`으로 열면 지도만 나옵니다. 자세한 내용은 `docs/EXPLORE-REPORT.md`를 보세요.
+
 ## 학교 외관·배치 다시 만들기 (v6)
 
 학교 외관은 이미지 AI가 아니라 코드 픽셀아트 `tools/school_art.py`가 원본이고, 실 배치는 `data/school_layout.json` 한 파일이 원본입니다. 둘 중 하나를 고친 뒤 아래 순서로 다시 만듭니다.
@@ -127,6 +131,7 @@ Node 20 이상을 권장합니다. 테스트에는 243개 선택 조합, 중복 
 ```bash
 python tools/school_art.py --out components/rpg_game/assets --only all
 python build_world.py
+python tools/build_explore_data.py
 python tools/asset_manifest.py
 python tools/check_maps.py
 ```

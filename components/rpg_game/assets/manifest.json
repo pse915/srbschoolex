@@ -263,6 +263,14 @@
       "source": false
     },
     {
+      "file": "map-pin.png",
+      "width": 12,
+      "height": 18,
+      "mode": "RGBA",
+      "sha256": "12b3baf24c0382eae7bdfba0cbaba635123013c2d1f2dc48f96db8966abea94d",
+      "source": false
+    },
+    {
       "file": "npcs-source.png",
       "width": 1402,
       "height": 1122,
@@ -364,6 +372,46 @@
       "height": 344,
       "mode": "RGBA",
       "sha256": "7253657e24c20cd14bd0beb151114ba954636abca562b3bc34405606e78e13a0",
+      "source": false
+    },
+    {
+      "file": "stack-floor-1.png",
+      "width": 588,
+      "height": 434,
+      "mode": "RGBA",
+      "sha256": "70346df66eef65d005a7b52fe3b123366a8334ea5fb34ed9d907eca84f7f4961",
+      "source": false
+    },
+    {
+      "file": "stack-floor-2.png",
+      "width": 588,
+      "height": 434,
+      "mode": "RGBA",
+      "sha256": "7cc98f982922eee74f731c80ac4ad0babec6c179748f306ce6c66963f0f203d1",
+      "source": false
+    },
+    {
+      "file": "stack-floor-3.png",
+      "width": 588,
+      "height": 434,
+      "mode": "RGBA",
+      "sha256": "dda401509205dbf65bca55756df8ba314579f8313f86e76019992b19c34587ac",
+      "source": false
+    },
+    {
+      "file": "stack-floor-4.png",
+      "width": 588,
+      "height": 434,
+      "mode": "RGBA",
+      "sha256": "3fc944bc114ba7909c95feded634ececb04308c65187a29ce034b28ab42b6f33",
+      "source": false
+    },
+    {
+      "file": "stamp.png",
+      "width": 32,
+      "height": 32,
+      "mode": "RGBA",
+      "sha256": "f7748002a939c7f53d25386fdc38244f35ff62bd639e89080c67a1e05dcbf019",
       "source": false
     },
     {

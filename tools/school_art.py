@@ -1149,6 +1149,82 @@ def footprint(metas):
     }
 
 
+# ---------------- explore game / school map extras ----------------
+STACK_S, STACK_GAP = 4, 20.0          # px per m, vertical gap between floors (m) in the stacked map
+
+
+def stack_extent():
+    """Canvas size and origin shared by the four stack layers (so they line up)."""
+    zmax = STACK_GAP * 3 + 2
+    W = int(STACK_S * (L1 + KX * (D + L2))) + 24
+    H = int(STACK_S * (KY * (D + L2) + zmax)) + 24
+    ox = int(STACK_S * KX * (D + L2)) + 12
+    oy = int(STACK_S * zmax) + 12
+    return W, H, ox, oy
+
+
+def render_stack_layer(plan, f):
+    """One floor of the 'stacked floors' map: the floor plan laid on the ground plane at height (f-1)*GAP."""
+    W, H, ox, oy = stack_extent()
+    P = _proj(STACK_S, ox, oy)
+    im = Image.new('RGBA', (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    z = (f - 1) * STACK_GAP
+    t = 0.8                                        # slab thickness (m)
+    quad = lambda r, zz: [P(r[0], r[1], zz), P(r[2], r[1], zz), P(r[2], r[3], zz), P(r[0], r[3], zz)]
+    wings = [[0, 0, L1, D], [0, D, D, plan['westEnd'] if f == 4 else D + L2]]
+    for r in wings:                                 # slab edges (south and east faces)
+        d.polygon([P(r[0], r[3], z), P(r[2], r[3], z), P(r[2], r[3], z - t), P(r[0], r[3], z - t)], fill=shade(BRICK, 0.9))
+        d.polygon([P(r[2], r[1], z), P(r[2], r[3], z), P(r[2], r[3], z - t), P(r[2], r[1], z - t)], fill=shade(BRICK, 0.75))
+    for r in wings:
+        d.polygon(quad(r, z), fill=BRICK_D)
+    for r in plan['corridors']:
+        d.polygon(quad(r, z), fill=PLAN_FLOOR)
+    for e in plan['items']:
+        k = e['kind']
+        if k == 'void':
+            continue
+        col = {'gap': shade(PLAN_SERVICE, 0.9), 'stair': COPING, 'ev': CANOPY, 'lobby': PLAN_LOBBY}.get(
+            k, CAT_COLOR.get(e.get('category'), PLAN_SERVICE))
+        d.polygon(quad(e['rect'], z), fill=col, outline=BRICK_D)
+    return im
+
+
+def render_pin():
+    """'지금 여기' map pin, 12x18 px (tip at the bottom centre)."""
+    im = Image.new('RGBA', (12, 18), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.ellipse((0, 0, 11, 11), fill=BRICK_D)
+    d.ellipse((1, 1, 10, 10), fill=BRICK_L)
+    d.polygon([(2, 8), (9, 8), (6, 17), (5, 17)], fill=BRICK_D)
+    d.polygon([(3, 8), (8, 8), (6, 15), (5, 15)], fill=BRICK_L)
+    d.ellipse((3, 3, 8, 8), fill=FRAME)
+    return im
+
+
+def render_stamp():
+    """Round school stamp (32x32) awarded for a found place: brick ring with the ┌ building in the middle."""
+    im = Image.new('RGBA', (32, 32), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.ellipse((0, 0, 31, 31), fill=BRICK_D)
+    d.ellipse((2, 2, 29, 29), fill=COPING)
+    d.ellipse((4, 4, 27, 27), outline=BRICK, width=2)
+    d.rectangle((9, 10, 23, 14), fill=BRICK)                # main wing
+    d.rectangle((9, 10, 13, 23), fill=BRICK)                # west wing (┌)
+    d.rectangle((11, 21, 13, 23), fill=VAULT_C)             # arch roof end
+    for x in (15, 18, 21):
+        d.point((x, 12), fill=FRAME)
+    return im
+
+
+def explore_images(layout):
+    plans = all_plans(layout)
+    out = {f'stack-floor-{f}': render_stack_layer(p, f) for f, p in plans.items()}
+    out['map-pin'] = render_pin()
+    out['stamp'] = render_stamp()
+    W, H, ox, oy = stack_extent()
+    meta = {'stack': {'size': [W, H], 'origin': [ox, oy], 's': STACK_S, 'gap': STACK_GAP,
+                      'formula': 'X = origin.x + s*(x - kx*y), Y = origin.y + s*(ky*y - (floor-1)*gap)'}}
+    return out, meta
+
+
 # ---------------- CLI ----------------
 def _save(img, path, written):
     img.save(path, format='PNG')
@@ -1163,7 +1239,7 @@ def _save_json(obj, path, written):
 def main(argv=None):
     ap = argparse.ArgumentParser(description='서라벌여중 코드 픽셀아트 (학교 외관·폐허·대기화면·층 평면도)')
     ap.add_argument('--out', default=str(ROOT / 'components' / 'rpg_game' / 'assets'))
-    ap.add_argument('--only', default='all', choices=['sprite', 'ruin', 'hero', 'props', 'plans', 'all'])
+    ap.add_argument('--only', default='all', choices=['sprite', 'ruin', 'hero', 'props', 'plans', 'explore', 'all'])
     ap.add_argument('--layout', default=str(LAYOUT_PATH))
     args = ap.parse_args(argv)
     out = Path(args.out); out.mkdir(parents=True, exist_ok=True)
@@ -1194,6 +1270,11 @@ def main(argv=None):
             _save(im, out / f'floor-plan-{f}.png', written)
             _save(im.resize((im.width * 3, im.height * 3), Image.NEAREST), out / f'floor-plan-{f}@3x.png', written)
         _save_json(kiosk_plan(layout, plans, fp), out / 'kiosk-plan.json', written)
+    if want('explore'):
+        imgs, meta = explore_images(load_layout(args.layout))
+        for name, img in imgs.items():
+            _save(img, out / f'{name}.png', written)
+        _save_json(meta, out / 'explore-art.json', written)
     for p in written:
         print(f'{hashlib.sha256(Path(p).read_bytes()).hexdigest()[:16]}  {Path(p).name}')
 

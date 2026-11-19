@@ -36,7 +36,7 @@
 ## 4. 알아 둘 점
 - **서버 저장은 임시입니다.** Community Cloud의 디스크(`private_data/progress.sqlite3`)는 앱이 재시작되면 사라질 수 있습니다. 오래 보관할 기록은 Google Sheets 연동을 켜거나, 학생이 다이어리에서 백업 JSON을 내려받게 하세요.
 - **잠자기:** 며칠 접속이 없으면 앱이 잠듭니다. 처음 연 사람이 **Yes, get this app back up!**을 누르면 1분쯤 뒤 다시 켜집니다. 수업 직전에 미리 한 번 열어 두세요.
-- **화면 구성:** 왼쪽 사이드바에서 **게임** / **교사용 대시보드**를 고릅니다.
+- **화면 구성:** 왼쪽 사이드바에서 **학교 탐방 게임(새)**(기본) / **학교 전체 지도** / **생애설계 게임(기존)** / **교사용 대시보드**를 고릅니다. 새 게임과 지도는 서버 저장 없이 기기에만 기록합니다.
 - **공개 범위:** 이 저장소는 공개 저장소입니다. 앱도 기본으로 누구나 열 수 있습니다. 앱 접근을 제한하려면 **Settings → Sharing**에서 **Only specific people**로 바꾸고 이메일을 추가합니다.
 
 ## 5. 고친 내용을 앱에 반영하기
@@ -46,6 +46,7 @@
 ```bash
 python tools/school_art.py --out components/rpg_game/assets --only all
 python build_world.py
+python tools/build_explore_data.py
 python tools/asset_manifest.py
 python tools/check_maps.py
 ```

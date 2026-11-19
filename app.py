@@ -23,7 +23,12 @@ def sheets():
     return Sheets(creds, sid) if creds and sid else None
 
 db = store()
-mode = st.sidebar.radio('화면', ['게임', '교사용 대시보드'])
+mode = st.sidebar.radio('화면', ['학교 탐방 게임(새)', '학교 전체 지도', '생애설계 게임(기존)', '교사용 대시보드'])
+if mode in ('학교 탐방 게임(새)', '학교 전체 지도'):
+    # 새 탐방 게임 (components/explore): 서버 저장 없이 기기에만 기록. 지도 화면은 같은 앱의 지도 모드.
+    explore = components.declare_component('seorabeol_explore', path=str(ROOT/'components/explore'))
+    explore(mode='map' if mode == '학교 전체 지도' else 'game', key='explore_' + ('map' if mode == '학교 전체 지도' else 'game'), default=None)
+    st.stop()
 if mode == '교사용 대시보드':
     st.title('함께 걸어온 이야기')
     configured = secret('teacher_password')

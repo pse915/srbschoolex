@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>서라벌 탐방</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main id="app">
+  <!-- 게임 화면 -->
+  <section id="play" hidden>
+    <canvas id="world" aria-label="학교를 걸어 다니는 게임 화면"></canvas>
+    <header class="hud">
+      <div class="where"><span class="seal">서</span><b id="where">서라벌여중 · 교정</b></div>
+      <div id="missionBar" class="mission" hidden></div>
+      <nav class="hud-buttons">
+        <button id="btnMap" type="button">지도</button>
+        <button id="btnBook" type="button">도감 <span id="bookCount">0</span></button>
+        <button id="btnMission" type="button">찾아가기</button>
+        <button id="btnMenu" type="button">메뉴</button>
+      </nav>
+    </header>
+    <canvas id="mini" width="144" height="144" aria-label="미니맵"></canvas>
+    <div class="pad" id="pad" aria-label="방향 패드">
+      <button data-dir="up" type="button" aria-label="위">▲</button>
+      <button data-dir="left" type="button" aria-label="왼쪽">◀</button>
+      <button data-dir="right" type="button" aria-label="오른쪽">▶</button>
+      <button data-dir="down" type="button" aria-label="아래">▼</button>
+    </div>
+    <button id="btnAct" class="act" type="button" hidden>말 걸기</button>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </section>
+
+  <!-- 시작 화면 -->
+  <section id="title" class="title-screen">
+    <div class="title-card">
+      <small>우리 학교를 직접 걸어 보는</small>
+      <h1>서라벌 탐방</h1>
+      <p>캐릭터를 고르고 학교 곳곳을 찾아가 장소 카드를 모아 보세요.</p>
+      <div id="avatars" class="avatars" role="radiogroup" aria-label="캐릭터 고르기"></div>
+      <div class="title-actions">
+        <button id="btnStart" class="primary" type="button">탐방 시작</button>
+        <button id="btnTitleMap" type="button">학교 전체 지도</button>
+      </div>
+      <p class="note" id="titleNote"></p>
+    </div>
+  </section>
+
+  <!-- 학교 전체 지도 -->
+  <section id="mapview" class="mapview" hidden>
+    <header class="map-head">
+      <h2>학교 전체 지도</h2>
+      <div class="tabs" id="mapTabs" role="tablist"></div>
+      <button id="mapClose" class="close" type="button">닫기</button>
+    </header>
+    <div class="map-body">
+      <div class="map-stage" id="mapStage"><canvas id="mapCanvas"></canvas></div>
+      <aside class="map-side">
+        <input id="mapSearch" type="search" placeholder="장소 찾기 (예: 위클래스, 도서관)" autocomplete="off" aria-label="장소 검색">
+        <div id="mapResults" class="results"></div>
+        <div id="mapInfo" class="info"><p class="muted">지도에서 장소를 누르거나 검색해 보세요.</p></div>
+        <label class="route-toggle"><input type="checkbox" id="routeToggle"> 현관에서 가는 길 보기</label>
+        <label class="route-toggle"><input type="checkbox" id="evToggle"> 엘리베이터로 가기</label>
+        <ol id="routeSteps" class="steps"></ol>
+        <div id="mapLegend" class="legend"></div>
+        <div id="mapNumbers" class="numbers"></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- 창 (카드, 대화, 층 선택, 도감, 결과, 메뉴) -->
+  <div id="modal" class="modal" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h2 id="modalTitle"></h2>
+      <div id="modalBody"></div>
+      <div id="modalActions" class="actions"></div>
+    </div>
+  </div>
+</main>
+<script src="js/util.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/mapview.js"></script>
+<script src="js/game.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

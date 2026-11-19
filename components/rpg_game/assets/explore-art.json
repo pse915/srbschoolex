@@ -1,0 +1,15 @@
+{
+ "stack": {
+  "size": [
+   588,
+   434
+  ],
+  "origin": [
+   160,
+   260
+  ],
+  "s": 4,
+  "gap": 20.0,
+  "formula": "X = origin.x + s*(x - kx*y), Y = origin.y + s*(ky*y - (floor-1)*gap)"
+ }
+}
