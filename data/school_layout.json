@@ -94,7 +94,6 @@
           {"id": "room-2-13", "name": "체력단련실", "category": "special", "span": 1.5}
         ],
         "outer": [
-          {"id": "room-2-14", "name": "화장실", "category": "restroom", "anchor": "westWC"},
           {"gap": 1}
         ]
       },
@@ -113,6 +112,7 @@
           {"anchor": "mainEndStair"}
         ],
         "outer": [
+          {"id": "room-2-14", "name": "화장실", "category": "restroom"},
           {"gap": 1},
           {"anchor": "ev"},
           {"id": "room-2-16", "name": "홈베이스", "category": "service"},
@@ -134,7 +134,6 @@
           {"id": "room-3-11", "name": "다목적실", "category": "special", "span": 2}
         ],
         "outer": [
-          {"id": "room-3-13", "name": "화장실", "category": "restroom", "anchor": "westWC"},
           {"gap": 1}
         ]
       },
@@ -155,6 +154,7 @@
           {"anchor": "mainEndStair"}
         ],
         "outer": [
+          {"id": "room-3-13", "name": "화장실", "category": "restroom"},
           {"gap": 1},
           {"anchor": "ev"},
           {"id": "room-3-15", "name": "홈베이스", "category": "service"},
@@ -178,7 +178,6 @@
            "description": "아치 지붕 구역으로 4층이 없는 것으로 추정. 교사 확인 필요"}
         ],
         "outer": [
-          {"id": "room-4-12", "name": "화장실", "category": "restroom", "anchor": "westWC"},
           {"gap": 1}
         ]
       },
@@ -197,6 +196,7 @@
           {"anchor": "mainEndStair"}
         ],
         "outer": [
+          {"id": "room-4-12", "name": "화장실", "category": "restroom"},
           {"gap": 1},
           {"anchor": "ev"},
           {"id": "room-4-13", "name": "홈베이스", "category": "service"},
