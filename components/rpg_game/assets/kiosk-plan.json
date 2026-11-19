@@ -315,43 +315,6 @@
      "node": "1:room-1-17"
     },
     {
-     "id": "room-1-15",
-     "floor": 1,
-     "name": "화장실",
-     "label": "화장실",
-     "kind": "restroom",
-     "category": "restroom",
-     "wing": "west",
-     "side": "outer",
-     "polygon": [
-      [
-       0.0,
-       18.0
-      ],
-      [
-       7.0,
-       18.0
-      ],
-      [
-       7.0,
-       26.0
-      ],
-      [
-       0.0,
-       26.0
-      ]
-     ],
-     "anchor": "westWC",
-     "visible": true,
-     "game": true,
-     "confirmed": true,
-     "door": [
-      7.0,
-      22.0
-     ],
-     "node": "1:room-1-15"
-    },
-    {
      "id": "room-1-8",
      "floor": 1,
      "name": "학습지원실2",
@@ -789,6 +752,42 @@
       10.0
      ],
      "node": "1:stair-mainEndStair"
+    },
+    {
+     "id": "room-1-15",
+     "floor": 1,
+     "name": "화장실",
+     "label": "화장실",
+     "kind": "restroom",
+     "category": "restroom",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       18.0,
+       0.0
+      ],
+      [
+       22.0,
+       0.0
+      ],
+      [
+       22.0,
+       7.0
+      ],
+      [
+       18.0,
+       7.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      20.0,
+      7.0
+     ],
+     "node": "1:room-1-15"
     },
     {
      "id": "ev-ev",
@@ -1279,18 +1278,6 @@
      "kind": "room"
     },
     {
-     "id": "1:c:room-1-15",
-     "x": 8.5,
-     "y": 22.0,
-     "kind": "corridor"
-    },
-    {
-     "id": "1:room-1-15",
-     "x": 7.0,
-     "y": 22.0,
-     "kind": "restroom"
-    },
-    {
      "id": "1:c:room-1-8",
      "x": 23.917,
      "y": 8.5,
@@ -1433,6 +1420,18 @@
      "x": 101.25,
      "y": 10.0,
      "kind": "stair"
+    },
+    {
+     "id": "1:c:room-1-15",
+     "x": 20.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-15",
+     "x": 20.0,
+     "y": 7.0,
+     "kind": "restroom"
     },
     {
      "id": "1:c:ev-ev",
@@ -1597,11 +1596,6 @@
      1.5
     ],
     [
-     "1:c:room-1-15",
-     "1:room-1-15",
-     1.5
-    ],
-    [
      "1:c:room-1-8",
      "1:room-1-8",
      1.5
@@ -1662,6 +1656,11 @@
      1.5
     ],
     [
+     "1:c:room-1-15",
+     "1:room-1-15",
+     1.5
+    ],
+    [
      "1:c:ev-ev",
      "1:ev-ev",
      1.5
@@ -1718,8 +1717,13 @@
     ],
     [
      "1:c:stair-cornerStair",
+     "1:c:room-1-15",
+     6.0
+    ],
+    [
+     "1:c:room-1-15",
      "1:c:room-1-8",
-     9.917
+     3.917
     ],
     [
      "1:c:room-1-8",
@@ -1828,13 +1832,8 @@
     ],
     [
      "1:corner",
-     "1:c:room-1-15",
-     13.5
-    ],
-    [
-     "1:c:room-1-15",
      "1:c:room-1-6",
-     0.167
+     13.667
     ],
     [
      "1:c:room-1-6",

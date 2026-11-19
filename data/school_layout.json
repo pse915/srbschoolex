@@ -47,7 +47,6 @@
           {"id": "room-1-17", "name": "체육교과연구실", "category": "office", "span": 1.2}
         ],
         "outer": [
-          {"id": "room-1-15", "name": "화장실", "category": "restroom", "anchor": "westWC"},
           {"gap": 1}
         ]
       },
@@ -67,6 +66,7 @@
           {"anchor": "mainEndStair"}
         ],
         "outer": [
+          {"id": "room-1-15", "name": "화장실", "category": "restroom"},
           {"gap": 1},
           {"anchor": "ev"},
           {"id": "room-1-18", "name": "회의실/민원면담실", "category": "office", "aliases": ["회의실", "민원면담실"]},

@@ -30,7 +30,7 @@
 ```json
 {"floors":[{"floor":1,
   "west":{"inner":[{"id":"room-1-6","name":"행정자료실","category":"service"}, {"anchor":"westMidStair"}, ...],
-          "outer":[{"id":"room-1-15","name":"화장실","category":"restroom","anchor":"westWC"}, {"gap":1}]},
+          "outer":[{"gap":1}]}  (1층 화장실 room-1-15는 본관 바깥 줄 서쪽 끝으로 옮김),
   "main":{"inner":[..., {"id":"lobby-1","name":"중앙현관","kind":"lobby","anchor":"lobby"}, ...],
           "outer":[{"gap":1}, {"anchor":"ev"}, ..., {"anchor":"centralStair"}, ...]}}],
  "outdoor":[{"id":"place-annex","name":"목련관","site":"annex","aliases":["급식실","강당"]}, ...]}
