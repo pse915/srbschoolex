@@ -12,6 +12,13 @@ window.SRB = SRB;
     return e;
   };
   U.getJSON = function (url) {
+    if (!window.fetch) return new Promise(function (ok, fail) {  // very old built-in browsers
+      var x = new XMLHttpRequest();
+      x.open('GET', url);
+      x.onload = function () { if (x.status >= 200 && x.status < 300) { try { ok(JSON.parse(x.responseText)); } catch (e) { fail(e); } } else fail(new Error(url + ' ' + x.status)); };
+      x.onerror = function () { fail(new Error(url)); };
+      x.send();
+    });
     return fetch(url).then(function (r) { if (!r.ok) throw new Error(url + ' ' + r.status); return r.json(); });
   };
   U.images = {};
