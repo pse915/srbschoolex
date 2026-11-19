@@ -1,0 +1,6574 @@
+{
+ "version": 1,
+ "generator": "tools/school_art.py (from data/school_layout.json)",
+ "units": "m",
+ "axes": "x=동, y=남 (본관 북서쪽 모서리가 원점)",
+ "image": {
+  "pxPerM": 4,
+  "marginM": 4.0,
+  "scale3x": 3,
+  "toPixel": "px = (m + marginM) * pxPerM (@3x 는 다시 3배)"
+ },
+ "gameTiles": {
+  "tilePerM": 1,
+  "marginTiles": 4,
+  "toTile": "tile = marginTiles + floor(m)"
+ },
+ "kiosk": {
+  "floor": 1,
+  "x": 56.0,
+  "y": 11.0,
+  "facing": "north",
+  "node": "1:lobby-1",
+  "note": "사이니지는 1층 중앙현관에서 중앙계단 쪽. 보는 사람은 북쪽(중앙계단)을 바라봄"
+ },
+ "floors": {
+  "1": {
+   "rooms": [
+    {
+     "id": "room-1-6",
+     "floor": 1,
+     "name": "행정자료실",
+     "label": "행정자료실",
+     "kind": "room",
+     "category": "service",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       18.0
+      ],
+      [
+       18.0,
+       18.0
+      ],
+      [
+       18.0,
+       26.333
+      ],
+      [
+       10.0,
+       26.333
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      22.167
+     ],
+     "node": "1:room-1-6"
+    },
+    {
+     "id": "room-1-7",
+     "floor": 1,
+     "name": "학습지원실1",
+     "label": "학습지원실1",
+     "kind": "room",
+     "category": "care",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       26.333
+      ],
+      [
+       18.0,
+       26.333
+      ],
+      [
+       18.0,
+       34.667
+      ],
+      [
+       10.0,
+       34.667
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      30.5
+     ],
+     "node": "1:room-1-7"
+    },
+    {
+     "id": "room-1-3",
+     "floor": 1,
+     "name": "보건실",
+     "label": "보건실",
+     "kind": "room",
+     "category": "care",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       34.667
+      ],
+      [
+       18.0,
+       34.667
+      ],
+      [
+       18.0,
+       43.0
+      ],
+      [
+       10.0,
+       43.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      38.833
+     ],
+     "node": "1:room-1-3"
+    },
+    {
+     "id": "stair-westMidStair",
+     "floor": 1,
+     "name": "계단(서쪽 동)·출입구",
+     "label": "계단(서쪽 동)·출입구",
+     "kind": "stair",
+     "category": "service",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       43.0
+      ],
+      [
+       18.0,
+       43.0
+      ],
+      [
+       18.0,
+       48.0
+      ],
+      [
+       10.0,
+       48.0
+      ]
+     ],
+     "anchor": "westMidStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      45.5
+     ],
+     "node": "1:stair-westMidStair"
+    },
+    {
+     "id": "room-1-16",
+     "floor": 1,
+     "name": "여교사휴게실",
+     "label": "여교사휴게실",
+     "kind": "room",
+     "category": "service",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       48.0
+      ],
+      [
+       18.0,
+       48.0
+      ],
+      [
+       18.0,
+       52.333
+      ],
+      [
+       10.0,
+       52.333
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      50.167
+     ],
+     "node": "1:room-1-16"
+    },
+    {
+     "id": "room-1-5",
+     "floor": 1,
+     "name": "자료실",
+     "label": "자료실",
+     "kind": "room",
+     "category": "service",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       52.333
+      ],
+      [
+       18.0,
+       52.333
+      ],
+      [
+       18.0,
+       58.111
+      ],
+      [
+       10.0,
+       58.111
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      55.222
+     ],
+     "node": "1:room-1-5"
+    },
+    {
+     "id": "room-1-4",
+     "floor": 1,
+     "name": "학생자치공간",
+     "label": "학생자치공간",
+     "kind": "room",
+     "category": "care",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       58.111
+      ],
+      [
+       18.0,
+       58.111
+      ],
+      [
+       18.0,
+       65.333
+      ],
+      [
+       10.0,
+       65.333
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      61.722
+     ],
+     "node": "1:room-1-4"
+    },
+    {
+     "id": "room-1-17",
+     "floor": 1,
+     "name": "체육교과연구실",
+     "label": "체육교과연구실",
+     "kind": "room",
+     "category": "office",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       65.333
+      ],
+      [
+       18.0,
+       65.333
+      ],
+      [
+       18.0,
+       74.0
+      ],
+      [
+       10.0,
+       74.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      69.667
+     ],
+     "node": "1:room-1-17"
+    },
+    {
+     "id": "room-1-15",
+     "floor": 1,
+     "name": "화장실",
+     "label": "화장실",
+     "kind": "restroom",
+     "category": "restroom",
+     "wing": "west",
+     "side": "outer",
+     "polygon": [
+      [
+       0.0,
+       18.0
+      ],
+      [
+       7.0,
+       18.0
+      ],
+      [
+       7.0,
+       26.0
+      ],
+      [
+       0.0,
+       26.0
+      ]
+     ],
+     "anchor": "westWC",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      7.0,
+      22.0
+     ],
+     "node": "1:room-1-15"
+    },
+    {
+     "id": "room-1-8",
+     "floor": 1,
+     "name": "학습지원실2",
+     "label": "학습지원실2",
+     "kind": "room",
+     "category": "care",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       18.0,
+       10.0
+      ],
+      [
+       29.833,
+       10.0
+      ],
+      [
+       29.833,
+       18.0
+      ],
+      [
+       18.0,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      23.917,
+      10.0
+     ],
+     "node": "1:room-1-8"
+    },
+    {
+     "id": "room-1-2",
+     "floor": 1,
+     "name": "교장실",
+     "label": "교장실",
+     "kind": "room",
+     "category": "office",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       29.833,
+       10.0
+      ],
+      [
+       41.667,
+       10.0
+      ],
+      [
+       41.667,
+       18.0
+      ],
+      [
+       29.833,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      35.75,
+      10.0
+     ],
+     "node": "1:room-1-2"
+    },
+    {
+     "id": "room-1-1",
+     "floor": 1,
+     "name": "행정실",
+     "label": "행정실",
+     "kind": "room",
+     "category": "office",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       41.667,
+       10.0
+      ],
+      [
+       53.5,
+       10.0
+      ],
+      [
+       53.5,
+       18.0
+      ],
+      [
+       41.667,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      47.583,
+      10.0
+     ],
+     "node": "1:room-1-1"
+    },
+    {
+     "id": "lobby-1",
+     "floor": 1,
+     "name": "중앙현관",
+     "label": "중앙현관",
+     "kind": "lobby",
+     "category": "lobby",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       53.5,
+       10.0
+      ],
+      [
+       58.5,
+       10.0
+      ],
+      [
+       58.5,
+       18.0
+      ],
+      [
+       53.5,
+       18.0
+      ]
+     ],
+     "aliases": [
+      "현관",
+      "로비"
+     ],
+     "anchor": "lobby",
+     "visible": true,
+     "game": false,
+     "confirmed": true,
+     "door": [
+      56.0,
+      10.0
+     ],
+     "node": "1:lobby-1"
+    },
+    {
+     "id": "room-1-9",
+     "floor": 1,
+     "name": "방송실",
+     "label": "방송실",
+     "kind": "room",
+     "category": "special",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       58.5,
+       10.0
+      ],
+      [
+       60.8,
+       10.0
+      ],
+      [
+       60.8,
+       18.0
+      ],
+      [
+       58.5,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      59.65,
+      10.0
+     ],
+     "node": "1:room-1-9"
+    },
+    {
+     "id": "room-1-14",
+     "floor": 1,
+     "name": "교육공무직원실",
+     "label": "교육공무직원실",
+     "kind": "room",
+     "category": "service",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       60.8,
+       10.0
+      ],
+      [
+       63.1,
+       10.0
+      ],
+      [
+       63.1,
+       18.0
+      ],
+      [
+       60.8,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      61.95,
+      10.0
+     ],
+     "node": "1:room-1-14"
+    },
+    {
+     "id": "room-1-10",
+     "floor": 1,
+     "name": "과학교과연구실",
+     "label": "과학교과연구실",
+     "kind": "room",
+     "category": "office",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       63.1,
+       10.0
+      ],
+      [
+       65.4,
+       10.0
+      ],
+      [
+       65.4,
+       18.0
+      ],
+      [
+       63.1,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      64.25,
+      10.0
+     ],
+     "node": "1:room-1-10"
+    },
+    {
+     "id": "room-1-13",
+     "floor": 1,
+     "name": "과학실3",
+     "label": "과학실3",
+     "kind": "room",
+     "category": "special",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       65.4,
+       10.0
+      ],
+      [
+       70.0,
+       10.0
+      ],
+      [
+       70.0,
+       18.0
+      ],
+      [
+       65.4,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      67.7,
+      10.0
+     ],
+     "node": "1:room-1-13"
+    },
+    {
+     "id": "stair-mainMidStair",
+     "floor": 1,
+     "name": "계단·출입구",
+     "label": "계단·출입구",
+     "kind": "stair",
+     "category": "service",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       70.0,
+       10.0
+      ],
+      [
+       75.0,
+       10.0
+      ],
+      [
+       75.0,
+       18.0
+      ],
+      [
+       70.0,
+       18.0
+      ]
+     ],
+     "anchor": "mainMidStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      72.5,
+      10.0
+     ],
+     "node": "1:stair-mainMidStair"
+    },
+    {
+     "id": "room-1-12",
+     "floor": 1,
+     "name": "과학실2",
+     "label": "과학실2",
+     "kind": "room",
+     "category": "special",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       75.0,
+       10.0
+      ],
+      [
+       86.75,
+       10.0
+      ],
+      [
+       86.75,
+       18.0
+      ],
+      [
+       75.0,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      80.875,
+      10.0
+     ],
+     "node": "1:room-1-12"
+    },
+    {
+     "id": "room-1-11",
+     "floor": 1,
+     "name": "과학실1",
+     "label": "과학실1",
+     "kind": "room",
+     "category": "special",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       86.75,
+       10.0
+      ],
+      [
+       98.5,
+       10.0
+      ],
+      [
+       98.5,
+       18.0
+      ],
+      [
+       86.75,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      92.625,
+      10.0
+     ],
+     "node": "1:room-1-11"
+    },
+    {
+     "id": "stair-mainEndStair",
+     "floor": 1,
+     "name": "계단(동쪽 끝)",
+     "label": "계단(동쪽 끝)",
+     "kind": "stair",
+     "category": "service",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       98.5,
+       10.0
+      ],
+      [
+       104.0,
+       10.0
+      ],
+      [
+       104.0,
+       18.0
+      ],
+      [
+       98.5,
+       18.0
+      ]
+     ],
+     "anchor": "mainEndStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      101.25,
+      10.0
+     ],
+     "node": "1:stair-mainEndStair"
+    },
+    {
+     "id": "ev-ev",
+     "floor": 1,
+     "name": "엘리베이터",
+     "label": "엘리베이터",
+     "kind": "ev",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       26.0,
+       0.0
+      ],
+      [
+       30.0,
+       0.0
+      ],
+      [
+       30.0,
+       7.0
+      ],
+      [
+       26.0,
+       7.0
+      ]
+     ],
+     "anchor": "ev",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      28.0,
+      7.0
+     ],
+     "node": "1:ev-ev"
+    },
+    {
+     "id": "room-1-18",
+     "floor": 1,
+     "name": "회의실/민원면담실",
+     "label": "회의실/민원면담실",
+     "kind": "room",
+     "category": "office",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       30.0,
+       0.0
+      ],
+      [
+       38.393,
+       0.0
+      ],
+      [
+       38.393,
+       7.0
+      ],
+      [
+       30.0,
+       7.0
+      ]
+     ],
+     "aliases": [
+      "회의실",
+      "민원면담실"
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      34.196,
+      7.0
+     ],
+     "node": "1:room-1-18"
+    },
+    {
+     "id": "room-1-19",
+     "floor": 1,
+     "name": "문서고",
+     "label": "문서고",
+     "kind": "room",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       38.393,
+       0.0
+      ],
+      [
+       43.429,
+       0.0
+      ],
+      [
+       43.429,
+       7.0
+      ],
+      [
+       38.393,
+       7.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      40.911,
+      7.0
+     ],
+     "node": "1:room-1-19"
+    },
+    {
+     "id": "room-1-20",
+     "floor": 1,
+     "name": "인쇄실",
+     "label": "인쇄실",
+     "kind": "room",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       43.429,
+       0.0
+      ],
+      [
+       48.464,
+       0.0
+      ],
+      [
+       48.464,
+       7.0
+      ],
+      [
+       43.429,
+       7.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      45.946,
+      7.0
+     ],
+     "node": "1:room-1-20"
+    },
+    {
+     "id": "room-1-21",
+     "floor": 1,
+     "name": "숙직실",
+     "label": "숙직실",
+     "kind": "room",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       48.464,
+       0.0
+      ],
+      [
+       53.5,
+       0.0
+      ],
+      [
+       53.5,
+       7.0
+      ],
+      [
+       48.464,
+       7.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      50.982,
+      7.0
+     ],
+     "node": "1:room-1-21"
+    },
+    {
+     "id": "stair-centralStair",
+     "floor": 1,
+     "name": "중앙계단",
+     "label": "중앙계단",
+     "kind": "stair",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       53.5,
+       0.0
+      ],
+      [
+       58.5,
+       0.0
+      ],
+      [
+       58.5,
+       7.0
+      ],
+      [
+       53.5,
+       7.0
+      ]
+     ],
+     "anchor": "centralStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      56.0,
+      7.0
+     ],
+     "node": "1:stair-centralStair"
+    },
+    {
+     "id": "room-1-22",
+     "floor": 1,
+     "name": "교직원화장실",
+     "label": "교직원화장실",
+     "kind": "restroom",
+     "category": "restroom",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       58.5,
+       0.0
+      ],
+      [
+       63.5,
+       0.0
+      ],
+      [
+       63.5,
+       7.0
+      ],
+      [
+       58.5,
+       7.0
+      ]
+     ],
+     "anchor": "staffWC",
+     "visible": true,
+     "game": false,
+     "confirmed": true,
+     "door": [
+      61.0,
+      7.0
+     ],
+     "node": "1:room-1-22"
+    },
+    {
+     "id": "room-1-23",
+     "floor": 1,
+     "name": "자료실",
+     "label": "자료실",
+     "kind": "room",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       63.5,
+       0.0
+      ],
+      [
+       71.625,
+       0.0
+      ],
+      [
+       71.625,
+       7.0
+      ],
+      [
+       63.5,
+       7.0
+      ]
+     ],
+     "aliases": [
+      "자료실(본관)"
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      67.562,
+      7.0
+     ],
+     "node": "1:room-1-23"
+    },
+    {
+     "id": "room-1-24",
+     "floor": 1,
+     "name": "과학준비실",
+     "label": "과학준비실",
+     "kind": "room",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       96.0,
+       0.0
+      ],
+      [
+       104.0,
+       0.0
+      ],
+      [
+       104.0,
+       7.0
+      ],
+      [
+       96.0,
+       7.0
+      ]
+     ],
+     "anchor": "eastEnd",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      100.0,
+      7.0
+     ],
+     "node": "1:room-1-24"
+    },
+    {
+     "id": "stair-cornerStair",
+     "floor": 1,
+     "name": "꺾임 계단",
+     "label": "꺾임 계단",
+     "kind": "stair",
+     "category": "service",
+     "wing": "corner",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       10.0
+      ],
+      [
+       18.0,
+       10.0
+      ],
+      [
+       18.0,
+       18.0
+      ],
+      [
+       10.0,
+       18.0
+      ]
+     ],
+     "anchor": "cornerStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      14.0,
+      10.0
+     ],
+     "node": "1:stair-cornerStair"
+    }
+   ],
+   "nodes": [
+    {
+     "id": "1:corner",
+     "x": 8.5,
+     "y": 8.5,
+     "kind": "corner"
+    },
+    {
+     "id": "1:main-end",
+     "x": 103.5,
+     "y": 8.5,
+     "kind": "end"
+    },
+    {
+     "id": "1:west-end",
+     "x": 8.5,
+     "y": 73.5,
+     "kind": "end"
+    },
+    {
+     "id": "1:c:room-1-6",
+     "x": 8.5,
+     "y": 22.167,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-6",
+     "x": 10.0,
+     "y": 22.167,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:room-1-7",
+     "x": 8.5,
+     "y": 30.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-7",
+     "x": 10.0,
+     "y": 30.5,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:room-1-3",
+     "x": 8.5,
+     "y": 38.833,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-3",
+     "x": 10.0,
+     "y": 38.833,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:stair-westMidStair",
+     "x": 8.5,
+     "y": 45.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:stair-westMidStair",
+     "x": 10.0,
+     "y": 45.5,
+     "kind": "stair"
+    },
+    {
+     "id": "1:c:room-1-16",
+     "x": 8.5,
+     "y": 50.167,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-16",
+     "x": 10.0,
+     "y": 50.167,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:room-1-5",
+     "x": 8.5,
+     "y": 55.222,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-5",
+     "x": 10.0,
+     "y": 55.222,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:room-1-4",
+     "x": 8.5,
+     "y": 61.722,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-4",
+     "x": 10.0,
+     "y": 61.722,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:room-1-17",
+     "x": 8.5,
+     "y": 69.667,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-17",
+     "x": 10.0,
+     "y": 69.667,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:room-1-15",
+     "x": 8.5,
+     "y": 22.0,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-15",
+     "x": 7.0,
+     "y": 22.0,
+     "kind": "restroom"
+    },
+    {
+     "id": "1:c:room-1-8",
+     "x": 23.917,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-8",
+     "x": 23.917,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:room-1-2",
+     "x": 35.75,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-2",
+     "x": 35.75,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:room-1-1",
+     "x": 47.583,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-1",
+     "x": 47.583,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:lobby-1",
+     "x": 56.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:lobby-1",
+     "x": 56.0,
+     "y": 10.0,
+     "kind": "lobby"
+    },
+    {
+     "id": "1:c:room-1-9",
+     "x": 59.65,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-9",
+     "x": 59.65,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:room-1-14",
+     "x": 61.95,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-14",
+     "x": 61.95,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:room-1-10",
+     "x": 64.25,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-10",
+     "x": 64.25,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:room-1-13",
+     "x": 67.7,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-13",
+     "x": 67.7,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:stair-mainMidStair",
+     "x": 72.5,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:stair-mainMidStair",
+     "x": 72.5,
+     "y": 10.0,
+     "kind": "stair"
+    },
+    {
+     "id": "1:c:room-1-12",
+     "x": 80.875,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-12",
+     "x": 80.875,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:room-1-11",
+     "x": 92.625,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-11",
+     "x": 92.625,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:stair-mainEndStair",
+     "x": 101.25,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:stair-mainEndStair",
+     "x": 101.25,
+     "y": 10.0,
+     "kind": "stair"
+    },
+    {
+     "id": "1:c:ev-ev",
+     "x": 28.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:ev-ev",
+     "x": 28.0,
+     "y": 7.0,
+     "kind": "ev"
+    },
+    {
+     "id": "1:c:room-1-18",
+     "x": 34.196,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-18",
+     "x": 34.196,
+     "y": 7.0,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:room-1-19",
+     "x": 40.911,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-19",
+     "x": 40.911,
+     "y": 7.0,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:room-1-20",
+     "x": 45.946,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-20",
+     "x": 45.946,
+     "y": 7.0,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:room-1-21",
+     "x": 50.982,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-21",
+     "x": 50.982,
+     "y": 7.0,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:stair-centralStair",
+     "x": 56.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:stair-centralStair",
+     "x": 56.0,
+     "y": 7.0,
+     "kind": "stair"
+    },
+    {
+     "id": "1:c:room-1-22",
+     "x": 61.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-22",
+     "x": 61.0,
+     "y": 7.0,
+     "kind": "restroom"
+    },
+    {
+     "id": "1:c:room-1-23",
+     "x": 67.562,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-23",
+     "x": 67.562,
+     "y": 7.0,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:room-1-24",
+     "x": 100.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:room-1-24",
+     "x": 100.0,
+     "y": 7.0,
+     "kind": "room"
+    },
+    {
+     "id": "1:c:stair-cornerStair",
+     "x": 14.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "1:stair-cornerStair",
+     "x": 14.0,
+     "y": 10.0,
+     "kind": "stair"
+    }
+   ],
+   "edges": [
+    [
+     "1:c:room-1-6",
+     "1:room-1-6",
+     1.5
+    ],
+    [
+     "1:c:room-1-7",
+     "1:room-1-7",
+     1.5
+    ],
+    [
+     "1:c:room-1-3",
+     "1:room-1-3",
+     1.5
+    ],
+    [
+     "1:c:stair-westMidStair",
+     "1:stair-westMidStair",
+     1.5
+    ],
+    [
+     "1:c:room-1-16",
+     "1:room-1-16",
+     1.5
+    ],
+    [
+     "1:c:room-1-5",
+     "1:room-1-5",
+     1.5
+    ],
+    [
+     "1:c:room-1-4",
+     "1:room-1-4",
+     1.5
+    ],
+    [
+     "1:c:room-1-17",
+     "1:room-1-17",
+     1.5
+    ],
+    [
+     "1:c:room-1-15",
+     "1:room-1-15",
+     1.5
+    ],
+    [
+     "1:c:room-1-8",
+     "1:room-1-8",
+     1.5
+    ],
+    [
+     "1:c:room-1-2",
+     "1:room-1-2",
+     1.5
+    ],
+    [
+     "1:c:room-1-1",
+     "1:room-1-1",
+     1.5
+    ],
+    [
+     "1:c:lobby-1",
+     "1:lobby-1",
+     1.5
+    ],
+    [
+     "1:c:room-1-9",
+     "1:room-1-9",
+     1.5
+    ],
+    [
+     "1:c:room-1-14",
+     "1:room-1-14",
+     1.5
+    ],
+    [
+     "1:c:room-1-10",
+     "1:room-1-10",
+     1.5
+    ],
+    [
+     "1:c:room-1-13",
+     "1:room-1-13",
+     1.5
+    ],
+    [
+     "1:c:stair-mainMidStair",
+     "1:stair-mainMidStair",
+     1.5
+    ],
+    [
+     "1:c:room-1-12",
+     "1:room-1-12",
+     1.5
+    ],
+    [
+     "1:c:room-1-11",
+     "1:room-1-11",
+     1.5
+    ],
+    [
+     "1:c:stair-mainEndStair",
+     "1:stair-mainEndStair",
+     1.5
+    ],
+    [
+     "1:c:ev-ev",
+     "1:ev-ev",
+     1.5
+    ],
+    [
+     "1:c:room-1-18",
+     "1:room-1-18",
+     1.5
+    ],
+    [
+     "1:c:room-1-19",
+     "1:room-1-19",
+     1.5
+    ],
+    [
+     "1:c:room-1-20",
+     "1:room-1-20",
+     1.5
+    ],
+    [
+     "1:c:room-1-21",
+     "1:room-1-21",
+     1.5
+    ],
+    [
+     "1:c:stair-centralStair",
+     "1:stair-centralStair",
+     1.5
+    ],
+    [
+     "1:c:room-1-22",
+     "1:room-1-22",
+     1.5
+    ],
+    [
+     "1:c:room-1-23",
+     "1:room-1-23",
+     1.5
+    ],
+    [
+     "1:c:room-1-24",
+     "1:room-1-24",
+     1.5
+    ],
+    [
+     "1:c:stair-cornerStair",
+     "1:stair-cornerStair",
+     1.5
+    ],
+    [
+     "1:corner",
+     "1:c:stair-cornerStair",
+     5.5
+    ],
+    [
+     "1:c:stair-cornerStair",
+     "1:c:room-1-8",
+     9.917
+    ],
+    [
+     "1:c:room-1-8",
+     "1:c:ev-ev",
+     4.083
+    ],
+    [
+     "1:c:ev-ev",
+     "1:c:room-1-18",
+     6.196
+    ],
+    [
+     "1:c:room-1-18",
+     "1:c:room-1-2",
+     1.554
+    ],
+    [
+     "1:c:room-1-2",
+     "1:c:room-1-19",
+     5.161
+    ],
+    [
+     "1:c:room-1-19",
+     "1:c:room-1-20",
+     5.036
+    ],
+    [
+     "1:c:room-1-20",
+     "1:c:room-1-1",
+     1.637
+    ],
+    [
+     "1:c:room-1-1",
+     "1:c:room-1-21",
+     3.399
+    ],
+    [
+     "1:c:room-1-21",
+     "1:c:lobby-1",
+     5.018
+    ],
+    [
+     "1:c:lobby-1",
+     "1:c:stair-centralStair",
+     0.0
+    ],
+    [
+     "1:c:stair-centralStair",
+     "1:c:room-1-9",
+     3.65
+    ],
+    [
+     "1:c:room-1-9",
+     "1:c:room-1-22",
+     1.35
+    ],
+    [
+     "1:c:room-1-22",
+     "1:c:room-1-14",
+     0.95
+    ],
+    [
+     "1:c:room-1-14",
+     "1:c:room-1-10",
+     2.3
+    ],
+    [
+     "1:c:room-1-10",
+     "1:c:room-1-23",
+     3.312
+    ],
+    [
+     "1:c:room-1-23",
+     "1:c:room-1-13",
+     0.137
+    ],
+    [
+     "1:c:room-1-13",
+     "1:c:stair-mainMidStair",
+     4.8
+    ],
+    [
+     "1:c:stair-mainMidStair",
+     "1:c:room-1-12",
+     8.375
+    ],
+    [
+     "1:c:room-1-12",
+     "1:c:room-1-11",
+     11.75
+    ],
+    [
+     "1:c:room-1-11",
+     "1:c:room-1-24",
+     7.375
+    ],
+    [
+     "1:c:room-1-24",
+     "1:c:stair-mainEndStair",
+     1.25
+    ],
+    [
+     "1:c:stair-mainEndStair",
+     "1:main-end",
+     2.25
+    ],
+    [
+     "1:corner",
+     "1:c:room-1-15",
+     13.5
+    ],
+    [
+     "1:c:room-1-15",
+     "1:c:room-1-6",
+     0.167
+    ],
+    [
+     "1:c:room-1-6",
+     "1:c:room-1-7",
+     8.333
+    ],
+    [
+     "1:c:room-1-7",
+     "1:c:room-1-3",
+     8.333
+    ],
+    [
+     "1:c:room-1-3",
+     "1:c:stair-westMidStair",
+     6.667
+    ],
+    [
+     "1:c:stair-westMidStair",
+     "1:c:room-1-16",
+     4.667
+    ],
+    [
+     "1:c:room-1-16",
+     "1:c:room-1-5",
+     5.056
+    ],
+    [
+     "1:c:room-1-5",
+     "1:c:room-1-4",
+     6.5
+    ],
+    [
+     "1:c:room-1-4",
+     "1:c:room-1-17",
+     7.944
+    ],
+    [
+     "1:c:room-1-17",
+     "1:west-end",
+     3.833
+    ]
+   ],
+   "image": "floor-plan-1.png",
+   "image3x": "floor-plan-1@3x.png"
+  },
+  "2": {
+   "rooms": [
+    {
+     "id": "room-2-7",
+     "floor": 2,
+     "name": "영어활동실",
+     "label": "영어활동실",
+     "kind": "room",
+     "category": "special",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       18.0
+      ],
+      [
+       18.0,
+       18.0
+      ],
+      [
+       18.0,
+       26.333
+      ],
+      [
+       10.0,
+       26.333
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      22.167
+     ],
+     "node": "2:room-2-7"
+    },
+    {
+     "id": "room-2-2",
+     "floor": 2,
+     "name": "1-3",
+     "label": "1학년 3반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       26.333
+      ],
+      [
+       18.0,
+       26.333
+      ],
+      [
+       18.0,
+       34.667
+      ],
+      [
+       10.0,
+       34.667
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      30.5
+     ],
+     "node": "2:room-2-2"
+    },
+    {
+     "id": "room-2-15",
+     "floor": 2,
+     "name": "복지실",
+     "label": "복지실",
+     "kind": "room",
+     "category": "care",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       34.667
+      ],
+      [
+       18.0,
+       34.667
+      ],
+      [
+       18.0,
+       43.0
+      ],
+      [
+       10.0,
+       43.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      38.833
+     ],
+     "node": "2:room-2-15"
+    },
+    {
+     "id": "stair-westMidStair",
+     "floor": 2,
+     "name": "계단(서쪽 동)",
+     "label": "계단(서쪽 동)",
+     "kind": "stair",
+     "category": "service",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       43.0
+      ],
+      [
+       18.0,
+       43.0
+      ],
+      [
+       18.0,
+       48.0
+      ],
+      [
+       10.0,
+       48.0
+      ]
+     ],
+     "anchor": "westMidStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      45.5
+     ],
+     "node": "2:stair-westMidStair"
+    },
+    {
+     "id": "room-2-3",
+     "floor": 2,
+     "name": "1-4",
+     "label": "1학년 4반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       48.0
+      ],
+      [
+       18.0,
+       48.0
+      ],
+      [
+       18.0,
+       55.429
+      ],
+      [
+       10.0,
+       55.429
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      51.714
+     ],
+     "node": "2:room-2-3"
+    },
+    {
+     "id": "room-2-4",
+     "floor": 2,
+     "name": "1-5",
+     "label": "1학년 5반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       55.429
+      ],
+      [
+       18.0,
+       55.429
+      ],
+      [
+       18.0,
+       62.857
+      ],
+      [
+       10.0,
+       62.857
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      59.143
+     ],
+     "node": "2:room-2-4"
+    },
+    {
+     "id": "room-2-13",
+     "floor": 2,
+     "name": "체력단련실",
+     "label": "체력단련실",
+     "kind": "room",
+     "category": "special",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       62.857
+      ],
+      [
+       18.0,
+       62.857
+      ],
+      [
+       18.0,
+       74.0
+      ],
+      [
+       10.0,
+       74.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      68.429
+     ],
+     "node": "2:room-2-13"
+    },
+    {
+     "id": "room-2-14",
+     "floor": 2,
+     "name": "화장실",
+     "label": "화장실",
+     "kind": "restroom",
+     "category": "restroom",
+     "wing": "west",
+     "side": "outer",
+     "polygon": [
+      [
+       0.0,
+       18.0
+      ],
+      [
+       7.0,
+       18.0
+      ],
+      [
+       7.0,
+       26.0
+      ],
+      [
+       0.0,
+       26.0
+      ]
+     ],
+     "anchor": "westWC",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      7.0,
+      22.0
+     ],
+     "node": "2:room-2-14"
+    },
+    {
+     "id": "room-2-1",
+     "floor": 2,
+     "name": "1-2",
+     "label": "1학년 2반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       18.0,
+       10.0
+      ],
+      [
+       25.222,
+       10.0
+      ],
+      [
+       25.222,
+       18.0
+      ],
+      [
+       18.0,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      21.611,
+      10.0
+     ],
+     "node": "2:room-2-1"
+    },
+    {
+     "id": "room-2-0",
+     "floor": 2,
+     "name": "1-1",
+     "label": "1학년 1반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       25.222,
+       10.0
+      ],
+      [
+       32.444,
+       10.0
+      ],
+      [
+       32.444,
+       18.0
+      ],
+      [
+       25.222,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      28.833,
+      10.0
+     ],
+     "node": "2:room-2-0"
+    },
+    {
+     "id": "room-2-5",
+     "floor": 2,
+     "name": "1학년 교무실",
+     "label": "1학년 교무실",
+     "kind": "room",
+     "category": "office",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       32.444,
+       10.0
+      ],
+      [
+       39.667,
+       10.0
+      ],
+      [
+       39.667,
+       18.0
+      ],
+      [
+       32.444,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      36.056,
+      10.0
+     ],
+     "node": "2:room-2-5"
+    },
+    {
+     "id": "room-2-6",
+     "floor": 2,
+     "name": "교무센터",
+     "label": "교무센터",
+     "kind": "room",
+     "category": "office",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       39.667,
+       10.0
+      ],
+      [
+       54.111,
+       10.0
+      ],
+      [
+       54.111,
+       18.0
+      ],
+      [
+       39.667,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      46.889,
+      10.0
+     ],
+     "node": "2:room-2-6"
+    },
+    {
+     "id": "room-2-10",
+     "floor": 2,
+     "name": "미술실",
+     "label": "미술실",
+     "kind": "room",
+     "category": "special",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       54.111,
+       10.0
+      ],
+      [
+       61.333,
+       10.0
+      ],
+      [
+       61.333,
+       18.0
+      ],
+      [
+       54.111,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      57.722,
+      10.0
+     ],
+     "node": "2:room-2-10"
+    },
+    {
+     "id": "room-2-11",
+     "floor": 2,
+     "name": "미술교과연구실",
+     "label": "미술교과연구실",
+     "kind": "room",
+     "category": "office",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       61.333,
+       10.0
+      ],
+      [
+       65.667,
+       10.0
+      ],
+      [
+       65.667,
+       18.0
+      ],
+      [
+       61.333,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      63.5,
+      10.0
+     ],
+     "node": "2:room-2-11"
+    },
+    {
+     "id": "room-2-12",
+     "floor": 2,
+     "name": "정보교과연구실",
+     "label": "정보교과연구실",
+     "kind": "room",
+     "category": "office",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       65.667,
+       10.0
+      ],
+      [
+       70.0,
+       10.0
+      ],
+      [
+       70.0,
+       18.0
+      ],
+      [
+       65.667,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      67.833,
+      10.0
+     ],
+     "node": "2:room-2-12"
+    },
+    {
+     "id": "stair-mainMidStair",
+     "floor": 2,
+     "name": "계단",
+     "label": "계단",
+     "kind": "stair",
+     "category": "service",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       70.0,
+       10.0
+      ],
+      [
+       75.0,
+       10.0
+      ],
+      [
+       75.0,
+       18.0
+      ],
+      [
+       70.0,
+       18.0
+      ]
+     ],
+     "anchor": "mainMidStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      72.5,
+      10.0
+     ],
+     "node": "2:stair-mainMidStair"
+    },
+    {
+     "id": "room-2-8",
+     "floor": 2,
+     "name": "기술실",
+     "label": "기술실",
+     "kind": "room",
+     "category": "special",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       75.0,
+       10.0
+      ],
+      [
+       86.75,
+       10.0
+      ],
+      [
+       86.75,
+       18.0
+      ],
+      [
+       75.0,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      80.875,
+      10.0
+     ],
+     "node": "2:room-2-8"
+    },
+    {
+     "id": "room-2-9",
+     "floor": 2,
+     "name": "가정실",
+     "label": "가정실",
+     "kind": "room",
+     "category": "special",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       86.75,
+       10.0
+      ],
+      [
+       98.5,
+       10.0
+      ],
+      [
+       98.5,
+       18.0
+      ],
+      [
+       86.75,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      92.625,
+      10.0
+     ],
+     "node": "2:room-2-9"
+    },
+    {
+     "id": "stair-mainEndStair",
+     "floor": 2,
+     "name": "계단(동쪽 끝)",
+     "label": "계단(동쪽 끝)",
+     "kind": "stair",
+     "category": "service",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       98.5,
+       10.0
+      ],
+      [
+       104.0,
+       10.0
+      ],
+      [
+       104.0,
+       18.0
+      ],
+      [
+       98.5,
+       18.0
+      ]
+     ],
+     "anchor": "mainEndStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      101.25,
+      10.0
+     ],
+     "node": "2:stair-mainEndStair"
+    },
+    {
+     "id": "ev-ev",
+     "floor": 2,
+     "name": "엘리베이터",
+     "label": "엘리베이터",
+     "kind": "ev",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       26.0,
+       0.0
+      ],
+      [
+       30.0,
+       0.0
+      ],
+      [
+       30.0,
+       7.0
+      ],
+      [
+       26.0,
+       7.0
+      ]
+     ],
+     "anchor": "ev",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      28.0,
+      7.0
+     ],
+     "node": "2:ev-ev"
+    },
+    {
+     "id": "room-2-16",
+     "floor": 2,
+     "name": "홈베이스",
+     "label": "홈베이스",
+     "kind": "room",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       30.0,
+       0.0
+      ],
+      [
+       53.5,
+       0.0
+      ],
+      [
+       53.5,
+       7.0
+      ],
+      [
+       30.0,
+       7.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      41.75,
+      7.0
+     ],
+     "node": "2:room-2-16"
+    },
+    {
+     "id": "stair-centralStair",
+     "floor": 2,
+     "name": "중앙계단",
+     "label": "중앙계단",
+     "kind": "stair",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       53.5,
+       0.0
+      ],
+      [
+       58.5,
+       0.0
+      ],
+      [
+       58.5,
+       7.0
+      ],
+      [
+       53.5,
+       7.0
+      ]
+     ],
+     "anchor": "centralStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      56.0,
+      7.0
+     ],
+     "node": "2:stair-centralStair"
+    },
+    {
+     "id": "room-2-17",
+     "floor": 2,
+     "name": "교직원화장실",
+     "label": "교직원화장실",
+     "kind": "restroom",
+     "category": "restroom",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       58.5,
+       0.0
+      ],
+      [
+       63.5,
+       0.0
+      ],
+      [
+       63.5,
+       7.0
+      ],
+      [
+       58.5,
+       7.0
+      ]
+     ],
+     "anchor": "staffWC",
+     "visible": true,
+     "game": false,
+     "confirmed": true,
+     "door": [
+      61.0,
+      7.0
+     ],
+     "node": "2:room-2-17"
+    },
+    {
+     "id": "room-2-18",
+     "floor": 2,
+     "name": "탈의실",
+     "label": "탈의실",
+     "kind": "room",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       63.5,
+       0.0
+      ],
+      [
+       68.917,
+       0.0
+      ],
+      [
+       68.917,
+       7.0
+      ],
+      [
+       63.5,
+       7.0
+      ]
+     ],
+     "visible": true,
+     "game": false,
+     "confirmed": true,
+     "door": [
+      66.208,
+      7.0
+     ],
+     "node": "2:room-2-18"
+    },
+    {
+     "id": "room-2-19",
+     "floor": 2,
+     "name": "화장실",
+     "label": "화장실",
+     "kind": "restroom",
+     "category": "restroom",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       96.0,
+       0.0
+      ],
+      [
+       104.0,
+       0.0
+      ],
+      [
+       104.0,
+       7.0
+      ],
+      [
+       96.0,
+       7.0
+      ]
+     ],
+     "anchor": "eastEnd",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      100.0,
+      7.0
+     ],
+     "node": "2:room-2-19"
+    },
+    {
+     "id": "stair-cornerStair",
+     "floor": 2,
+     "name": "꺾임 계단",
+     "label": "꺾임 계단",
+     "kind": "stair",
+     "category": "service",
+     "wing": "corner",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       10.0
+      ],
+      [
+       18.0,
+       10.0
+      ],
+      [
+       18.0,
+       18.0
+      ],
+      [
+       10.0,
+       18.0
+      ]
+     ],
+     "anchor": "cornerStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      14.0,
+      10.0
+     ],
+     "node": "2:stair-cornerStair"
+    }
+   ],
+   "nodes": [
+    {
+     "id": "2:corner",
+     "x": 8.5,
+     "y": 8.5,
+     "kind": "corner"
+    },
+    {
+     "id": "2:main-end",
+     "x": 103.5,
+     "y": 8.5,
+     "kind": "end"
+    },
+    {
+     "id": "2:west-end",
+     "x": 8.5,
+     "y": 73.5,
+     "kind": "end"
+    },
+    {
+     "id": "2:c:room-2-7",
+     "x": 8.5,
+     "y": 22.167,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-7",
+     "x": 10.0,
+     "y": 22.167,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:room-2-2",
+     "x": 8.5,
+     "y": 30.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-2",
+     "x": 10.0,
+     "y": 30.5,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:room-2-15",
+     "x": 8.5,
+     "y": 38.833,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-15",
+     "x": 10.0,
+     "y": 38.833,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:stair-westMidStair",
+     "x": 8.5,
+     "y": 45.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:stair-westMidStair",
+     "x": 10.0,
+     "y": 45.5,
+     "kind": "stair"
+    },
+    {
+     "id": "2:c:room-2-3",
+     "x": 8.5,
+     "y": 51.714,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-3",
+     "x": 10.0,
+     "y": 51.714,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:room-2-4",
+     "x": 8.5,
+     "y": 59.143,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-4",
+     "x": 10.0,
+     "y": 59.143,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:room-2-13",
+     "x": 8.5,
+     "y": 68.429,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-13",
+     "x": 10.0,
+     "y": 68.429,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:room-2-14",
+     "x": 8.5,
+     "y": 22.0,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-14",
+     "x": 7.0,
+     "y": 22.0,
+     "kind": "restroom"
+    },
+    {
+     "id": "2:c:room-2-1",
+     "x": 21.611,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-1",
+     "x": 21.611,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:room-2-0",
+     "x": 28.833,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-0",
+     "x": 28.833,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:room-2-5",
+     "x": 36.056,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-5",
+     "x": 36.056,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:room-2-6",
+     "x": 46.889,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-6",
+     "x": 46.889,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:room-2-10",
+     "x": 57.722,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-10",
+     "x": 57.722,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:room-2-11",
+     "x": 63.5,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-11",
+     "x": 63.5,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:room-2-12",
+     "x": 67.833,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-12",
+     "x": 67.833,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:stair-mainMidStair",
+     "x": 72.5,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:stair-mainMidStair",
+     "x": 72.5,
+     "y": 10.0,
+     "kind": "stair"
+    },
+    {
+     "id": "2:c:room-2-8",
+     "x": 80.875,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-8",
+     "x": 80.875,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:room-2-9",
+     "x": 92.625,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-9",
+     "x": 92.625,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:stair-mainEndStair",
+     "x": 101.25,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:stair-mainEndStair",
+     "x": 101.25,
+     "y": 10.0,
+     "kind": "stair"
+    },
+    {
+     "id": "2:c:ev-ev",
+     "x": 28.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:ev-ev",
+     "x": 28.0,
+     "y": 7.0,
+     "kind": "ev"
+    },
+    {
+     "id": "2:c:room-2-16",
+     "x": 41.75,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-16",
+     "x": 41.75,
+     "y": 7.0,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:stair-centralStair",
+     "x": 56.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:stair-centralStair",
+     "x": 56.0,
+     "y": 7.0,
+     "kind": "stair"
+    },
+    {
+     "id": "2:c:room-2-17",
+     "x": 61.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-17",
+     "x": 61.0,
+     "y": 7.0,
+     "kind": "restroom"
+    },
+    {
+     "id": "2:c:room-2-18",
+     "x": 66.208,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-18",
+     "x": 66.208,
+     "y": 7.0,
+     "kind": "room"
+    },
+    {
+     "id": "2:c:room-2-19",
+     "x": 100.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:room-2-19",
+     "x": 100.0,
+     "y": 7.0,
+     "kind": "restroom"
+    },
+    {
+     "id": "2:c:stair-cornerStair",
+     "x": 14.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "2:stair-cornerStair",
+     "x": 14.0,
+     "y": 10.0,
+     "kind": "stair"
+    }
+   ],
+   "edges": [
+    [
+     "2:c:room-2-7",
+     "2:room-2-7",
+     1.5
+    ],
+    [
+     "2:c:room-2-2",
+     "2:room-2-2",
+     1.5
+    ],
+    [
+     "2:c:room-2-15",
+     "2:room-2-15",
+     1.5
+    ],
+    [
+     "2:c:stair-westMidStair",
+     "2:stair-westMidStair",
+     1.5
+    ],
+    [
+     "2:c:room-2-3",
+     "2:room-2-3",
+     1.5
+    ],
+    [
+     "2:c:room-2-4",
+     "2:room-2-4",
+     1.5
+    ],
+    [
+     "2:c:room-2-13",
+     "2:room-2-13",
+     1.5
+    ],
+    [
+     "2:c:room-2-14",
+     "2:room-2-14",
+     1.5
+    ],
+    [
+     "2:c:room-2-1",
+     "2:room-2-1",
+     1.5
+    ],
+    [
+     "2:c:room-2-0",
+     "2:room-2-0",
+     1.5
+    ],
+    [
+     "2:c:room-2-5",
+     "2:room-2-5",
+     1.5
+    ],
+    [
+     "2:c:room-2-6",
+     "2:room-2-6",
+     1.5
+    ],
+    [
+     "2:c:room-2-10",
+     "2:room-2-10",
+     1.5
+    ],
+    [
+     "2:c:room-2-11",
+     "2:room-2-11",
+     1.5
+    ],
+    [
+     "2:c:room-2-12",
+     "2:room-2-12",
+     1.5
+    ],
+    [
+     "2:c:stair-mainMidStair",
+     "2:stair-mainMidStair",
+     1.5
+    ],
+    [
+     "2:c:room-2-8",
+     "2:room-2-8",
+     1.5
+    ],
+    [
+     "2:c:room-2-9",
+     "2:room-2-9",
+     1.5
+    ],
+    [
+     "2:c:stair-mainEndStair",
+     "2:stair-mainEndStair",
+     1.5
+    ],
+    [
+     "2:c:ev-ev",
+     "2:ev-ev",
+     1.5
+    ],
+    [
+     "2:c:room-2-16",
+     "2:room-2-16",
+     1.5
+    ],
+    [
+     "2:c:stair-centralStair",
+     "2:stair-centralStair",
+     1.5
+    ],
+    [
+     "2:c:room-2-17",
+     "2:room-2-17",
+     1.5
+    ],
+    [
+     "2:c:room-2-18",
+     "2:room-2-18",
+     1.5
+    ],
+    [
+     "2:c:room-2-19",
+     "2:room-2-19",
+     1.5
+    ],
+    [
+     "2:c:stair-cornerStair",
+     "2:stair-cornerStair",
+     1.5
+    ],
+    [
+     "2:corner",
+     "2:c:stair-cornerStair",
+     5.5
+    ],
+    [
+     "2:c:stair-cornerStair",
+     "2:c:room-2-1",
+     7.611
+    ],
+    [
+     "2:c:room-2-1",
+     "2:c:ev-ev",
+     6.389
+    ],
+    [
+     "2:c:ev-ev",
+     "2:c:room-2-0",
+     0.833
+    ],
+    [
+     "2:c:room-2-0",
+     "2:c:room-2-5",
+     7.222
+    ],
+    [
+     "2:c:room-2-5",
+     "2:c:room-2-16",
+     5.694
+    ],
+    [
+     "2:c:room-2-16",
+     "2:c:room-2-6",
+     5.139
+    ],
+    [
+     "2:c:room-2-6",
+     "2:c:stair-centralStair",
+     9.111
+    ],
+    [
+     "2:c:stair-centralStair",
+     "2:c:room-2-10",
+     1.722
+    ],
+    [
+     "2:c:room-2-10",
+     "2:c:room-2-17",
+     3.278
+    ],
+    [
+     "2:c:room-2-17",
+     "2:c:room-2-11",
+     2.5
+    ],
+    [
+     "2:c:room-2-11",
+     "2:c:room-2-18",
+     2.708
+    ],
+    [
+     "2:c:room-2-18",
+     "2:c:room-2-12",
+     1.625
+    ],
+    [
+     "2:c:room-2-12",
+     "2:c:stair-mainMidStair",
+     4.667
+    ],
+    [
+     "2:c:stair-mainMidStair",
+     "2:c:room-2-8",
+     8.375
+    ],
+    [
+     "2:c:room-2-8",
+     "2:c:room-2-9",
+     11.75
+    ],
+    [
+     "2:c:room-2-9",
+     "2:c:room-2-19",
+     7.375
+    ],
+    [
+     "2:c:room-2-19",
+     "2:c:stair-mainEndStair",
+     1.25
+    ],
+    [
+     "2:c:stair-mainEndStair",
+     "2:main-end",
+     2.25
+    ],
+    [
+     "2:corner",
+     "2:c:room-2-14",
+     13.5
+    ],
+    [
+     "2:c:room-2-14",
+     "2:c:room-2-7",
+     0.167
+    ],
+    [
+     "2:c:room-2-7",
+     "2:c:room-2-2",
+     8.333
+    ],
+    [
+     "2:c:room-2-2",
+     "2:c:room-2-15",
+     8.333
+    ],
+    [
+     "2:c:room-2-15",
+     "2:c:stair-westMidStair",
+     6.667
+    ],
+    [
+     "2:c:stair-westMidStair",
+     "2:c:room-2-3",
+     6.214
+    ],
+    [
+     "2:c:room-2-3",
+     "2:c:room-2-4",
+     7.429
+    ],
+    [
+     "2:c:room-2-4",
+     "2:c:room-2-13",
+     9.286
+    ],
+    [
+     "2:c:room-2-13",
+     "2:west-end",
+     5.071
+    ]
+   ],
+   "image": "floor-plan-2.png",
+   "image3x": "floor-plan-2@3x.png"
+  },
+  "3": {
+   "rooms": [
+    {
+     "id": "room-3-12",
+     "floor": 3,
+     "name": "수학교과지원실",
+     "label": "수학교과지원실",
+     "kind": "room",
+     "category": "office",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       18.0
+      ],
+      [
+       18.0,
+       18.0
+      ],
+      [
+       18.0,
+       25.5
+      ],
+      [
+       10.0,
+       25.5
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      21.75
+     ],
+     "node": "3:room-3-12"
+    },
+    {
+     "id": "room-3-7",
+     "floor": 3,
+     "name": "컴퓨터실",
+     "label": "컴퓨터실",
+     "kind": "room",
+     "category": "special",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       25.5
+      ],
+      [
+       18.0,
+       25.5
+      ],
+      [
+       18.0,
+       43.0
+      ],
+      [
+       10.0,
+       43.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      34.25
+     ],
+     "node": "3:room-3-7"
+    },
+    {
+     "id": "stair-westMidStair",
+     "floor": 3,
+     "name": "계단(서쪽 동)",
+     "label": "계단(서쪽 동)",
+     "kind": "stair",
+     "category": "service",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       43.0
+      ],
+      [
+       18.0,
+       43.0
+      ],
+      [
+       18.0,
+       48.0
+      ],
+      [
+       10.0,
+       48.0
+      ]
+     ],
+     "anchor": "westMidStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      45.5
+     ],
+     "node": "3:stair-westMidStair"
+    },
+    {
+     "id": "room-3-11",
+     "floor": 3,
+     "name": "다목적실",
+     "label": "다목적실",
+     "kind": "room",
+     "category": "special",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       48.0
+      ],
+      [
+       18.0,
+       48.0
+      ],
+      [
+       18.0,
+       74.0
+      ],
+      [
+       10.0,
+       74.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      61.0
+     ],
+     "node": "3:room-3-11"
+    },
+    {
+     "id": "room-3-13",
+     "floor": 3,
+     "name": "화장실",
+     "label": "화장실",
+     "kind": "restroom",
+     "category": "restroom",
+     "wing": "west",
+     "side": "outer",
+     "polygon": [
+      [
+       0.0,
+       18.0
+      ],
+      [
+       7.0,
+       18.0
+      ],
+      [
+       7.0,
+       26.0
+      ],
+      [
+       0.0,
+       26.0
+      ]
+     ],
+     "anchor": "westWC",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      7.0,
+      22.0
+     ],
+     "node": "3:room-3-13"
+    },
+    {
+     "id": "room-3-0",
+     "floor": 3,
+     "name": "2-1",
+     "label": "2학년 1반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       18.0,
+       10.0
+      ],
+      [
+       25.429,
+       10.0
+      ],
+      [
+       25.429,
+       18.0
+      ],
+      [
+       18.0,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      21.714,
+      10.0
+     ],
+     "node": "3:room-3-0"
+    },
+    {
+     "id": "room-3-1",
+     "floor": 3,
+     "name": "2-2",
+     "label": "2학년 2반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       25.429,
+       10.0
+      ],
+      [
+       32.857,
+       10.0
+      ],
+      [
+       32.857,
+       18.0
+      ],
+      [
+       25.429,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      29.143,
+      10.0
+     ],
+     "node": "3:room-3-1"
+    },
+    {
+     "id": "room-3-6",
+     "floor": 3,
+     "name": "2학년 교무실",
+     "label": "2학년 교무실",
+     "kind": "room",
+     "category": "office",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       32.857,
+       10.0
+      ],
+      [
+       40.286,
+       10.0
+      ],
+      [
+       40.286,
+       18.0
+      ],
+      [
+       32.857,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      36.571,
+      10.0
+     ],
+     "node": "3:room-3-6"
+    },
+    {
+     "id": "room-3-2",
+     "floor": 3,
+     "name": "2-3",
+     "label": "2학년 3반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       40.286,
+       10.0
+      ],
+      [
+       47.714,
+       10.0
+      ],
+      [
+       47.714,
+       18.0
+      ],
+      [
+       40.286,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      44.0,
+      10.0
+     ],
+     "node": "3:room-3-2"
+    },
+    {
+     "id": "room-3-3",
+     "floor": 3,
+     "name": "2-4",
+     "label": "2학년 4반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       47.714,
+       10.0
+      ],
+      [
+       55.143,
+       10.0
+      ],
+      [
+       55.143,
+       18.0
+      ],
+      [
+       47.714,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      51.429,
+      10.0
+     ],
+     "node": "3:room-3-3"
+    },
+    {
+     "id": "room-3-4",
+     "floor": 3,
+     "name": "2-5",
+     "label": "2학년 5반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       55.143,
+       10.0
+      ],
+      [
+       62.571,
+       10.0
+      ],
+      [
+       62.571,
+       18.0
+      ],
+      [
+       55.143,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      58.857,
+      10.0
+     ],
+     "node": "3:room-3-4"
+    },
+    {
+     "id": "room-3-5",
+     "floor": 3,
+     "name": "2-6",
+     "label": "2학년 6반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       62.571,
+       10.0
+      ],
+      [
+       70.0,
+       10.0
+      ],
+      [
+       70.0,
+       18.0
+      ],
+      [
+       62.571,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      66.286,
+      10.0
+     ],
+     "node": "3:room-3-5"
+    },
+    {
+     "id": "stair-mainMidStair",
+     "floor": 3,
+     "name": "계단",
+     "label": "계단",
+     "kind": "stair",
+     "category": "service",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       70.0,
+       10.0
+      ],
+      [
+       75.0,
+       10.0
+      ],
+      [
+       75.0,
+       18.0
+      ],
+      [
+       70.0,
+       18.0
+      ]
+     ],
+     "anchor": "mainMidStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      72.5,
+      10.0
+     ],
+     "node": "3:stair-mainMidStair"
+    },
+    {
+     "id": "room-3-14",
+     "floor": 3,
+     "name": "즉시분리공간/주제선택수업실",
+     "label": "즉시분리공간/주제선택수업실",
+     "kind": "room",
+     "category": "care",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       75.0,
+       10.0
+      ],
+      [
+       80.036,
+       10.0
+      ],
+      [
+       80.036,
+       18.0
+      ],
+      [
+       75.0,
+       18.0
+      ]
+     ],
+     "aliases": [
+      "즉시분리공간",
+      "주제선택수업실"
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      77.518,
+      10.0
+     ],
+     "node": "3:room-3-14"
+    },
+    {
+     "id": "room-3-8",
+     "floor": 3,
+     "name": "진로상담실",
+     "label": "진로상담실",
+     "kind": "room",
+     "category": "care",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       80.036,
+       10.0
+      ],
+      [
+       85.071,
+       10.0
+      ],
+      [
+       85.071,
+       18.0
+      ],
+      [
+       80.036,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      82.554,
+      10.0
+     ],
+     "node": "3:room-3-8"
+    },
+    {
+     "id": "room-3-10",
+     "floor": 3,
+     "name": "자기주도배움터",
+     "label": "자기주도배움터",
+     "kind": "room",
+     "category": "care",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       85.071,
+       10.0
+      ],
+      [
+       91.786,
+       10.0
+      ],
+      [
+       91.786,
+       18.0
+      ],
+      [
+       85.071,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      88.429,
+      10.0
+     ],
+     "node": "3:room-3-10"
+    },
+    {
+     "id": "room-3-9",
+     "floor": 3,
+     "name": "Wee클래스",
+     "label": "Wee클래스",
+     "kind": "room",
+     "category": "care",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       91.786,
+       10.0
+      ],
+      [
+       98.5,
+       10.0
+      ],
+      [
+       98.5,
+       18.0
+      ],
+      [
+       91.786,
+       18.0
+      ]
+     ],
+     "aliases": [
+      "위클래스",
+      "Wee 클래스"
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      95.143,
+      10.0
+     ],
+     "node": "3:room-3-9"
+    },
+    {
+     "id": "stair-mainEndStair",
+     "floor": 3,
+     "name": "계단(동쪽 끝)",
+     "label": "계단(동쪽 끝)",
+     "kind": "stair",
+     "category": "service",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       98.5,
+       10.0
+      ],
+      [
+       104.0,
+       10.0
+      ],
+      [
+       104.0,
+       18.0
+      ],
+      [
+       98.5,
+       18.0
+      ]
+     ],
+     "anchor": "mainEndStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      101.25,
+      10.0
+     ],
+     "node": "3:stair-mainEndStair"
+    },
+    {
+     "id": "ev-ev",
+     "floor": 3,
+     "name": "엘리베이터",
+     "label": "엘리베이터",
+     "kind": "ev",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       26.0,
+       0.0
+      ],
+      [
+       30.0,
+       0.0
+      ],
+      [
+       30.0,
+       7.0
+      ],
+      [
+       26.0,
+       7.0
+      ]
+     ],
+     "anchor": "ev",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      28.0,
+      7.0
+     ],
+     "node": "3:ev-ev"
+    },
+    {
+     "id": "room-3-15",
+     "floor": 3,
+     "name": "홈베이스",
+     "label": "홈베이스",
+     "kind": "room",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       30.0,
+       0.0
+      ],
+      [
+       53.5,
+       0.0
+      ],
+      [
+       53.5,
+       7.0
+      ],
+      [
+       30.0,
+       7.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      41.75,
+      7.0
+     ],
+     "node": "3:room-3-15"
+    },
+    {
+     "id": "stair-centralStair",
+     "floor": 3,
+     "name": "중앙계단",
+     "label": "중앙계단",
+     "kind": "stair",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       53.5,
+       0.0
+      ],
+      [
+       58.5,
+       0.0
+      ],
+      [
+       58.5,
+       7.0
+      ],
+      [
+       53.5,
+       7.0
+      ]
+     ],
+     "anchor": "centralStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      56.0,
+      7.0
+     ],
+     "node": "3:stair-centralStair"
+    },
+    {
+     "id": "room-3-16",
+     "floor": 3,
+     "name": "교직원화장실",
+     "label": "교직원화장실",
+     "kind": "restroom",
+     "category": "restroom",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       58.5,
+       0.0
+      ],
+      [
+       63.5,
+       0.0
+      ],
+      [
+       63.5,
+       7.0
+      ],
+      [
+       58.5,
+       7.0
+      ]
+     ],
+     "anchor": "staffWC",
+     "visible": true,
+     "game": false,
+     "confirmed": true,
+     "door": [
+      61.0,
+      7.0
+     ],
+     "node": "3:room-3-16"
+    },
+    {
+     "id": "room-3-17",
+     "floor": 3,
+     "name": "탈의실",
+     "label": "탈의실",
+     "kind": "room",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       63.5,
+       0.0
+      ],
+      [
+       68.917,
+       0.0
+      ],
+      [
+       68.917,
+       7.0
+      ],
+      [
+       63.5,
+       7.0
+      ]
+     ],
+     "visible": true,
+     "game": false,
+     "confirmed": true,
+     "door": [
+      66.208,
+      7.0
+     ],
+     "node": "3:room-3-17"
+    },
+    {
+     "id": "room-3-18",
+     "floor": 3,
+     "name": "화장실",
+     "label": "화장실",
+     "kind": "restroom",
+     "category": "restroom",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       96.0,
+       0.0
+      ],
+      [
+       104.0,
+       0.0
+      ],
+      [
+       104.0,
+       7.0
+      ],
+      [
+       96.0,
+       7.0
+      ]
+     ],
+     "anchor": "eastEnd",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      100.0,
+      7.0
+     ],
+     "node": "3:room-3-18"
+    },
+    {
+     "id": "stair-cornerStair",
+     "floor": 3,
+     "name": "꺾임 계단",
+     "label": "꺾임 계단",
+     "kind": "stair",
+     "category": "service",
+     "wing": "corner",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       10.0
+      ],
+      [
+       18.0,
+       10.0
+      ],
+      [
+       18.0,
+       18.0
+      ],
+      [
+       10.0,
+       18.0
+      ]
+     ],
+     "anchor": "cornerStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      14.0,
+      10.0
+     ],
+     "node": "3:stair-cornerStair"
+    }
+   ],
+   "nodes": [
+    {
+     "id": "3:corner",
+     "x": 8.5,
+     "y": 8.5,
+     "kind": "corner"
+    },
+    {
+     "id": "3:main-end",
+     "x": 103.5,
+     "y": 8.5,
+     "kind": "end"
+    },
+    {
+     "id": "3:west-end",
+     "x": 8.5,
+     "y": 73.5,
+     "kind": "end"
+    },
+    {
+     "id": "3:c:room-3-12",
+     "x": 8.5,
+     "y": 21.75,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-12",
+     "x": 10.0,
+     "y": 21.75,
+     "kind": "room"
+    },
+    {
+     "id": "3:c:room-3-7",
+     "x": 8.5,
+     "y": 34.25,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-7",
+     "x": 10.0,
+     "y": 34.25,
+     "kind": "room"
+    },
+    {
+     "id": "3:c:stair-westMidStair",
+     "x": 8.5,
+     "y": 45.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:stair-westMidStair",
+     "x": 10.0,
+     "y": 45.5,
+     "kind": "stair"
+    },
+    {
+     "id": "3:c:room-3-11",
+     "x": 8.5,
+     "y": 61.0,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-11",
+     "x": 10.0,
+     "y": 61.0,
+     "kind": "room"
+    },
+    {
+     "id": "3:c:room-3-13",
+     "x": 8.5,
+     "y": 22.0,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-13",
+     "x": 7.0,
+     "y": 22.0,
+     "kind": "restroom"
+    },
+    {
+     "id": "3:c:room-3-0",
+     "x": 21.714,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-0",
+     "x": 21.714,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "3:c:room-3-1",
+     "x": 29.143,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-1",
+     "x": 29.143,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "3:c:room-3-6",
+     "x": 36.571,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-6",
+     "x": 36.571,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "3:c:room-3-2",
+     "x": 44.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-2",
+     "x": 44.0,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "3:c:room-3-3",
+     "x": 51.429,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-3",
+     "x": 51.429,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "3:c:room-3-4",
+     "x": 58.857,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-4",
+     "x": 58.857,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "3:c:room-3-5",
+     "x": 66.286,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-5",
+     "x": 66.286,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "3:c:stair-mainMidStair",
+     "x": 72.5,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:stair-mainMidStair",
+     "x": 72.5,
+     "y": 10.0,
+     "kind": "stair"
+    },
+    {
+     "id": "3:c:room-3-14",
+     "x": 77.518,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-14",
+     "x": 77.518,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "3:c:room-3-8",
+     "x": 82.554,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-8",
+     "x": 82.554,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "3:c:room-3-10",
+     "x": 88.429,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-10",
+     "x": 88.429,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "3:c:room-3-9",
+     "x": 95.143,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-9",
+     "x": 95.143,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "3:c:stair-mainEndStair",
+     "x": 101.25,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:stair-mainEndStair",
+     "x": 101.25,
+     "y": 10.0,
+     "kind": "stair"
+    },
+    {
+     "id": "3:c:ev-ev",
+     "x": 28.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:ev-ev",
+     "x": 28.0,
+     "y": 7.0,
+     "kind": "ev"
+    },
+    {
+     "id": "3:c:room-3-15",
+     "x": 41.75,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-15",
+     "x": 41.75,
+     "y": 7.0,
+     "kind": "room"
+    },
+    {
+     "id": "3:c:stair-centralStair",
+     "x": 56.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:stair-centralStair",
+     "x": 56.0,
+     "y": 7.0,
+     "kind": "stair"
+    },
+    {
+     "id": "3:c:room-3-16",
+     "x": 61.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-16",
+     "x": 61.0,
+     "y": 7.0,
+     "kind": "restroom"
+    },
+    {
+     "id": "3:c:room-3-17",
+     "x": 66.208,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-17",
+     "x": 66.208,
+     "y": 7.0,
+     "kind": "room"
+    },
+    {
+     "id": "3:c:room-3-18",
+     "x": 100.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:room-3-18",
+     "x": 100.0,
+     "y": 7.0,
+     "kind": "restroom"
+    },
+    {
+     "id": "3:c:stair-cornerStair",
+     "x": 14.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "3:stair-cornerStair",
+     "x": 14.0,
+     "y": 10.0,
+     "kind": "stair"
+    }
+   ],
+   "edges": [
+    [
+     "3:c:room-3-12",
+     "3:room-3-12",
+     1.5
+    ],
+    [
+     "3:c:room-3-7",
+     "3:room-3-7",
+     1.5
+    ],
+    [
+     "3:c:stair-westMidStair",
+     "3:stair-westMidStair",
+     1.5
+    ],
+    [
+     "3:c:room-3-11",
+     "3:room-3-11",
+     1.5
+    ],
+    [
+     "3:c:room-3-13",
+     "3:room-3-13",
+     1.5
+    ],
+    [
+     "3:c:room-3-0",
+     "3:room-3-0",
+     1.5
+    ],
+    [
+     "3:c:room-3-1",
+     "3:room-3-1",
+     1.5
+    ],
+    [
+     "3:c:room-3-6",
+     "3:room-3-6",
+     1.5
+    ],
+    [
+     "3:c:room-3-2",
+     "3:room-3-2",
+     1.5
+    ],
+    [
+     "3:c:room-3-3",
+     "3:room-3-3",
+     1.5
+    ],
+    [
+     "3:c:room-3-4",
+     "3:room-3-4",
+     1.5
+    ],
+    [
+     "3:c:room-3-5",
+     "3:room-3-5",
+     1.5
+    ],
+    [
+     "3:c:stair-mainMidStair",
+     "3:stair-mainMidStair",
+     1.5
+    ],
+    [
+     "3:c:room-3-14",
+     "3:room-3-14",
+     1.5
+    ],
+    [
+     "3:c:room-3-8",
+     "3:room-3-8",
+     1.5
+    ],
+    [
+     "3:c:room-3-10",
+     "3:room-3-10",
+     1.5
+    ],
+    [
+     "3:c:room-3-9",
+     "3:room-3-9",
+     1.5
+    ],
+    [
+     "3:c:stair-mainEndStair",
+     "3:stair-mainEndStair",
+     1.5
+    ],
+    [
+     "3:c:ev-ev",
+     "3:ev-ev",
+     1.5
+    ],
+    [
+     "3:c:room-3-15",
+     "3:room-3-15",
+     1.5
+    ],
+    [
+     "3:c:stair-centralStair",
+     "3:stair-centralStair",
+     1.5
+    ],
+    [
+     "3:c:room-3-16",
+     "3:room-3-16",
+     1.5
+    ],
+    [
+     "3:c:room-3-17",
+     "3:room-3-17",
+     1.5
+    ],
+    [
+     "3:c:room-3-18",
+     "3:room-3-18",
+     1.5
+    ],
+    [
+     "3:c:stair-cornerStair",
+     "3:stair-cornerStair",
+     1.5
+    ],
+    [
+     "3:corner",
+     "3:c:stair-cornerStair",
+     5.5
+    ],
+    [
+     "3:c:stair-cornerStair",
+     "3:c:room-3-0",
+     7.714
+    ],
+    [
+     "3:c:room-3-0",
+     "3:c:ev-ev",
+     6.286
+    ],
+    [
+     "3:c:ev-ev",
+     "3:c:room-3-1",
+     1.143
+    ],
+    [
+     "3:c:room-3-1",
+     "3:c:room-3-6",
+     7.429
+    ],
+    [
+     "3:c:room-3-6",
+     "3:c:room-3-15",
+     5.179
+    ],
+    [
+     "3:c:room-3-15",
+     "3:c:room-3-2",
+     2.25
+    ],
+    [
+     "3:c:room-3-2",
+     "3:c:room-3-3",
+     7.429
+    ],
+    [
+     "3:c:room-3-3",
+     "3:c:stair-centralStair",
+     4.571
+    ],
+    [
+     "3:c:stair-centralStair",
+     "3:c:room-3-4",
+     2.857
+    ],
+    [
+     "3:c:room-3-4",
+     "3:c:room-3-16",
+     2.143
+    ],
+    [
+     "3:c:room-3-16",
+     "3:c:room-3-17",
+     5.208
+    ],
+    [
+     "3:c:room-3-17",
+     "3:c:room-3-5",
+     0.077
+    ],
+    [
+     "3:c:room-3-5",
+     "3:c:stair-mainMidStair",
+     6.214
+    ],
+    [
+     "3:c:stair-mainMidStair",
+     "3:c:room-3-14",
+     5.018
+    ],
+    [
+     "3:c:room-3-14",
+     "3:c:room-3-8",
+     5.036
+    ],
+    [
+     "3:c:room-3-8",
+     "3:c:room-3-10",
+     5.875
+    ],
+    [
+     "3:c:room-3-10",
+     "3:c:room-3-9",
+     6.714
+    ],
+    [
+     "3:c:room-3-9",
+     "3:c:room-3-18",
+     4.857
+    ],
+    [
+     "3:c:room-3-18",
+     "3:c:stair-mainEndStair",
+     1.25
+    ],
+    [
+     "3:c:stair-mainEndStair",
+     "3:main-end",
+     2.25
+    ],
+    [
+     "3:corner",
+     "3:c:room-3-12",
+     13.25
+    ],
+    [
+     "3:c:room-3-12",
+     "3:c:room-3-13",
+     0.25
+    ],
+    [
+     "3:c:room-3-13",
+     "3:c:room-3-7",
+     12.25
+    ],
+    [
+     "3:c:room-3-7",
+     "3:c:stair-westMidStair",
+     11.25
+    ],
+    [
+     "3:c:stair-westMidStair",
+     "3:c:room-3-11",
+     15.5
+    ],
+    [
+     "3:c:room-3-11",
+     "3:west-end",
+     12.5
+    ]
+   ],
+   "image": "floor-plan-3.png",
+   "image3x": "floor-plan-3@3x.png"
+  },
+  "4": {
+   "rooms": [
+    {
+     "id": "room-4-9",
+     "floor": 4,
+     "name": "음악교과연구실",
+     "label": "음악교과연구실",
+     "kind": "room",
+     "category": "office",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       18.0
+      ],
+      [
+       18.0,
+       18.0
+      ],
+      [
+       18.0,
+       25.143
+      ],
+      [
+       10.0,
+       25.143
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      21.571
+     ],
+     "node": "4:room-4-9"
+    },
+    {
+     "id": "room-4-8",
+     "floor": 4,
+     "name": "음악실2",
+     "label": "음악실2",
+     "kind": "room",
+     "category": "special",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       25.143
+      ],
+      [
+       18.0,
+       25.143
+      ],
+      [
+       18.0,
+       34.071
+      ],
+      [
+       10.0,
+       34.071
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      29.607
+     ],
+     "node": "4:room-4-8"
+    },
+    {
+     "id": "room-4-7",
+     "floor": 4,
+     "name": "음악실1",
+     "label": "음악실1",
+     "kind": "room",
+     "category": "special",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       34.071
+      ],
+      [
+       18.0,
+       34.071
+      ],
+      [
+       18.0,
+       43.0
+      ],
+      [
+       10.0,
+       43.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      38.536
+     ],
+     "node": "4:room-4-7"
+    },
+    {
+     "id": "stair-westMidStair",
+     "floor": 4,
+     "name": "계단(서쪽 동)",
+     "label": "계단(서쪽 동)",
+     "kind": "stair",
+     "category": "service",
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       43.0
+      ],
+      [
+       18.0,
+       43.0
+      ],
+      [
+       18.0,
+       48.0
+      ],
+      [
+       10.0,
+       48.0
+      ]
+     ],
+     "anchor": "westMidStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      10.0,
+      45.5
+     ],
+     "node": "4:stair-westMidStair"
+    },
+    {
+     "id": "void-4-west",
+     "floor": 4,
+     "name": "서쪽 동 끝 구역(배치도 미표기)",
+     "label": "서쪽 동 끝 구역(배치도 미표기)",
+     "kind": "void",
+     "category": null,
+     "wing": "west",
+     "side": "inner",
+     "polygon": [
+      [
+       0.0,
+       48.0
+      ],
+      [
+       18.0,
+       48.0
+      ],
+      [
+       18.0,
+       74.0
+      ],
+      [
+       0.0,
+       74.0
+      ]
+     ],
+     "description": "아치 지붕 구역으로 4층이 없는 것으로 추정. 교사 확인 필요",
+     "visible": false,
+     "game": false,
+     "confirmed": false
+    },
+    {
+     "id": "room-4-12",
+     "floor": 4,
+     "name": "화장실",
+     "label": "화장실",
+     "kind": "restroom",
+     "category": "restroom",
+     "wing": "west",
+     "side": "outer",
+     "polygon": [
+      [
+       0.0,
+       18.0
+      ],
+      [
+       7.0,
+       18.0
+      ],
+      [
+       7.0,
+       26.0
+      ],
+      [
+       0.0,
+       26.0
+      ]
+     ],
+     "anchor": "westWC",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      7.0,
+      22.0
+     ],
+     "node": "4:room-4-12"
+    },
+    {
+     "id": "room-4-0",
+     "floor": 4,
+     "name": "3-1",
+     "label": "3학년 1반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       18.0,
+       10.0
+      ],
+      [
+       25.429,
+       10.0
+      ],
+      [
+       25.429,
+       18.0
+      ],
+      [
+       18.0,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      21.714,
+      10.0
+     ],
+     "node": "4:room-4-0"
+    },
+    {
+     "id": "room-4-1",
+     "floor": 4,
+     "name": "3-2",
+     "label": "3학년 2반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       25.429,
+       10.0
+      ],
+      [
+       32.857,
+       10.0
+      ],
+      [
+       32.857,
+       18.0
+      ],
+      [
+       25.429,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      29.143,
+      10.0
+     ],
+     "node": "4:room-4-1"
+    },
+    {
+     "id": "room-4-6",
+     "floor": 4,
+     "name": "3학년 교무실",
+     "label": "3학년 교무실",
+     "kind": "room",
+     "category": "office",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       32.857,
+       10.0
+      ],
+      [
+       40.286,
+       10.0
+      ],
+      [
+       40.286,
+       18.0
+      ],
+      [
+       32.857,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      36.571,
+      10.0
+     ],
+     "node": "4:room-4-6"
+    },
+    {
+     "id": "room-4-2",
+     "floor": 4,
+     "name": "3-3",
+     "label": "3학년 3반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       40.286,
+       10.0
+      ],
+      [
+       47.714,
+       10.0
+      ],
+      [
+       47.714,
+       18.0
+      ],
+      [
+       40.286,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      44.0,
+      10.0
+     ],
+     "node": "4:room-4-2"
+    },
+    {
+     "id": "room-4-3",
+     "floor": 4,
+     "name": "3-4",
+     "label": "3학년 4반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       47.714,
+       10.0
+      ],
+      [
+       55.143,
+       10.0
+      ],
+      [
+       55.143,
+       18.0
+      ],
+      [
+       47.714,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      51.429,
+      10.0
+     ],
+     "node": "4:room-4-3"
+    },
+    {
+     "id": "room-4-4",
+     "floor": 4,
+     "name": "3-5",
+     "label": "3학년 5반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       55.143,
+       10.0
+      ],
+      [
+       62.571,
+       10.0
+      ],
+      [
+       62.571,
+       18.0
+      ],
+      [
+       55.143,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      58.857,
+      10.0
+     ],
+     "node": "4:room-4-4"
+    },
+    {
+     "id": "room-4-5",
+     "floor": 4,
+     "name": "3-6",
+     "label": "3학년 6반",
+     "kind": "room",
+     "category": "classroom",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       62.571,
+       10.0
+      ],
+      [
+       70.0,
+       10.0
+      ],
+      [
+       70.0,
+       18.0
+      ],
+      [
+       62.571,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      66.286,
+      10.0
+     ],
+     "node": "4:room-4-5"
+    },
+    {
+     "id": "stair-mainMidStair",
+     "floor": 4,
+     "name": "계단",
+     "label": "계단",
+     "kind": "stair",
+     "category": "service",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       70.0,
+       10.0
+      ],
+      [
+       75.0,
+       10.0
+      ],
+      [
+       75.0,
+       18.0
+      ],
+      [
+       70.0,
+       18.0
+      ]
+     ],
+     "anchor": "mainMidStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      72.5,
+      10.0
+     ],
+     "node": "4:stair-mainMidStair"
+    },
+    {
+     "id": "room-4-10",
+     "floor": 4,
+     "name": "글빛소회의실",
+     "label": "글빛소회의실",
+     "kind": "room",
+     "category": "office",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       75.0,
+       10.0
+      ],
+      [
+       80.423,
+       10.0
+      ],
+      [
+       80.423,
+       18.0
+      ],
+      [
+       75.0,
+       18.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      77.712,
+      10.0
+     ],
+     "node": "4:room-4-10"
+    },
+    {
+     "id": "room-4-11",
+     "floor": 4,
+     "name": "글빛도서관",
+     "label": "글빛도서관",
+     "kind": "room",
+     "category": "special",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       80.423,
+       10.0
+      ],
+      [
+       98.5,
+       10.0
+      ],
+      [
+       98.5,
+       18.0
+      ],
+      [
+       80.423,
+       18.0
+      ]
+     ],
+     "aliases": [
+      "도서관"
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      89.462,
+      10.0
+     ],
+     "node": "4:room-4-11"
+    },
+    {
+     "id": "stair-mainEndStair",
+     "floor": 4,
+     "name": "계단(동쪽 끝)",
+     "label": "계단(동쪽 끝)",
+     "kind": "stair",
+     "category": "service",
+     "wing": "main",
+     "side": "inner",
+     "polygon": [
+      [
+       98.5,
+       10.0
+      ],
+      [
+       104.0,
+       10.0
+      ],
+      [
+       104.0,
+       18.0
+      ],
+      [
+       98.5,
+       18.0
+      ]
+     ],
+     "anchor": "mainEndStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      101.25,
+      10.0
+     ],
+     "node": "4:stair-mainEndStair"
+    },
+    {
+     "id": "ev-ev",
+     "floor": 4,
+     "name": "엘리베이터",
+     "label": "엘리베이터",
+     "kind": "ev",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       26.0,
+       0.0
+      ],
+      [
+       30.0,
+       0.0
+      ],
+      [
+       30.0,
+       7.0
+      ],
+      [
+       26.0,
+       7.0
+      ]
+     ],
+     "anchor": "ev",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      28.0,
+      7.0
+     ],
+     "node": "4:ev-ev"
+    },
+    {
+     "id": "room-4-13",
+     "floor": 4,
+     "name": "홈베이스",
+     "label": "홈베이스",
+     "kind": "room",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       30.0,
+       0.0
+      ],
+      [
+       53.5,
+       0.0
+      ],
+      [
+       53.5,
+       7.0
+      ],
+      [
+       30.0,
+       7.0
+      ]
+     ],
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      41.75,
+      7.0
+     ],
+     "node": "4:room-4-13"
+    },
+    {
+     "id": "stair-centralStair",
+     "floor": 4,
+     "name": "중앙계단",
+     "label": "중앙계단",
+     "kind": "stair",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       53.5,
+       0.0
+      ],
+      [
+       58.5,
+       0.0
+      ],
+      [
+       58.5,
+       7.0
+      ],
+      [
+       53.5,
+       7.0
+      ]
+     ],
+     "anchor": "centralStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      56.0,
+      7.0
+     ],
+     "node": "4:stair-centralStair"
+    },
+    {
+     "id": "room-4-14",
+     "floor": 4,
+     "name": "교직원화장실",
+     "label": "교직원화장실",
+     "kind": "restroom",
+     "category": "restroom",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       58.5,
+       0.0
+      ],
+      [
+       63.5,
+       0.0
+      ],
+      [
+       63.5,
+       7.0
+      ],
+      [
+       58.5,
+       7.0
+      ]
+     ],
+     "anchor": "staffWC",
+     "visible": true,
+     "game": false,
+     "confirmed": true,
+     "door": [
+      61.0,
+      7.0
+     ],
+     "node": "4:room-4-14"
+    },
+    {
+     "id": "room-4-15",
+     "floor": 4,
+     "name": "탈의실",
+     "label": "탈의실",
+     "kind": "room",
+     "category": "service",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       63.5,
+       0.0
+      ],
+      [
+       68.917,
+       0.0
+      ],
+      [
+       68.917,
+       7.0
+      ],
+      [
+       63.5,
+       7.0
+      ]
+     ],
+     "visible": true,
+     "game": false,
+     "confirmed": true,
+     "door": [
+      66.208,
+      7.0
+     ],
+     "node": "4:room-4-15"
+    },
+    {
+     "id": "room-4-16",
+     "floor": 4,
+     "name": "화장실",
+     "label": "화장실",
+     "kind": "restroom",
+     "category": "restroom",
+     "wing": "main",
+     "side": "outer",
+     "polygon": [
+      [
+       96.0,
+       0.0
+      ],
+      [
+       104.0,
+       0.0
+      ],
+      [
+       104.0,
+       7.0
+      ],
+      [
+       96.0,
+       7.0
+      ]
+     ],
+     "anchor": "eastEnd",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      100.0,
+      7.0
+     ],
+     "node": "4:room-4-16"
+    },
+    {
+     "id": "stair-cornerStair",
+     "floor": 4,
+     "name": "꺾임 계단",
+     "label": "꺾임 계단",
+     "kind": "stair",
+     "category": "service",
+     "wing": "corner",
+     "side": "inner",
+     "polygon": [
+      [
+       10.0,
+       10.0
+      ],
+      [
+       18.0,
+       10.0
+      ],
+      [
+       18.0,
+       18.0
+      ],
+      [
+       10.0,
+       18.0
+      ]
+     ],
+     "anchor": "cornerStair",
+     "visible": true,
+     "game": true,
+     "confirmed": true,
+     "door": [
+      14.0,
+      10.0
+     ],
+     "node": "4:stair-cornerStair"
+    }
+   ],
+   "nodes": [
+    {
+     "id": "4:corner",
+     "x": 8.5,
+     "y": 8.5,
+     "kind": "corner"
+    },
+    {
+     "id": "4:main-end",
+     "x": 103.5,
+     "y": 8.5,
+     "kind": "end"
+    },
+    {
+     "id": "4:west-end",
+     "x": 8.5,
+     "y": 47.5,
+     "kind": "end"
+    },
+    {
+     "id": "4:c:room-4-9",
+     "x": 8.5,
+     "y": 21.571,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-9",
+     "x": 10.0,
+     "y": 21.571,
+     "kind": "room"
+    },
+    {
+     "id": "4:c:room-4-8",
+     "x": 8.5,
+     "y": 29.607,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-8",
+     "x": 10.0,
+     "y": 29.607,
+     "kind": "room"
+    },
+    {
+     "id": "4:c:room-4-7",
+     "x": 8.5,
+     "y": 38.536,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-7",
+     "x": 10.0,
+     "y": 38.536,
+     "kind": "room"
+    },
+    {
+     "id": "4:c:stair-westMidStair",
+     "x": 8.5,
+     "y": 45.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:stair-westMidStair",
+     "x": 10.0,
+     "y": 45.5,
+     "kind": "stair"
+    },
+    {
+     "id": "4:c:room-4-12",
+     "x": 8.5,
+     "y": 22.0,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-12",
+     "x": 7.0,
+     "y": 22.0,
+     "kind": "restroom"
+    },
+    {
+     "id": "4:c:room-4-0",
+     "x": 21.714,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-0",
+     "x": 21.714,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "4:c:room-4-1",
+     "x": 29.143,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-1",
+     "x": 29.143,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "4:c:room-4-6",
+     "x": 36.571,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-6",
+     "x": 36.571,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "4:c:room-4-2",
+     "x": 44.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-2",
+     "x": 44.0,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "4:c:room-4-3",
+     "x": 51.429,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-3",
+     "x": 51.429,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "4:c:room-4-4",
+     "x": 58.857,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-4",
+     "x": 58.857,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "4:c:room-4-5",
+     "x": 66.286,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-5",
+     "x": 66.286,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "4:c:stair-mainMidStair",
+     "x": 72.5,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:stair-mainMidStair",
+     "x": 72.5,
+     "y": 10.0,
+     "kind": "stair"
+    },
+    {
+     "id": "4:c:room-4-10",
+     "x": 77.712,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-10",
+     "x": 77.712,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "4:c:room-4-11",
+     "x": 89.462,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-11",
+     "x": 89.462,
+     "y": 10.0,
+     "kind": "room"
+    },
+    {
+     "id": "4:c:stair-mainEndStair",
+     "x": 101.25,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:stair-mainEndStair",
+     "x": 101.25,
+     "y": 10.0,
+     "kind": "stair"
+    },
+    {
+     "id": "4:c:ev-ev",
+     "x": 28.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:ev-ev",
+     "x": 28.0,
+     "y": 7.0,
+     "kind": "ev"
+    },
+    {
+     "id": "4:c:room-4-13",
+     "x": 41.75,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-13",
+     "x": 41.75,
+     "y": 7.0,
+     "kind": "room"
+    },
+    {
+     "id": "4:c:stair-centralStair",
+     "x": 56.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:stair-centralStair",
+     "x": 56.0,
+     "y": 7.0,
+     "kind": "stair"
+    },
+    {
+     "id": "4:c:room-4-14",
+     "x": 61.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-14",
+     "x": 61.0,
+     "y": 7.0,
+     "kind": "restroom"
+    },
+    {
+     "id": "4:c:room-4-15",
+     "x": 66.208,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-15",
+     "x": 66.208,
+     "y": 7.0,
+     "kind": "room"
+    },
+    {
+     "id": "4:c:room-4-16",
+     "x": 100.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:room-4-16",
+     "x": 100.0,
+     "y": 7.0,
+     "kind": "restroom"
+    },
+    {
+     "id": "4:c:stair-cornerStair",
+     "x": 14.0,
+     "y": 8.5,
+     "kind": "corridor"
+    },
+    {
+     "id": "4:stair-cornerStair",
+     "x": 14.0,
+     "y": 10.0,
+     "kind": "stair"
+    }
+   ],
+   "edges": [
+    [
+     "4:c:room-4-9",
+     "4:room-4-9",
+     1.5
+    ],
+    [
+     "4:c:room-4-8",
+     "4:room-4-8",
+     1.5
+    ],
+    [
+     "4:c:room-4-7",
+     "4:room-4-7",
+     1.5
+    ],
+    [
+     "4:c:stair-westMidStair",
+     "4:stair-westMidStair",
+     1.5
+    ],
+    [
+     "4:c:room-4-12",
+     "4:room-4-12",
+     1.5
+    ],
+    [
+     "4:c:room-4-0",
+     "4:room-4-0",
+     1.5
+    ],
+    [
+     "4:c:room-4-1",
+     "4:room-4-1",
+     1.5
+    ],
+    [
+     "4:c:room-4-6",
+     "4:room-4-6",
+     1.5
+    ],
+    [
+     "4:c:room-4-2",
+     "4:room-4-2",
+     1.5
+    ],
+    [
+     "4:c:room-4-3",
+     "4:room-4-3",
+     1.5
+    ],
+    [
+     "4:c:room-4-4",
+     "4:room-4-4",
+     1.5
+    ],
+    [
+     "4:c:room-4-5",
+     "4:room-4-5",
+     1.5
+    ],
+    [
+     "4:c:stair-mainMidStair",
+     "4:stair-mainMidStair",
+     1.5
+    ],
+    [
+     "4:c:room-4-10",
+     "4:room-4-10",
+     1.5
+    ],
+    [
+     "4:c:room-4-11",
+     "4:room-4-11",
+     1.5
+    ],
+    [
+     "4:c:stair-mainEndStair",
+     "4:stair-mainEndStair",
+     1.5
+    ],
+    [
+     "4:c:ev-ev",
+     "4:ev-ev",
+     1.5
+    ],
+    [
+     "4:c:room-4-13",
+     "4:room-4-13",
+     1.5
+    ],
+    [
+     "4:c:stair-centralStair",
+     "4:stair-centralStair",
+     1.5
+    ],
+    [
+     "4:c:room-4-14",
+     "4:room-4-14",
+     1.5
+    ],
+    [
+     "4:c:room-4-15",
+     "4:room-4-15",
+     1.5
+    ],
+    [
+     "4:c:room-4-16",
+     "4:room-4-16",
+     1.5
+    ],
+    [
+     "4:c:stair-cornerStair",
+     "4:stair-cornerStair",
+     1.5
+    ],
+    [
+     "4:corner",
+     "4:c:stair-cornerStair",
+     5.5
+    ],
+    [
+     "4:c:stair-cornerStair",
+     "4:c:room-4-0",
+     7.714
+    ],
+    [
+     "4:c:room-4-0",
+     "4:c:ev-ev",
+     6.286
+    ],
+    [
+     "4:c:ev-ev",
+     "4:c:room-4-1",
+     1.143
+    ],
+    [
+     "4:c:room-4-1",
+     "4:c:room-4-6",
+     7.429
+    ],
+    [
+     "4:c:room-4-6",
+     "4:c:room-4-13",
+     5.179
+    ],
+    [
+     "4:c:room-4-13",
+     "4:c:room-4-2",
+     2.25
+    ],
+    [
+     "4:c:room-4-2",
+     "4:c:room-4-3",
+     7.429
+    ],
+    [
+     "4:c:room-4-3",
+     "4:c:stair-centralStair",
+     4.571
+    ],
+    [
+     "4:c:stair-centralStair",
+     "4:c:room-4-4",
+     2.857
+    ],
+    [
+     "4:c:room-4-4",
+     "4:c:room-4-14",
+     2.143
+    ],
+    [
+     "4:c:room-4-14",
+     "4:c:room-4-15",
+     5.208
+    ],
+    [
+     "4:c:room-4-15",
+     "4:c:room-4-5",
+     0.077
+    ],
+    [
+     "4:c:room-4-5",
+     "4:c:stair-mainMidStair",
+     6.214
+    ],
+    [
+     "4:c:stair-mainMidStair",
+     "4:c:room-4-10",
+     5.212
+    ],
+    [
+     "4:c:room-4-10",
+     "4:c:room-4-11",
+     11.75
+    ],
+    [
+     "4:c:room-4-11",
+     "4:c:room-4-16",
+     10.538
+    ],
+    [
+     "4:c:room-4-16",
+     "4:c:stair-mainEndStair",
+     1.25
+    ],
+    [
+     "4:c:stair-mainEndStair",
+     "4:main-end",
+     2.25
+    ],
+    [
+     "4:corner",
+     "4:c:room-4-9",
+     13.071
+    ],
+    [
+     "4:c:room-4-9",
+     "4:c:room-4-12",
+     0.429
+    ],
+    [
+     "4:c:room-4-12",
+     "4:c:room-4-8",
+     7.607
+    ],
+    [
+     "4:c:room-4-8",
+     "4:c:room-4-7",
+     8.929
+    ],
+    [
+     "4:c:room-4-7",
+     "4:c:stair-westMidStair",
+     6.964
+    ],
+    [
+     "4:c:stair-westMidStair",
+     "4:west-end",
+     2.0
+    ]
+   ],
+   "image": "floor-plan-4.png",
+   "image3x": "floor-plan-4@3x.png"
+  }
+ },
+ "vertical": [
+  {
+   "a": "1:ev-ev",
+   "b": "2:ev-ev",
+   "kind": "ev",
+   "cost": 12.0
+  },
+  {
+   "a": "2:ev-ev",
+   "b": "3:ev-ev",
+   "kind": "ev",
+   "cost": 12.0
+  },
+  {
+   "a": "3:ev-ev",
+   "b": "4:ev-ev",
+   "kind": "ev",
+   "cost": 12.0
+  },
+  {
+   "a": "1:stair-centralStair",
+   "b": "2:stair-centralStair",
+   "kind": "stair",
+   "cost": 8.0
+  },
+  {
+   "a": "2:stair-centralStair",
+   "b": "3:stair-centralStair",
+   "kind": "stair",
+   "cost": 8.0
+  },
+  {
+   "a": "3:stair-centralStair",
+   "b": "4:stair-centralStair",
+   "kind": "stair",
+   "cost": 8.0
+  },
+  {
+   "a": "1:stair-cornerStair",
+   "b": "2:stair-cornerStair",
+   "kind": "stair",
+   "cost": 8.0
+  },
+  {
+   "a": "2:stair-cornerStair",
+   "b": "3:stair-cornerStair",
+   "kind": "stair",
+   "cost": 8.0
+  },
+  {
+   "a": "3:stair-cornerStair",
+   "b": "4:stair-cornerStair",
+   "kind": "stair",
+   "cost": 8.0
+  },
+  {
+   "a": "1:stair-mainEndStair",
+   "b": "2:stair-mainEndStair",
+   "kind": "stair",
+   "cost": 8.0
+  },
+  {
+   "a": "2:stair-mainEndStair",
+   "b": "3:stair-mainEndStair",
+   "kind": "stair",
+   "cost": 8.0
+  },
+  {
+   "a": "3:stair-mainEndStair",
+   "b": "4:stair-mainEndStair",
+   "kind": "stair",
+   "cost": 8.0
+  },
+  {
+   "a": "1:stair-mainMidStair",
+   "b": "2:stair-mainMidStair",
+   "kind": "stair",
+   "cost": 8.0
+  },
+  {
+   "a": "2:stair-mainMidStair",
+   "b": "3:stair-mainMidStair",
+   "kind": "stair",
+   "cost": 8.0
+  },
+  {
+   "a": "3:stair-mainMidStair",
+   "b": "4:stair-mainMidStair",
+   "kind": "stair",
+   "cost": 8.0
+  },
+  {
+   "a": "1:stair-westMidStair",
+   "b": "2:stair-westMidStair",
+   "kind": "stair",
+   "cost": 8.0
+  },
+  {
+   "a": "2:stair-westMidStair",
+   "b": "3:stair-westMidStair",
+   "kind": "stair",
+   "cost": 8.0
+  },
+  {
+   "a": "3:stair-westMidStair",
+   "b": "4:stair-westMidStair",
+   "kind": "stair",
+   "cost": 8.0
+  }
+ ],
+ "outdoor": [
+  {
+   "id": "place-playground",
+   "name": "운동장",
+   "site": "field",
+   "category": "outdoor",
+   "area": [
+    [
+     21.0,
+     21.0
+    ],
+    [
+     102.0,
+     104.0
+    ]
+   ]
+  },
+  {
+   "id": "place-platform",
+   "name": "조회대",
+   "site": "platform",
+   "category": "outdoor",
+   "area": [
+    [
+     63.0,
+     18.0
+    ],
+    [
+     74.0,
+     28.4
+    ]
+   ]
+  },
+  {
+   "id": "place-annex",
+   "name": "목련관",
+   "site": "annex",
+   "category": "outdoor",
+   "aliases": [
+    "급식실",
+    "식생활관",
+    "강당"
+   ],
+   "description": "1층 식생활관·조리실, 2층 목련관(강당)",
+   "area": [
+    [
+     132.0,
+     70.0
+    ],
+    [
+     162.0,
+     92.0
+    ]
+   ]
+  },
+  {
+   "id": "place-fountain",
+   "name": "급수대",
+   "site": "fountain",
+   "category": "outdoor",
+   "area": [
+    [
+     24.0,
+     23.0
+    ],
+    [
+     28.0,
+     24.2
+    ]
+   ]
+  },
+  {
+   "id": "place-gate-east",
+   "name": "정문",
+   "site": "gateEast",
+   "category": "outdoor",
+   "area": [
+    [
+     174.0,
+     22.0
+    ],
+    [
+     174.0,
+     30.0
+    ]
+   ]
+  },
+  {
+   "id": "place-gate-north",
+   "name": "후문",
+   "site": "gateNorth",
+   "category": "outdoor",
+   "area": [
+    [
+     66.0,
+     -100.0
+    ],
+    [
+     74.0,
+     -100.0
+    ]
+   ]
+  }
+ ]
+}

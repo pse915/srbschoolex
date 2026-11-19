@@ -35,6 +35,9 @@ export function environmentPlan(map,condition){
     for(let i=0;i<(stage===4?9:stage===3?5:1);i++)plan.push({type:i===0?'shutter':i%3===0?'roof':i%2?'window':'crack',x:o.x*32+o.w*(.15+(i%4)*.19),y:o.y*32+o.h*(.24+Math.floor(i/4)*.20),w:Math.min(48,o.w*.14),h:Math.min(42,o.h*.18)});
    }
   }
+  // v6 school: the building is one ┌-shaped image, so damage goes to its real window/roof spots (map.landmarks.facade).
+  const facade=map.landmarks?.facade||[];
+  for(let i=0;i<Math.ceil(facade.length*(stage===4?1:stage===3?.6:.25));i++){const [fx,fy,kind]=facade[i];plan.push({type:kind==='roof'?'roof':i%4===0?'crack':'window',x:fx*32-20,y:fy*32-12,w:40,h:22});}
   const inside=map.kind==='room'||map.kind==='floor'||/^floor/.test(map.id);
   for(let y=4;y<map.height-3;y+=stage===4?4:7)for(let x=4;x<map.width-3;x+=7){
    if(map.solid[y*map.width+x]||(x*7+y*11)%5>stage-1)continue;
@@ -42,9 +45,10 @@ export function environmentPlan(map,condition){
    plan.push({type:inside?'crack':(x+y)%3===0?'crack':'weeds',x:x*32,y:y*32,w:32,h:32});
   }
   if(inside&&stage>=3)for(const o of (map.objects||[]).filter(o=>o.asset>=33&&o.asset<=48).slice(0,stage*5))plan.push({type:'desk',x:o.x*32,y:o.y*32,w:32,h:32});
-  if(map.id==='school'&&stage>=3){plan.push({type:'shutter',x:39*32,y:41*32,w:52,h:60});plan.push({type:'shutter',x:79*32,y:41*32,w:52,h:60});}
+  if(map.id==='school'&&stage>=3)for(const [sx,sy] of map.landmarks?.shutters||[[39,41],[79,41]])plan.push({type:'shutter',x:sx*32-26,y:sy*32-30,w:52,h:60});
  }
- if(map.id==='school'&&stage===2)plan.push({type:'learning',x:75*32,y:48*32,w:128,h:96});
+ const lm=map.landmarks||{};const at=(p,d)=>p||d;
+ if(map.id==='school'&&stage===2){const [lx,ly]=at(lm.learning,[75,48]);plan.push({type:'learning',x:lx*32,y:ly*32,w:128,h:96});}
  if(condition.policies){
   const projects=condition.projects||[];
   if(map.id==='town'){
@@ -53,9 +57,10 @@ export function environmentPlan(map,condition){
     if(id==='q13')for(let j=0;j<7;j++)plan.push({type:'repair',x:(x+j-3)*32,y:(y+3)*32,w:32,h:32});
    }
   }else if(map.id==='school'){
-   if(projects.some(id=>['q07','q14','q15'].includes(id)))plan.push({type:'learning',x:75*32,y:48*32,w:128,h:96});
-   if(projects.some(id=>['q08','q10','q11'].includes(id)))plan.push({type:'care',x:54*32,y:47*32,w:96,h:96});
-   if(projects.includes('q13'))for(let i=0;i<9;i++)plan.push({type:'repair',x:(57+i)*32,y:53*32,w:32,h:32});
+   const [lx,ly]=at(lm.learning,[75,48]),[cx,cy]=at(lm.care,[54,47]),[rx,ry]=at(lm.repair,[57,53]);
+   if(projects.some(id=>['q07','q14','q15'].includes(id)))plan.push({type:'learning',x:lx*32,y:ly*32,w:128,h:96});
+   if(projects.some(id=>['q08','q10','q11'].includes(id)))plan.push({type:'care',x:cx*32,y:cy*32,w:96,h:96});
+   if(projects.includes('q13'))for(let i=0;i<9;i++)plan.push({type:'repair',x:(rx+i)*32,y:ry*32,w:32,h:32});
   }
   // A restored town retains a few physical traces rather than erasing its history.
   if(condition.baseStage>=3&&stage<=2)for(const o of (map.objects||[]).filter(o=>o.asset>=16&&o.asset<=32).slice(0,3))plan.push({type:'crack',x:o.x*32+o.w*.2,y:o.y*32+o.h*.4,w:12,h:30});

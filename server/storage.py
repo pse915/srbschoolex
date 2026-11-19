@@ -106,7 +106,7 @@ def validate(s):
         if not isinstance(entry,dict) or entry.get('id') not in QUEST_IDS:raise ValueError('Invalid diary entry')
         if any(not isinstance(entry.get(k),str) or len(entry[k])>1000 for k in ('title','choice','consequence','concept')):raise ValueError('Invalid diary text')
     if [d['id'] for d in s['diary']]!=s['completed']:raise ValueError('Inconsistent diary')
-    if not isinstance(s.get('visited',[]),list) or len(s.get('visited',[]))>100 or any(not isinstance(v,str) or len(v)>64 for v in s.get('visited',[])):raise ValueError('Invalid visits')
+    if not isinstance(s.get('visited',[]),list) or len(s.get('visited',[]))>200 or any(not isinstance(v,str) or len(v)>64 for v in s.get('visited',[])):raise ValueError('Invalid visits')
     if not isinstance(s.get('stats'),dict) or set(s['stats'])!=STAT_KEYS: raise ValueError('Invalid stats')
     if any(isinstance(v,bool) or not isinstance(v,(int,float)) or not math.isfinite(v) or not 0<=v<=100 for v in s['stats'].values()): raise ValueError('Invalid stat values')
     if not isinstance(s.get('reflection',''),str) or len(s.get('reflection',''))>2000: raise ValueError('Invalid reflection')

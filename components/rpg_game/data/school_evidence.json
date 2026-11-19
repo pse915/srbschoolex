@@ -1,54 +1,73 @@
 {
-  "version": 1,
+  "version": 2,
   "schoolName": "서라벌여중",
-  "evidenceScope": "첨부 ZIP과 지시문만 확인; 최신 실측 도면과 실제 사진은 제공되지 않음",
+  "evidenceScope": "교실배치도(docs/kiosk/floorplan.jpg), 운동장 사진(docs/kiosk/photo-playground.jpg), 교사가 확인한 실 이름(docs/kiosk/00_서라벌여중_배치_기준표.md)",
   "confirmedFromUserBrief": [
     {
-      "feature": "학습지원실2부터 왼쪽 날개가 90도 꺾이는 ㄱ자 구조",
-      "status": "brief-confirmed; physical placement unverified"
+      "feature": "학습지원실2와 행정자료실 사이 꺾임 계단에서 서쪽 동이 남쪽으로 90° 꺾이는 ┌자 구조(1~4층)",
+      "status": "교실배치도 + 운동장 사진으로 확인"
     },
     {
-      "feature": "학교 명칭 서라벌여중",
-      "status": "brief-confirmed"
+      "feature": "층별 실 이름과 순서(안쪽/바깥쪽)",
+      "status": "교사 확인 · data/school_layout.json"
+    },
+    {
+      "feature": "중앙현관은 본관 남쪽(운동장 쪽) 면, 바로 북쪽에 중앙계단, EV는 중앙계단 서쪽",
+      "status": "기준표 1장"
+    },
+    {
+      "feature": "시계탑·유리 커튼월 없음, 짙은 회색 캐노피 + 흰 기둥 현관, 화강석 조회대, 서쪽 동 끝 아치 지붕",
+      "status": "운동장 사진"
     }
   ],
   "inferred": [
     {
-      "feature": "층별 객실 순서, 치수, 문 위치, 계단 좌표",
-      "status": "provisional; original project data"
+      "feature": "건물 치수(깊이 18m, 본관 104m, 서쪽 동 56m, 층고 3.6m), 실 폭, 계단·EV 정확한 위치",
+      "status": "사진·배치도 기반 추정 (tools/school_art.py 상수)"
     },
     {
-      "feature": "외벽 벽돌·창문·지붕 재질, 방별 내부 가구 배치",
-      "status": "fictionalized for game; real photos required"
+      "feature": "배치도에 \"…\"로 표시된 바깥쪽 지원공간",
+      "status": "이름 없이 빈 칸으로 둠 (지어내지 않음)"
+    },
+    {
+      "feature": "실 내부 가구 배치",
+      "status": "게임용 구성"
+    }
+  ],
+  "unconfirmed": [
+    {
+      "floor": 4,
+      "id": "void-4-west",
+      "name": "서쪽 동 끝 구역(배치도 미표기)"
     }
   ],
   "floorMaps": [
     {
       "id": "floor1",
-      "roomCount": 16,
-      "shape": "L-shaped corridor in data",
-      "status": "project-derived; physical validation pending"
+      "roomCount": 24,
+      "shape": "┌자 복도 (본관 동서 + 꺾임 계단 + 서쪽 동 남북)",
+      "status": "data/school_layout.json 기준"
     },
     {
       "id": "floor2",
-      "roomCount": 15,
-      "shape": "L-shaped corridor in data",
-      "status": "project-derived; physical validation pending"
+      "roomCount": 20,
+      "shape": "┌자 복도 (본관 동서 + 꺾임 계단 + 서쪽 동 남북)",
+      "status": "data/school_layout.json 기준"
     },
     {
       "id": "floor3",
-      "roomCount": 14,
-      "shape": "L-shaped corridor in data",
-      "status": "project-derived; physical validation pending"
+      "roomCount": 19,
+      "shape": "┌자 복도 (본관 동서 + 꺾임 계단 + 서쪽 동 남북)",
+      "status": "data/school_layout.json 기준"
     },
     {
       "id": "floor4",
-      "roomCount": 13,
-      "shape": "L-shaped corridor in data",
-      "status": "project-derived; physical validation pending"
+      "roomCount": 17,
+      "shape": "┌자 복도 (본관 동서 + 꺾임 계단 + 서쪽 동 남북)",
+      "status": "data/school_layout.json 기준"
     }
   ],
-  "schoolRoomCount": 58,
-  "realPlanValidation": "additional source required; not represented as exact reconstruction",
-  "indoorRoomCount": 74
+  "schoolRoomCount": 80,
+  "indoorRoomCount": 96,
+  "realPlanValidation": "교실배치도 기준 배치. 치수는 추정치이며 실측 도면이 아님"
 }

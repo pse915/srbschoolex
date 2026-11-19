@@ -54,6 +54,11 @@ def upgrade(root):
    for a in (0,16):d.line((x,a,x+31,a),fill=col(-12))
    d.line((x+((i%2)*16),0,x+((i%2)*16),15),fill=col(-12));d.line((x+16,16,x+16,31),fill=col(-12))
  d.rectangle((7*32,0,8*32-1,31),fill='#39383f')
+ # v6: school ground / floor tiles drawn by tools/school_art.py in the facade palette (indices 48+)
+ import sys;sys.path.insert(0,str(root.parents[1]/'tools'));import school_art as SA
+ extra=SA.ground_tiles();full=Image.new('RGBA',(32*(SA.TILE_BASE+len(extra)),32));full.paste(im,(0,0))
+ for i,t in enumerate(extra):full.paste(t,((SA.TILE_BASE+i)*32,0))
+ im=full
  im.save(assets/'terrain.png')
  def roomtype(m):
   n=m['name'];id=m['id']
@@ -148,13 +153,14 @@ def upgrade(root):
    inspect(m,6,11,'공간 안내',SPECS[kind][0]+'을 위한 공간이다. '+SPECS[kind][1]+'이 눈에 들어온다.')
    inspect(m,25,24,'창가에서 쉬기','잠시 숨을 고르며 지금 내게 필요한 건강, 여가, 관계를 떠올렸다.')
    for n in m['npcs']:n.pop('quest',None);n['x']=16;n['y']=12;n['text']='오늘은 어떤 하루를 보내고 싶나요? 서로 다른 삶과 가족의 모습을 존중해요.'
-  specs.append(dict(map=m['id'],name=m['name'],type=kind,purpose=SPECS[kind][0],materials=SPECS[kind][1],assets=SPECS[kind][2],entrance=[16,28],layoutStatus='provisional; real school plan pending'))
+  specs.append(dict(map=m['id'],name=m['name'],type=kind,purpose=SPECS[kind][0],materials=SPECS[kind][1],assets=SPECS[kind][2],entrance=[16,28],layoutStatus=('data/school_layout.json (교실배치도 기준)' if m['id'].startswith('room-') else 'original village design')))
  # No repeated clue prerequisites. Distinct interactive events in the same coherent day.
  for m in maps.values():
   for n in m['npcs']:n.pop('quest',None)
   for o in m['interactions']:o.pop('clue',None);o.pop('quest',None)
  school=maps['school'];school['npcs'].append(dict(x=62,y=51,name='기술썜',variant=5,quest='teacher',text='교정에서 오래된 다이어리를 찾았구나. 네가 살아갈 미래에는 어떤 하루가 기다릴까?'))
- school['interactions']=[dict(x=64,y=51,label='미래 다이어리',quest='intro',text='나의 선택과 우리가 함께 준비한 미래를 만나 보자.')]
+ school['interactions']=[dict(x=64,y=51,label='미래 다이어리',quest='intro',text='나의 선택과 우리가 함께 준비한 미래를 만나 보자.')]+[i for i in school['interactions'] if i.pop('keep',False)]
+ LM=school['landmarks']
  for id,q in [('cafe','life'),('care','care'),('hall','policy')]:maps[id]['npcs'][0]['quest']=q
  maps['cafe']['interactions'].append(dict(x=16,y=15,label='오늘의 교대표',quest='day',text='일과 쉼을 나누는 시간표'))
  for id in ('home','shared','rental'):maps[id]['npcs'].append(dict(x=16,y=20,name='미래의 나',quest='retire',variant=35,text='내 삶은 여전히 새로운 선택으로 이어지고 있어.'))
@@ -172,16 +178,14 @@ def upgrade(root):
   x=181+round(math.sin(y/17)*3);fill(town,x,y,4,1,40+(y%4))
  for y in (48,92,132,180,222):fill(town,177,y,22,7,16)
  for y in range(30,232,14):put(town,9,179,y,96,64);put(town,46,177,y+4,96,64)
- for x in range(48,82,4):
-  if 60<=x<=67:continue
-  put(school,79,x,59,128,64)
- for x,y in [(55,52),(69,52),(56,62),(68,62)]:put(school,46,x,y,96,64)
+ for x,y in LM['benches']:put(school,79,x,y,128,64)
+ for x,y in LM['planters']:put(school,46,x,y,96,64)
  # Optional future overlays are data, not destructive modifications to base geometry.
  for m in maps.values():m['futureLayers']=[]
- for id,x,y in [('school',66,47),('town',135,130),('welfare',17,24)]:maps[id]['futureLayers'].append(dict(when='access',objects=[dict(asset=77,x=x,y=y,w=96,h=64)],label='모두를 위한 이동 환경'))
- for id,x,y in [('school',57,52),('town',122,132),('culture',18,19)]:maps[id]['futureLayers'].append(dict(when='community',objects=[dict(asset=78,x=x,y=y,w=128,h=96),dict(asset=9,x=x+4,y=y,w=96,h=64)],label='함께 가꾸는 정원'))
- for id,x,y in [('floor1',34,44),('care',20,21),('school',69,53)]:maps[id]['futureLayers'].append(dict(when='care',objects=[dict(asset=75,x=x,y=y,w=96,h=64)],label='돌봄과 배움의 자리'))
- maps['floor2']['futureLayers'].append(dict(when='community',objects=[dict(asset=43,x=43,y=44,w=96,h=64)],label='세대가 함께 읽는 학교'))
+ for id,x,y in [('school',*LM['access']),('town',135,130),('welfare',17,24)]:maps[id]['futureLayers'].append(dict(when='access',objects=[dict(asset=77,x=x,y=y,w=96,h=64)],label='모두를 위한 이동 환경'))
+ for id,x,y in [('school',*LM['garden']),('town',122,132),('culture',18,19)]:maps[id]['futureLayers'].append(dict(when='community',objects=[dict(asset=78,x=x,y=y,w=128,h=96),dict(asset=9,x=x+4,y=y,w=96,h=64)],label='함께 가꾸는 정원'))
+ for id,x,y in [('floor1',58,15),('care',20,21),('school',*LM['care'])]:maps[id]['futureLayers'].append(dict(when='care',objects=[dict(asset=75,x=x,y=y,w=96,h=64)],label='돌봄과 배움의 자리'))
+ maps['floor2']['futureLayers'].append(dict(when='community',objects=[dict(asset=43,x=40,y=11,w=96,h=64)],label='세대가 함께 읽는 학교'))
  for id in ('home','rental','shared'):
   maps[id]['futureLayers'].append(dict(when='home',objects=[dict(asset=78,x=10,y=22,w=96,h=64)],label='내 생활에 맞춘 집'))
  # Compact furnished interiors without reducing the 32x32 map envelope.
@@ -208,8 +212,8 @@ def upgrade(root):
    for o in layer['objects']:compact(o)
   m['spawn']=[16,24]
  # School learning choices must produce a visible learning space too.
- maps['school']['futureLayers'].append(dict(when='learning',objects=[dict(asset=80,x=59,y=53,w=96,h=96),dict(asset=43,x=68,y=54,w=96,h=64)],label='지역과 함께 배우는 학교'))
- maps['floor2']['futureLayers'].append(dict(when='learning',objects=[dict(asset=43,x=43,y=44,w=96,h=64)],label='지역 배움 교실'))
+ maps['school']['futureLayers'].append(dict(when='learning',objects=[dict(asset=80,x=LM['schoolLearning'][0],y=LM['schoolLearning'][1],w=96,h=96),dict(asset=43,x=LM['schoolBooks'][0],y=LM['schoolBooks'][1],w=96,h=64)],label='지역과 함께 배우는 학교'))
+ maps['floor2']['futureLayers'].append(dict(when='learning',objects=[dict(asset=43,x=60,y=11,w=96,h=64)],label='지역 배움 교실'))
  maps['cafe']['futureLayers'].extend([
   dict(when='earning',objects=[dict(asset=80,x=19,y=18,w=64,h=64)],label='저축과 교대 근무 기록'),
   dict(when='balanced',objects=[dict(asset=73,x=18,y=18,w=96,h=64)],label='함께 정하는 교대표'),

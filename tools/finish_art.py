@@ -1,29 +1,49 @@
-"""Normalize generated source to the existing atlas contract and record evidence."""
+"""Record school evidence + map connectivity; optionally re-normalize the environment atlas.
+  python tools/finish_art.py            -> data/school_evidence.json, docs/evidence/graphics-connectivity.json, manifest (sizes/hashes)
+  python tools/finish_art.py --atlas    -> also rebuilds environment.png from environment-source.png (v3 step)
+The connectivity check itself lives in tools/check_maps.py (v6: 중앙현관 -> every room/stair/EV/restroom).
+"""
 from pathlib import Path
 from PIL import Image
-import json,hashlib,collections
-from clean_atlas import clean
-root=Path(__file__).resolve().parents[1];a=root/'components/rpg_game/assets';data=root/'components/rpg_game/data'
-im=Image.open(a/'environment-source.png').convert('RGBA');im.resize((1024,1024),Image.Resampling.NEAREST).save(a/'environment.png')
-clean(a/'environment.png')
-maps={p.stem:json.loads(p.read_text(encoding='utf-8')) for p in (data/'maps').glob('*.json')};errors=[]
-for name,m in maps.items():
- w,h=m['width'],m['height'];sx,sy=m['spawn'];seen={(sx,sy)};q=collections.deque(seen)
- while q:
-  x,y=q.popleft()
-  for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
-   xx,yy=x+dx,y+dy
-   if 0<=xx<w and 0<=yy<h and (xx,yy) not in seen and not m['solid'][yy*w+xx]:seen.add((xx,yy));q.append((xx,yy))
- for p in m['portals']+m['interactions']+m['npcs']:
-  if not any((p['x']+dx,p['y']+dy) in seen for dx,dy in ((0,0),(1,0),(-1,0),(0,1),(0,-1))):errors.append([name,p.get('name',p.get('label')),'unreachable'])
- for p in m['portals']:
-  dest=maps.get(p['target']);pos=p.get('arrival')
-  if not dest:errors.append([name,p['target'],'missing target'])
-  elif not pos or not (0<=pos[0]<dest['width'] and 0<=pos[1]<dest['height']):errors.append([name,p['target'],'invalid arrival'])
-  elif dest['solid'][pos[1]*dest['width']+pos[0]]:errors.append([name,p['target'],'solid arrival'])
-school={'version':1,'schoolName':'서라벌여중','evidenceScope':'첨부 ZIP과 지시문만 확인; 최신 실측 도면과 실제 사진은 제공되지 않음','confirmedFromUserBrief':[{'feature':'학습지원실2부터 왼쪽 날개가 90도 꺾이는 ㄱ자 구조','status':'brief-confirmed; physical placement unverified'},{'feature':'학교 명칭 서라벌여중','status':'brief-confirmed'}],'inferred':[{'feature':'층별 객실 순서, 치수, 문 위치, 계단 좌표','status':'provisional; original project data'},{'feature':'외벽 벽돌·창문·지붕 재질, 방별 내부 가구 배치','status':'fictionalized for game; real photos required'}],'floorMaps':[{'id':k,'roomCount':sum(p['target'].startswith('room-') for p in m['portals']),'shape':'L-shaped corridor in data','status':'project-derived; physical validation pending'} for k,m in maps.items() if k.startswith('floor')],'schoolRoomCount':sum(k.startswith('room-') for k in maps),'indoorRoomCount':sum(m['kind']=='room' for m in maps.values()),'realPlanValidation':'additional source required; not represented as exact reconstruction'}
-(data/'school_evidence.json').write_text(json.dumps(school,ensure_ascii=False,indent=2),encoding='utf-8')
-(root/'docs/evidence/graphics-connectivity.json').write_text(json.dumps({'maps':len(maps),'roomCount':school['schoolRoomCount'],'checks':'spawn reachability; interaction adjacency; portal target and arrival bounds; solid arrival','errors':errors},ensure_ascii=False,indent=2),encoding='utf-8')
-manifest=json.loads((a/'manifest.json').read_text(encoding='utf-8'));manifest['version']=3;manifest['environmentSource']='original generated atlas 2026-10-11; normalized from 1254x1254';manifest['avatarSheet']=json.loads((a/'avatars.json').read_text());manifest['schoolEvidence']='data/school_evidence.json';manifest['qualityGate']='PARTIAL: original environment atlas and six avatars replaced; other original atlases retained; external reference and real-device validation unavailable'
-manifest['assets']=[dict(file=p.name,width=Image.open(p).width,height=Image.open(p).height,mode=Image.open(p).mode,sha256=hashlib.sha256(p.read_bytes()).hexdigest(),source=p.stem.endswith('-source')) for p in sorted(a.glob('*.png'))]
-(a/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8');print(json.dumps({'maps':len(maps),'rooms':school['schoolRoomCount'],'errors':errors},ensure_ascii=True))
+import json, hashlib, sys
+root = Path(__file__).resolve().parents[1]; a = root / 'components/rpg_game/assets'; data = root / 'components/rpg_game/data'
+sys.path.insert(0, str(root / 'tools'))
+import check_maps, school_art as SA  # noqa: E402
+
+if '--atlas' in sys.argv:
+    from clean_atlas import clean
+    im = Image.open(a / 'environment-source.png').convert('RGBA'); im.resize((1024, 1024), Image.Resampling.NEAREST).save(a / 'environment.png')
+    clean(a / 'environment.png')
+maps = check_maps.load_maps()
+result = check_maps.check(maps)
+layout = SA.load_layout(); plans = SA.all_plans(layout)
+unconfirmed = [dict(floor=f, id=e['id'], name=e.get('name')) for f, p in plans.items() for e in p['items'] if e.get('confirmed') is False]
+school = {
+    'version': 2, 'schoolName': '서라벌여중',
+    'evidenceScope': '교실배치도(docs/kiosk/floorplan.jpg), 운동장 사진(docs/kiosk/photo-playground.jpg), 교사가 확인한 실 이름(docs/kiosk/00_서라벌여중_배치_기준표.md)',
+    'confirmedFromUserBrief': [
+        {'feature': '학습지원실2와 행정자료실 사이 꺾임 계단에서 서쪽 동이 남쪽으로 90° 꺾이는 ┌자 구조(1~4층)', 'status': '교실배치도 + 운동장 사진으로 확인'},
+        {'feature': '층별 실 이름과 순서(안쪽/바깥쪽)', 'status': '교사 확인 · data/school_layout.json'},
+        {'feature': '중앙현관은 본관 남쪽(운동장 쪽) 면, 바로 북쪽에 중앙계단, EV는 중앙계단 서쪽', 'status': '기준표 1장'},
+        {'feature': '시계탑·유리 커튼월 없음, 짙은 회색 캐노피 + 흰 기둥 현관, 화강석 조회대, 서쪽 동 끝 아치 지붕', 'status': '운동장 사진'},
+    ],
+    'inferred': [
+        {'feature': '건물 치수(깊이 18m, 본관 104m, 서쪽 동 56m, 층고 3.6m), 실 폭, 계단·EV 정확한 위치', 'status': '사진·배치도 기반 추정 (tools/school_art.py 상수)'},
+        {'feature': '배치도에 "…"로 표시된 바깥쪽 지원공간', 'status': '이름 없이 빈 칸으로 둠 (지어내지 않음)'},
+        {'feature': '실 내부 가구 배치', 'status': '게임용 구성'},
+    ],
+    'unconfirmed': unconfirmed,
+    'floorMaps': [{'id': f'floor{f}', 'roomCount': sum(e['kind'] in ('room', 'restroom') for e in p['items']), 'shape': '┌자 복도 (본관 동서 + 꺾임 계단 + 서쪽 동 남북)',
+                   'status': 'data/school_layout.json 기준'} for f, p in plans.items()],
+    'schoolRoomCount': sum(k.startswith('room-') for k in maps),
+    'indoorRoomCount': sum(m['kind'] == 'room' for m in maps.values()),
+    'realPlanValidation': '교실배치도 기준 배치. 치수는 추정치이며 실측 도면이 아님',
+}
+(data / 'school_evidence.json').write_text(json.dumps(school, ensure_ascii=False, indent=2), encoding='utf-8')
+(root / 'docs/evidence/graphics-connectivity.json').write_text(json.dumps({**result, 'roomCount': school['schoolRoomCount']}, ensure_ascii=False, indent=2), encoding='utf-8')
+manifest = json.loads((a / 'manifest.json').read_text(encoding='utf-8')); manifest['version'] = 3; manifest['schoolEvidence'] = 'data/school_evidence.json'
+manifest['avatarSheet'] = json.loads((a / 'avatars.json').read_text())
+manifest['assets'] = [dict(file=p.name, width=Image.open(p).width, height=Image.open(p).height, mode=Image.open(p).mode, sha256=hashlib.sha256(p.read_bytes()).hexdigest(), source=p.stem.endswith('-source')) for p in sorted(a.glob('*.png'))]
+(a / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf-8')
+print(json.dumps({'maps': len(maps), 'rooms': school['schoolRoomCount'], 'errors': result['errors']}, ensure_ascii=True))
+sys.exit(1 if result['errors'] else 0)

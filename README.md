@@ -75,6 +75,10 @@ python -m http.server 8765 --directory components/rpg_game
 - 모든 학급을 방문할 필요는 없습니다. 결혼·출산이나 특정 직업은 진행 조건이 아닙니다.
 - **다이어리**에서 진행 백업 JSON과 글 TXT를 내려받을 수 있습니다. 백업에는 복원 토큰이 들어 있으므로 개인 기록처럼 보관합니다.
 
+## Streamlit Community Cloud 배포
+
+배포 순서는 `docs/STREAMLIT-DEPLOY.md`를 보세요(저장소 `pse915/srbschoolex`, 진입 파일 `app.py`).
+
 ## 저장 및 Google Sheets
 
 1. `.streamlit/secrets.example.toml`을 배포 서버의 `.streamlit/secrets.toml`로 복사합니다.
@@ -96,7 +100,7 @@ python -m http.server 8765 --directory components/rpg_game
 | 공간 | 크기 |
 |---|---|
 | 교정 | 128×128타일 |
-| 학교 1~4층 | 각각 96×96타일 |
+| 학교 1~4층 | 각각 112×84타일 (1타일 = 1m, ┌자 복도) |
 | 교실·특별실·마을 실내 | 각각 32×32타일 |
 | 미래마을 | 256×256타일 |
 
@@ -116,9 +120,22 @@ python tests/check_connectivity.py
 
 Node 20 이상을 권장합니다. 테스트에는 243개 선택 조합, 중복 선택 방지, 충돌 경로, 저장 인증·revision·전송 실패와 재시도, 맵 연결 검사가 포함됩니다. 브라우저 검사에는 Playwright와 Chrome/WebKit을 사용했습니다. 세부 한계는 `docs/QA.md`를 확인하세요.
 
+## 학교 외관·배치 다시 만들기 (v6)
+
+학교 외관은 이미지 AI가 아니라 코드 픽셀아트 `tools/school_art.py`가 원본이고, 실 배치는 `data/school_layout.json` 한 파일이 원본입니다. 둘 중 하나를 고친 뒤 아래 순서로 다시 만듭니다.
+
+```bash
+python tools/school_art.py --out components/rpg_game/assets --only all
+python build_world.py
+python tools/asset_manifest.py
+python tools/check_maps.py
+```
+
+`school_art.py`는 `school.png`(게임 외관), `school-ruin.png`(50년 뒤), `school-hero.png`(1920×1080 대기화면), 목련관·정문·후문·급수대·운동장 그림, `floor-plan-1~4.png`(+@3x), `school-footprint.json`, `kiosk-plan.json`을 만듭니다. 같은 입력이면 항상 같은 파일이 나옵니다. 변경 내용은 `docs/V6-LSHAPE-REPORT.md`에 있습니다.
+
 ## 최종 완료를 막는 사항
 
-참고 이미지 2장과 실제 학교 사진·교실배치도는 작업 환경에서 확인되지 않았습니다. 그래픽과 학교 좌표는 원본 대조 전입니다. 교과서102-103페이지.docx 본문은 읽고 생애체험 선택에 반영했습니다. 학교 공간 순서는 임시이며 실제 학교 재현도가 확인되지 않았습니다.
+v6부터 학교 외관과 교정·1~4층 맵은 교실배치도와 운동장 사진(`docs/kiosk/`)을 기준으로 다시 만들었습니다(┌자 건물, 실 이름은 교사 확인). 건물 치수는 사진·배치도로 추정한 값이고, 4층 서쪽 끝(아치 지붕) 구역은 확인이 필요합니다(`docs/V6-LSHAPE-REPORT.md`). 교과서102-103페이지.docx 본문은 읽고 생애체험 선택에 반영했습니다.
 
 학교와 마을의 공간 밀도, 교실별 개성, NPC 이동·방향 애니메이션, 플레이어 외형 4종의 독립 디자인, 표정 세트, 독립 UI·장식의 전체 목록, 장기 플레이 및 수업 시간 검증은 추가 제작·개선이 필요합니다. 현재 플레이어 선택 4종은 색상 변형입니다. 모든 NPC가 4방향 애니메이션을 가진 것은 아닙니다. 큰 맵의 면적 자체가 충분한 탐험 콘텐츠를 보장하지 않습니다.
 

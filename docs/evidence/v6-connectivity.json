@@ -1,0 +1,8 @@
+{
+  "maps": 102,
+  "reachableFromLobby": 102,
+  "schoolRoomsChecked": 84,
+  "stairEvPortals": 42,
+  "checks": "spawn reachability; portal/NPC/interaction adjacency; portal target+arrival; lobby -> all rooms/stairs/EV/restrooms; discovery/activity/landmark points",
+  "errors": []
+}

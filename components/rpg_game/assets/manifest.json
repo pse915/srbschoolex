@@ -87,6 +87,14 @@
       "source": false
     },
     {
+      "file": "buildings-ruin.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "sha256": "c1b4ba512d12cd47db5798518a6f9634010b82cb53902a64639108619d3c9042",
+      "source": false
+    },
+    {
       "file": "buildings-source.png",
       "width": 1254,
       "height": 1254,
@@ -175,6 +183,70 @@
       "source": false
     },
     {
+      "file": "floor-plan-1.png",
+      "width": 448,
+      "height": 328,
+      "mode": "RGBA",
+      "sha256": "09196de66a54c4d2c0bfafd8b27e10fb0d0553c4fd9f211bbdedce7ca2cf9ad4",
+      "source": false
+    },
+    {
+      "file": "floor-plan-1@3x.png",
+      "width": 1344,
+      "height": 984,
+      "mode": "RGBA",
+      "sha256": "3df1d1d0336e0f5b0506be469fd6308397a71a50c67fbdbe8269cb4bb519f9a5",
+      "source": false
+    },
+    {
+      "file": "floor-plan-2.png",
+      "width": 448,
+      "height": 328,
+      "mode": "RGBA",
+      "sha256": "b81375038be640fdc01f34dc130abd23eeae676469647255d392eb7de52f7b62",
+      "source": false
+    },
+    {
+      "file": "floor-plan-2@3x.png",
+      "width": 1344,
+      "height": 984,
+      "mode": "RGBA",
+      "sha256": "461268dce8b50c9be4ceca3658ee2df44ebd6ab7a10a31491d164f18e3dd3aa4",
+      "source": false
+    },
+    {
+      "file": "floor-plan-3.png",
+      "width": 448,
+      "height": 328,
+      "mode": "RGBA",
+      "sha256": "3cfbd22ebc2c007a44a6d1a7c95ba9060cb2202dd4853a5306dbec9d349f4b1b",
+      "source": false
+    },
+    {
+      "file": "floor-plan-3@3x.png",
+      "width": 1344,
+      "height": 984,
+      "mode": "RGBA",
+      "sha256": "4e052b65ff6582a26e6e48413f6ba5fb1dfec688970dc798283a7912e1662988",
+      "source": false
+    },
+    {
+      "file": "floor-plan-4.png",
+      "width": 448,
+      "height": 328,
+      "mode": "RGBA",
+      "sha256": "068cff7e1bfff6dd59accb69b59429c72484ae09bc48784743357d5af026e7af",
+      "source": false
+    },
+    {
+      "file": "floor-plan-4@3x.png",
+      "width": 1344,
+      "height": 984,
+      "mode": "RGBA",
+      "sha256": "21714c9b441b741cad6c526425ec68f8ec37abac0b24ea57fc55de39e4374bef",
+      "source": false
+    },
+    {
       "file": "furniture-source.png",
       "width": 1254,
       "height": 1254,
@@ -215,6 +287,70 @@
       "source": false
     },
     {
+      "file": "school-annex-ruin.png",
+      "width": 253,
+      "height": 128,
+      "mode": "RGBA",
+      "sha256": "f004de38e7bbc6308477ad923d719dc7155c6b8916aaad1db92c3e1f0e00f766",
+      "source": false
+    },
+    {
+      "file": "school-annex.png",
+      "width": 253,
+      "height": 128,
+      "mode": "RGBA",
+      "sha256": "c1c58eaa6d53385cb53c779fa45ab593597aacea11f9ea6de2d60b79ab37070e",
+      "source": false
+    },
+    {
+      "file": "school-fountain.png",
+      "width": 33,
+      "height": 19,
+      "mode": "RGBA",
+      "sha256": "5bec6d73aa3a79c5246fc2a441d8dc0ac3339bbdd3c906d44a4a94774a31c080",
+      "source": false
+    },
+    {
+      "file": "school-gate-east.png",
+      "width": 92,
+      "height": 108,
+      "mode": "RGBA",
+      "sha256": "89ab7a022b52ffcb0519573749145d66af6ece370593c7c8b718843fa7f1ee3b",
+      "source": false
+    },
+    {
+      "file": "school-gate-north.png",
+      "width": 174,
+      "height": 25,
+      "mode": "RGBA",
+      "sha256": "7d8b68c86039850d7d4804e185ba7614f1ed9668d8463487318bc6ac0aa52099",
+      "source": false
+    },
+    {
+      "file": "school-ground.png",
+      "width": 761,
+      "height": 289,
+      "mode": "RGBA",
+      "sha256": "75dde397499eccacb91bdf8c1812f51477143e08cb529d2ca286ec345b7ec422",
+      "source": false
+    },
+    {
+      "file": "school-hero.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGB",
+      "sha256": "5f2b7f77f8929775e855714019d1a441a027bce56baecac814960b0d7b5cdf48",
+      "source": false
+    },
+    {
+      "file": "school-ruin.png",
+      "width": 856,
+      "height": 344,
+      "mode": "RGBA",
+      "sha256": "93477128cc82e907579417cb4b0cf1cfa5ecd2af4dc7036b0e57f28cd65be979",
+      "source": false
+    },
+    {
       "file": "school-source.png",
       "width": 1774,
       "height": 887,
@@ -224,18 +360,18 @@
     },
     {
       "file": "school.png",
-      "width": 864,
-      "height": 448,
+      "width": 856,
+      "height": 344,
       "mode": "RGBA",
-      "sha256": "2901f94aacdd70f6544ee01aa2eb58d208e4d875a91e902bd051c5876fe81f54",
+      "sha256": "7253657e24c20cd14bd0beb151114ba954636abca562b3bc34405606e78e13a0",
       "source": false
     },
     {
       "file": "terrain.png",
-      "width": 1536,
+      "width": 2016,
       "height": 32,
       "mode": "RGBA",
-      "sha256": "417f3ab0ee6ab8500ef957717588c0b279f823bd941690cf01bd2d6505363e41",
+      "sha256": "11656f163001fce57e9f82d105dfc6ac77803057319f549962b6fb1870fe698c",
       "source": false
     },
     {
@@ -287,5 +423,10 @@
     "variants": "distinct hairstyle, skin, clothing and satchel; no hue rotation",
     "sha256": "f53f97a47a9406185251fc8689e065496eee15c7a6220c2d07cbae75e406280f"
   },
-  "schoolEvidence": "data/school_evidence.json"
+  "schoolEvidence": "data/school_evidence.json",
+  "mapCount": 102,
+  "schoolPlan": "data/school_layout.json (교실배치도 기준 ┌자; 4층 서쪽 끝 구역 confirmed:false)",
+  "schoolArt": "tools/school_art.py (code pixel art; school.png, school-ruin.png, school-hero.png, floor-plan-1~4, props)",
+  "schoolFootprint": "school-footprint.json",
+  "kioskPlan": "kiosk-plan.json"
 }

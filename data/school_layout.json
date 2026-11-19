@@ -1,0 +1,224 @@
+{
+  "version": 1,
+  "school": "서라벌여자중학교",
+  "source": "docs/kiosk/00_서라벌여중_배치_기준표.md 2장 층별 표 + docs/kiosk/floorplan.jpg(바깥쪽 지원공간)",
+  "_help": [
+    "이 파일이 학교 실 배치의 유일한 원본입니다. 층 맵(floor1~4.json), 층 평면도(floor-plan-N.png), kiosk-plan.json, 사이니지 rooms.json 이 모두 여기서 만들어집니다.",
+    "교사가 고쳐도 되는 칸: name(실 이름), aliases(별칭 목록), name_en(영문 이름), description(설명), visible(안내 화면 표시, 기본 true), game(탐방 게임 장소로 사용, 기본 true), confirmed(실제 확인 여부, 기본 true).",
+    "id 는 게임 맵 이름(room-층-번호)이라 바꾸지 마세요. 실을 추가할 때는 그 층에서 아직 안 쓴 번호를 새로 붙입니다.",
+    "순서 규칙: 서쪽 동은 꺾임부 → 남쪽 끝, 본관은 꺾임부 → 동쪽 끝. inner = 운동장 쪽(안쪽), outer = 바깥쪽 지원공간.",
+    "{\"anchor\": ...} 항목은 계단·EV처럼 층마다 같은 자리에 고정된 칸입니다. 나머지 실은 고정 칸 사이를 span(폭 비율) 만큼 나눠 가집니다.",
+    "{\"gap\": n} 은 배치도에 이름이 없는 칸(… 표시)입니다. 지어내지 않고 비워 둡니다.",
+    "수정 후: python tools/school_art.py --out components/rpg_game/assets --only all  →  python build_world.py  →  python tools/asset_manifest.py"
+  ],
+  "categories": {
+    "classroom": "교실",
+    "office": "교무실·행정",
+    "care": "학생 지원",
+    "special": "특별실",
+    "service": "지원 공간",
+    "restroom": "화장실",
+    "lobby": "현관"
+  },
+  "anchors": {
+    "cornerStair": {"name": "꺾임 계단", "kind": "stair", "note": "본관과 서쪽 동이 만나는 안쪽 모서리. 옥상 위 계단탑"},
+    "centralStair": {"name": "중앙계단", "kind": "stair", "note": "중앙현관 바로 북쪽"},
+    "ev": {"name": "엘리베이터", "kind": "ev", "note": "중앙계단보다 서쪽, 꺾임부 가까이"},
+    "mainMidStair": {"name": "계단", "kind": "stair", "note": "본관 동쪽 중간 계단(1층은 출입구)"},
+    "mainEndStair": {"name": "계단(동쪽 끝)", "kind": "stair"},
+    "westMidStair": {"name": "계단(서쪽 동)", "kind": "stair", "note": "서쪽 동 중간 계단(1층은 출입구)"},
+    "lobby": {"name": "중앙현관", "kind": "lobby"},
+    "staffWC": {"name": "교직원화장실 자리", "kind": "slot"},
+    "eastEnd": {"name": "본관 동쪽 끝 바깥 칸", "kind": "slot"},
+    "westWC": {"name": "꺾임부 바깥쪽 화장실 자리", "kind": "slot"}
+  },
+  "floors": [
+    {
+      "floor": 1,
+      "west": {
+        "inner": [
+          {"id": "room-1-6", "name": "행정자료실", "category": "service"},
+          {"id": "room-1-7", "name": "학습지원실1", "category": "care"},
+          {"id": "room-1-3", "name": "보건실", "category": "care"},
+          {"anchor": "westMidStair"},
+          {"id": "room-1-16", "name": "여교사휴게실", "category": "service", "span": 0.6},
+          {"id": "room-1-5", "name": "자료실", "category": "service", "span": 0.8},
+          {"id": "room-1-4", "name": "학생자치공간", "category": "care"},
+          {"id": "room-1-17", "name": "체육교과연구실", "category": "office", "span": 1.2}
+        ],
+        "outer": [
+          {"id": "room-1-15", "name": "화장실", "category": "restroom", "anchor": "westWC"},
+          {"gap": 1}
+        ]
+      },
+      "main": {
+        "inner": [
+          {"id": "room-1-8", "name": "학습지원실2", "category": "care"},
+          {"id": "room-1-2", "name": "교장실", "category": "office"},
+          {"id": "room-1-1", "name": "행정실", "category": "office"},
+          {"id": "lobby-1", "name": "중앙현관", "category": "lobby", "kind": "lobby", "anchor": "lobby", "aliases": ["현관", "로비"], "game": false},
+          {"id": "room-1-9", "name": "방송실", "category": "special", "span": 0.8},
+          {"id": "room-1-14", "name": "교육공무직원실", "category": "service", "span": 0.8},
+          {"id": "room-1-10", "name": "과학교과연구실", "category": "office", "span": 0.8},
+          {"id": "room-1-13", "name": "과학실3", "category": "special", "span": 1.6},
+          {"anchor": "mainMidStair"},
+          {"id": "room-1-12", "name": "과학실2", "category": "special"},
+          {"id": "room-1-11", "name": "과학실1", "category": "special"},
+          {"anchor": "mainEndStair"}
+        ],
+        "outer": [
+          {"gap": 1},
+          {"anchor": "ev"},
+          {"id": "room-1-18", "name": "회의실/민원면담실", "category": "office", "aliases": ["회의실", "민원면담실"]},
+          {"id": "room-1-19", "name": "문서고", "category": "service", "span": 0.6},
+          {"id": "room-1-20", "name": "인쇄실", "category": "service", "span": 0.6},
+          {"id": "room-1-21", "name": "숙직실", "category": "service", "span": 0.6},
+          {"anchor": "centralStair"},
+          {"id": "room-1-22", "name": "교직원화장실", "category": "restroom", "anchor": "staffWC", "game": false},
+          {"id": "room-1-23", "name": "자료실", "category": "service", "aliases": ["자료실(본관)"]},
+          {"gap": 3},
+          {"id": "room-1-24", "name": "과학준비실", "category": "service", "anchor": "eastEnd"}
+        ]
+      }
+    },
+    {
+      "floor": 2,
+      "west": {
+        "inner": [
+          {"id": "room-2-7", "name": "영어활동실", "category": "special"},
+          {"id": "room-2-2", "name": "1-3", "category": "classroom"},
+          {"id": "room-2-15", "name": "복지실", "category": "care"},
+          {"anchor": "westMidStair"},
+          {"id": "room-2-3", "name": "1-4", "category": "classroom"},
+          {"id": "room-2-4", "name": "1-5", "category": "classroom"},
+          {"id": "room-2-13", "name": "체력단련실", "category": "special", "span": 1.5}
+        ],
+        "outer": [
+          {"id": "room-2-14", "name": "화장실", "category": "restroom", "anchor": "westWC"},
+          {"gap": 1}
+        ]
+      },
+      "main": {
+        "inner": [
+          {"id": "room-2-1", "name": "1-2", "category": "classroom"},
+          {"id": "room-2-0", "name": "1-1", "category": "classroom"},
+          {"id": "room-2-5", "name": "1학년 교무실", "category": "office"},
+          {"id": "room-2-6", "name": "교무센터", "category": "office", "span": 2},
+          {"id": "room-2-10", "name": "미술실", "category": "special"},
+          {"id": "room-2-11", "name": "미술교과연구실", "category": "office", "span": 0.6},
+          {"id": "room-2-12", "name": "정보교과연구실", "category": "office", "span": 0.6},
+          {"anchor": "mainMidStair"},
+          {"id": "room-2-8", "name": "기술실", "category": "special"},
+          {"id": "room-2-9", "name": "가정실", "category": "special"},
+          {"anchor": "mainEndStair"}
+        ],
+        "outer": [
+          {"gap": 1},
+          {"anchor": "ev"},
+          {"id": "room-2-16", "name": "홈베이스", "category": "service"},
+          {"anchor": "centralStair"},
+          {"id": "room-2-17", "name": "교직원화장실", "category": "restroom", "anchor": "staffWC", "game": false},
+          {"id": "room-2-18", "name": "탈의실", "category": "service", "span": 0.6, "game": false},
+          {"gap": 3},
+          {"id": "room-2-19", "name": "화장실", "category": "restroom", "anchor": "eastEnd"}
+        ]
+      }
+    },
+    {
+      "floor": 3,
+      "west": {
+        "inner": [
+          {"id": "room-3-12", "name": "수학교과지원실", "category": "office", "span": 0.6},
+          {"id": "room-3-7", "name": "컴퓨터실", "category": "special", "span": 1.4},
+          {"anchor": "westMidStair"},
+          {"id": "room-3-11", "name": "다목적실", "category": "special", "span": 2}
+        ],
+        "outer": [
+          {"id": "room-3-13", "name": "화장실", "category": "restroom", "anchor": "westWC"},
+          {"gap": 1}
+        ]
+      },
+      "main": {
+        "inner": [
+          {"id": "room-3-0", "name": "2-1", "category": "classroom"},
+          {"id": "room-3-1", "name": "2-2", "category": "classroom"},
+          {"id": "room-3-6", "name": "2학년 교무실", "category": "office"},
+          {"id": "room-3-2", "name": "2-3", "category": "classroom"},
+          {"id": "room-3-3", "name": "2-4", "category": "classroom"},
+          {"id": "room-3-4", "name": "2-5", "category": "classroom"},
+          {"id": "room-3-5", "name": "2-6", "category": "classroom"},
+          {"anchor": "mainMidStair"},
+          {"id": "room-3-14", "name": "즉시분리공간/주제선택수업실", "category": "care", "span": 0.6, "aliases": ["즉시분리공간", "주제선택수업실"]},
+          {"id": "room-3-8", "name": "진로상담실", "category": "care", "span": 0.6},
+          {"id": "room-3-10", "name": "자기주도배움터", "category": "care", "span": 0.8},
+          {"id": "room-3-9", "name": "Wee클래스", "category": "care", "span": 0.8, "aliases": ["위클래스", "Wee 클래스"]},
+          {"anchor": "mainEndStair"}
+        ],
+        "outer": [
+          {"gap": 1},
+          {"anchor": "ev"},
+          {"id": "room-3-15", "name": "홈베이스", "category": "service"},
+          {"anchor": "centralStair"},
+          {"id": "room-3-16", "name": "교직원화장실", "category": "restroom", "anchor": "staffWC", "game": false},
+          {"id": "room-3-17", "name": "탈의실", "category": "service", "span": 0.6, "game": false},
+          {"gap": 3},
+          {"id": "room-3-18", "name": "화장실", "category": "restroom", "anchor": "eastEnd"}
+        ]
+      }
+    },
+    {
+      "floor": 4,
+      "west": {
+        "inner": [
+          {"id": "room-4-9", "name": "음악교과연구실", "category": "office", "span": 0.8},
+          {"id": "room-4-8", "name": "음악실2", "category": "special"},
+          {"id": "room-4-7", "name": "음악실1", "category": "special"},
+          {"anchor": "westMidStair"},
+          {"id": "void-4-west", "name": "서쪽 동 끝 구역(배치도 미표기)", "kind": "void", "confirmed": false, "visible": false, "game": false,
+           "description": "아치 지붕 구역으로 4층이 없는 것으로 추정. 교사 확인 필요"}
+        ],
+        "outer": [
+          {"id": "room-4-12", "name": "화장실", "category": "restroom", "anchor": "westWC"},
+          {"gap": 1}
+        ]
+      },
+      "main": {
+        "inner": [
+          {"id": "room-4-0", "name": "3-1", "category": "classroom"},
+          {"id": "room-4-1", "name": "3-2", "category": "classroom"},
+          {"id": "room-4-6", "name": "3학년 교무실", "category": "office"},
+          {"id": "room-4-2", "name": "3-3", "category": "classroom"},
+          {"id": "room-4-3", "name": "3-4", "category": "classroom"},
+          {"id": "room-4-4", "name": "3-5", "category": "classroom"},
+          {"id": "room-4-5", "name": "3-6", "category": "classroom"},
+          {"anchor": "mainMidStair"},
+          {"id": "room-4-10", "name": "글빛소회의실", "category": "office", "span": 0.6},
+          {"id": "room-4-11", "name": "글빛도서관", "category": "special", "span": 2, "aliases": ["도서관"]},
+          {"anchor": "mainEndStair"}
+        ],
+        "outer": [
+          {"gap": 1},
+          {"anchor": "ev"},
+          {"id": "room-4-13", "name": "홈베이스", "category": "service"},
+          {"anchor": "centralStair"},
+          {"id": "room-4-14", "name": "교직원화장실", "category": "restroom", "anchor": "staffWC", "game": false},
+          {"id": "room-4-15", "name": "탈의실", "category": "service", "span": 0.6, "game": false},
+          {"gap": 3},
+          {"id": "room-4-16", "name": "화장실", "category": "restroom", "anchor": "eastEnd"}
+        ]
+      }
+    }
+  ],
+  "outdoor": [
+    {"id": "place-playground", "name": "운동장", "site": "field", "category": "outdoor"},
+    {"id": "place-platform", "name": "조회대", "site": "platform", "category": "outdoor"},
+    {"id": "place-annex", "name": "목련관", "site": "annex", "category": "outdoor", "aliases": ["급식실", "식생활관", "강당"],
+     "description": "1층 식생활관·조리실, 2층 목련관(강당)"},
+    {"id": "place-fountain", "name": "급수대", "site": "fountain", "category": "outdoor"},
+    {"id": "place-gate-east", "name": "정문", "site": "gateEast", "category": "outdoor"},
+    {"id": "place-gate-north", "name": "후문", "site": "gateNorth", "category": "outdoor"}
+  ],
+  "retired": {
+    "room-1-0": {"was": "중앙현관(방)", "now": "floor1 의 중앙현관(로비 lobby-1)"}
+  }
+}

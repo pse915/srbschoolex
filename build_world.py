@@ -1,6 +1,7 @@
 """Original world/content authoring. Run to rebuild deterministic map data and 32px tiles."""
 from pathlib import Path
 import json, random
+import numpy as np
 from PIL import Image, ImageDraw,ImageColor
 ROOT=Path(__file__).parent/'components/rpg_game'
 DATA=ROOT/'data'; ASSETS=ROOT/'assets'
@@ -29,7 +30,7 @@ for i,c in enumerate(colors):
   for y in (6,19,26):d.line((x+4,y,x+16,y),fill='#c1e0cf')
 tile.save(ASSETS/'terrain.png')
 teachers=[('1-1','기술썜','일본어/진로활동'),('1-2','기술썜','기술가정'),('1-3','기술썜','음악'),('1-4','기술썜','수학'),('1-5','기술썜','과학'),('2-1','기술썜','한문'),('2-2','기술썜','수학'),('2-3','기술썜','과학'),('2-4','기술썜','역사'),('2-5','기술썜','국어'),('2-6','기술썜','음악/스포츠'),('3-1','기술썜','국어'),('3-2','기술썜','영어'),('3-3','기술썜','사회/역사'),('3-4','기술썜','수학'),('3-5','기술썜','사회'),('3-6','기술썜','도덕')]
-floors=[['중앙현관','행정실','교장실','보건실','학생자치공간','자료실','행정자료실','학습지원실1','학습지원실2','방송실','과학교과연구실','과학실1','과학실2','과학실3','교육공무직원 관련 공간'],['1학년 교무실','교무센터','영어활동실','기술실','가정실','미술실','미술교과연구실','정보교과연구실','체력단련실'],['2학년 교무실','컴퓨터실','진로상담실','Wee클래스','자기주도배움터','다목적실','수학교과지원실'],['3학년 교무실','음악실1','음악실2','음악교과연구실','국어 관련 교과 공간','국어도서관']]
+# 층별 실 이름·순서는 data/school_layout.json 에서 읽는다 (v6, 교실배치도 기준).
 catalog=[]
 def new(id,name,w,h,kind='room',floor=None):
  return dict(id=id,name=name,width=w,height=h,kind=kind,floor=floor,spawn=[16,25],tiles=[0]*(w*h),solid=[0]*(w*h),objects=[],portals=[],npcs=[],interactions=[])
@@ -89,35 +90,239 @@ def room(id,name,kind,back,arrival,teacher=None,quest=None,seed=0):
  elif quest:m['npcs'].append(dict(x=16,y=11,name={'job':'진로 안내자 윤슬','housing':'주민 다온','care':'돌봄 활동가 보람','elder':'주민 은빛','generation':'문화 기획자 하람','policy':'마을 안내자 누리','retire':'미래의 나','budget':'카페지기 소담'}.get(quest,'주민'),variant={'job':32,'housing':34,'care':27,'elder':35,'generation':30,'policy':33,'retire':36,'budget':25}[quest],quest=quest,text='함께 이 동네의 이야기를 바꿔 볼래요?'))
  else:m['npcs'].append(dict(x=16,y=11,name='공간 안내자',variant=21+seed%12,text=f'{name}에서 잠깐 쉬어 가요. 다이어리에 오늘의 생각을 기록할 수 있어요.'))
  save(m)
+# ---------------------------------------------------------------------------------------------
+# v6: the school grounds and floors come from tools/school_art.py outputs and data/school_layout.json
+#     (교실배치도 기준 ┌자 건물). Run `python tools/school_art.py --only all` first.
+# ---------------------------------------------------------------------------------------------
+import sys,math
+sys.path.insert(0,str(Path(__file__).parent/'tools'))
+import school_art as SA
+FP_PATH=ASSETS/'school-footprint.json'
+if not FP_PATH.exists():raise SystemExit('school-footprint.json 이 없습니다. 먼저 python tools/school_art.py --only all 을 실행하세요.')
+FP=json.loads(FP_PATH.read_text(encoding='utf-8'))
+LAYOUT=SA.load_layout()
+SC=FP['displayScale'];PS=FP['projection'];S_,KX_,KY_=PS['s'],PS['kx'],PS['ky']
+SO=FP['images']['school']['origin']
+ENTRANCE_TILE=(64,50)   # 중앙현관 portal; kept from v5 so spawn [64,52], teacher [62,51], diary [64,51] stay valid
+_ex,_ey=SO[0]+S_*(SA.XE-KX_*SA.D),SO[1]+S_*(KY_*SA.D)
+OX=round((ENTRANCE_TILE[0]+.5-_ex*SC/32)*32)/32;OY=round((ENTRANCE_TILE[1]-.05-_ey*SC/32)*32)/32
+def w2t(x,y,z=0):
+ """world meters -> school-map tile coordinates (float)"""
+ return OX+(SO[0]+S_*(x-KX_*y))*SC/32,OY+(SO[1]+S_*(KY_*y-z))*SC/32
+def t2w(tx,ty):
+ """school-map tile coordinates -> world ground point (z=0)"""
+ y=((ty-OY)*32/SC-SO[1])/(S_*KY_);return ((tx-OX)*32/SC-SO[0])/S_+KX_*y,y
+def wtile(x,y,z=0):
+ a,b=w2t(x,y,z);return int(math.floor(a)),int(math.floor(b))
+def image_obj(m,name,sort=None,ground=False):
+ """place a school_art image so its world origin lands on w2t(0,0,0); integer 2x scale"""
+ meta=FP['images'][name];o=meta['origin'];ox,oy=w2t(0,0,0)
+ d=dict(asset=-1,image=name,x=round((ox-o[0]*SC/32)*32)/32,y=round((oy-o[1]*SC/32)*32)/32,w=meta['size'][0]*SC,h=meta['size'][1]*SC,role='landmark')
+ if sort is not None:d['sortY']=sort
+ if ground:d['ground']=True
+ m['objects'].append(d);return d
+def in_box(x,y,b,pad=0):return b[0][0]-pad<=x<=b[1][0]+pad and b[0][1]-pad<=y<=b[1][1]+pad
+SITE=FP['site'];BLD=FP['building']
+def in_building(x,y):return in_box(x,y,[BLD['main'][0],BLD['main'][2]]) or in_box(x,y,[BLD['west'][0],BLD['west'][2]])
 school=new('school','서라벌여중 · 교정',128,128,'outside');school['spawn']=[64,52]
-rect(school,49,35,30,72,1);rect(school,31,75,70,28,8);rect(school,59,100,10,28,2)
-# Modular brick building with an L footprint, pending real plan validation.
-obj(school,32,35,17,1728,896)
-rect(school,35,32,54,13,0,1);rect(school,35,17,8,28,0,1)
-portal(school,64,46,'floor1','중앙현관',[58,45])
-interaction(school,64,51,'빛나는 다이어리','어느 날, 운동장 가장자리에서 신비로운 다이어리를 발견했다. 미래마을의 여덟 이야기를 만나 나만의 삶을 기록해 보자.',quest='intro');obj(school,15,63,49,64,64,False)
-for x,y in [(52,49),(72,49),(52,55),(72,55)]:obj(school,1,x,y,96,128);obj(school,9,x+3,y+1,96,64)
-portal(school,64,119,'town','미래마을로',[128,116])
-for j in range(180):
- x=random.randrange(8,120);y=random.randrange(5,118)
- if not (30<x<104 and 15<y<110):obj(school,j%2,x,y,96,128)
+W_,H_=school['width'],school['height']
+# ground: grass(0) everywhere, sand(SA.TILE['sand']) where a tile lies fully inside the field
+for ty in range(H_):
+ for tx in range(W_):
+  cs=[t2w(tx+a,ty+b) for a in (0,1) for b in (0,1)];x,y=t2w(tx+.5,ty+.5)
+  if all(in_box(px,py,SITE['field']) for px,py in cs):school['tiles'][ty*W_+tx]=SA.TILE['sand']
+  if in_building(x,y):j=ty*W_+tx;school['tiles'][j]=SA.TILE['paving'];school['solid'][j]=1
+reserved=set()
+def reserve(tx,ty,r=0):
+ for yy in range(ty-r,ty+r+1):
+  for xx in range(tx-r,tx+r+1):reserved.add((xx,yy))
+def paint(tx,ty,t=None,s=None):
+ if 0<=tx<W_ and 0<=ty<H_:
+  j=ty*W_+tx
+  if t is not None:school['tiles'][j]=t
+  if s is not None:school['solid'][j]=s
+# building sprite: one object; sorted at the main south face so the playground side draws in front of it
+image_obj(school,'school-ground',ground=True)
+face_row=w2t(SA.XE,SA.D)[1]
+image_obj(school,'school',sort=face_row)
+for tx in range(W_):
+ for ty in range(H_):
+  x,y=t2w(tx+.5,ty+.5)
+  if in_building(x,y):reserve(tx,ty,1)
+# sprite bounding box is reserved for trees (roof and walls are drawn there)
+_sx,_sy=w2t(0,0,0);_m=FP['images']['school']
+for ty in range(int(OY),int(OY+_m['size'][1]*SC/32)+1):
+ for tx in range(int(OX),int(OX+_m['size'][0]*SC/32)+1):reserved.add((tx,ty))
+# hedges and pines drawn in the sprite are solid at their base
+for p in FP['planting']:
+ tx,ty=wtile(p['x'],p['y'])
+ for dx in ((-1,0,1) if p['kind']=='hedge' else (0,)):paint(tx+dx,ty,s=1)
+# entrance: two white columns are solid, the steps between them are open
+for c in FP['entrance']['columns']:
+ tx,ty=wtile((c[0]+c[2])/2,(c[1]+c[3])/2);paint(tx,ty,s=1)
+ex_,ey_=ENTRANCE_TILE
+for xx in range(ex_-1,ex_+2):paint(xx,ey_,s=0)
+portal(school,ex_,ey_,'floor1','중앙현관',None)
+# 조회대: granite platform you can walk onto (steps on its south side)
+pf=SITE['platform'];pcx,pcy=wtile((pf[0][0]+pf[1][0])/2,(pf[0][1]+pf[1][1])/2)
+for ty in range(H_):
+ for tx in range(W_):
+  x,y=t2w(tx+.5,ty+.5)
+  if in_box(x,y,pf):paint(tx,ty,t=SA.TILE['paving'],s=0);reserved.add((tx,ty))
+interaction(school,pcx,pcy,'조회대','화강석 조회대에 올라섰다. 아침 조회 때 선생님이 서는 자리에서 운동장이 한눈에 보인다.');school['interactions'][-1]['keep']=True
+# 급수대 (north-west corner of the field)
+fo=SITE['fountain']
+image_obj(school,'school-fountain')
+for ty in range(H_):
+ for tx in range(W_):
+  x,y=t2w(tx+.5,ty+.5)
+  if in_box(x,y,fo,0.3):paint(tx,ty,s=1);reserve(tx,ty,1)
+ftx,fty=wtile((fo[0][0]+fo[1][0])/2,fo[1][1]+2.5)
+interaction(school,ftx,fty,'급수대','운동장 북서쪽 급수대. 체육 시간이 끝나면 줄이 길어진다.');school['interactions'][-1]['keep']=True
+# 목련관 (south-east detached hall: 1층 식생활관·조리실, 2층 강당)
+an=SITE['annex']
+image_obj(school,'school-annex',sort=w2t(an[1][0],an[1][1])[1])
+for ty in range(H_):
+ for tx in range(W_):
+  x,y=t2w(tx+.5,ty+.5)
+  if in_box(x,y,an):paint(tx,ty,t=SA.TILE['paving'],s=1)
+  if in_box(x,y,an,3):reserved.add((tx,ty))
+_ax,_ay=w2t(an[0][0],an[0][1],SA.ANNEX_H+2);_bx,_by=w2t(an[1][0],an[1][1])
+for ty in range(int(_ay),int(_by)+2):
+ for tx in range(int(_ax)-8,int(_bx)+2):reserved.add((tx,ty))
+adx,ady=wtile(SITE['annexDoor'][0],SITE['annexDoor'][1]+2.0)
+interaction(school,adx,ady,'목련관','목련관 입구. 1층은 식생활관·조리실, 2층은 강당(목련관)이다.');school['interactions'][-1]['keep']=True
+# 정문 (east) with the portal to the future village, 후문 (north)
+ge=SITE['gateEast'];gcx,gcy=wtile(ge[0][0]+1.5,(ge[0][1]+ge[1][1])/2)
+image_obj(school,'school-gate-east',sort=w2t(ge[1][0],ge[1][1]+1.2)[1])
+gn=SITE['gateNorth'];ncx,ncy=wtile((gn[0][0]+gn[1][0])/2,gn[0][1]+1.5)
+image_obj(school,'school-gate-north',sort=w2t(gn[0][0],gn[0][1]+0.6)[1])
+for (gx0,gy0),(gx1,gy1),along in ((ge[0],ge[1],'y'),(gn[0],gn[1],'x')):
+ pts=[]
+ if along=='y':pts=[(gx0,gy0-v) for v in np.arange(0,10.5,0.5)]+[(gx0,gy1+v) for v in np.arange(0,10.5,0.5)]
+ else:pts=[(gx0-v,gy0) for v in np.arange(0,10.5,0.5)]+[(gx1+v,gy0) for v in np.arange(0,10.5,0.5)]
+ for x,y in pts:
+  tx,ty=wtile(x,y);paint(tx,ty,s=1);reserve(tx,ty,2)
+reserve(gcx,gcy,3);reserve(ncx,ncy,3)
+# paths (보도블럭): entrance -> 정문, and 후문 -> around the east end -> 정문 path
+def path_line(a,b,w=2):
+ (x0,y0),(x1,y1)=a,b
+ for tx in range(min(x0,x1),max(x0,x1)+1):
+  for ty in range(min(y0,y1),max(y0,y1)+1):
+   for k in range(w):
+    xx,yy=(tx,ty+k) if y0==y1 else (tx+k,ty)
+    j=yy*W_+xx
+    if not school['solid'][j] or (xx,yy) in ((gcx,gcy),(ncx,ncy)):paint(xx,yy,t=SA.TILE['paving'],s=0)
+    reserve(xx,yy,1)
+east_end_x=wtile(SA.L1+3,SA.D)[0]
+path_line((ex_,ey_+1),(ex_,gcy));path_line((ex_,gcy),(gcx,gcy))
+north_row=wtile(SA.L1,-3)[1]
+path_line((ncx,ncy),(ncx,north_row));path_line((min(ncx,east_end_x),north_row),(max(ncx,east_end_x),north_row))
+path_line((east_end_x,north_row),(east_end_x,gcy))
+portal(school,gcx,gcy,'town','미래마을로',[128,116])
+interaction(school,ncx,ncy+1,'후문','학교 북쪽 후문. 등굣길에 이 문으로 들어오는 학생도 많다.');school['interactions'][-1]['keep']=True
+_tcx,_tcy=wtile(*SITE['track']['center'])
+interaction(school,_tcx,_tcy,'운동장','두 동이 감싸 안은 모래 운동장. 트랙 한 바퀴를 돌며 숨을 고른다.');school['interactions'][-1]['keep']=True
+obj(school,15,64,50,64,64,False)   # 빛나는 다이어리 (interaction is added in world_v2)
+# trees around the grounds, never on the building, field, paths, gates or the hall
+for j in range(260):
+ x=random.randrange(3,123);y=random.randrange(3,122)
+ cx,cy=x+1,y+3
+ if any((xx,yy) in reserved for xx in range(x,x+3) for yy in range(y+1,y+4)):continue
+ fx,fy=t2w(cx+.5,cy+.5)
+ if in_box(fx,fy,SITE['field'],4):continue
+ obj(school,j%2,x,y,96,128)
+# landmarks used by the game/ending code (instead of hard-coded coordinates)
+def rt(v):return [round(v[0],2),round(v[1],2)]
+school['landmarks']=dict(
+ entrance=list(ENTRANCE_TILE),
+ shutters=[rt(w2t(SA.XE-16,SA.D,3.0)),rt(w2t(SA.XE+30,SA.D,3.0))],
+ roof=rt(w2t(SA.D+14,SA.D*0.35,SA.H4))+[round((SA.L1-SA.D-24)*S_*SC/32,2)],
+ plaza=[ex_-7,ey_+2,15],
+ learning=rt(w2t(SA.L1-14,SA.D,0.0)),
+ care=[ex_-10,ey_+1],
+ repair=[ex_-4,ey_+3],
+ students=[ex_-3,ey_+3],
+ benches=[[ex_-14,ey_+3],[ex_-10,ey_+3],[ex_+9,ey_+4],[ex_+13,ey_+4]],
+ planters=[[ex_-5,ey_+1],[ex_+3,ey_+1]],
+ access=[ex_+1,ey_],garden=[ex_-8,ey_+5],schoolLearning=[ex_-6,ey_+3],schoolBooks=[ex_+4,ey_+4])
+# facade points (windows on the south face / west wing east face, roof spots) for crisis.js damage overlays
+_fac=[]
+for _z in (2.6,6.2,9.8,13.4):
+ for _x in np.arange(SA.D+5,SA.L1-3,9.0):
+  if not (abs(_x-SA.XE)<9 and _z<7):_fac.append(rt(w2t(_x,SA.D,_z))+['window'])   # not behind the entrance canopy
+ for _y in np.arange(SA.D+6,SA.ARCH_Y0-2,8.0):_fac.append(rt(w2t(SA.D,_y,_z))+['window'])
+for _x in np.arange(SA.D+8,SA.L1-6,14.0):_fac.append(rt(w2t(_x,SA.D*0.5,SA.H4))+['roof'])
+random.Random(6).shuffle(_fac)
+school['landmarks']['facade']=_fac
+_vx,_vy=w2t(0,0,0)
+school['endingView']=dict(x=int(OX)-2,y=int(OY)-3,w=80,h=45)
+# minimap: building footprint in brick colour so the ┌ reads at a glance (keys: s=solid / w=walkable + tile index)
+school['minimapColors']={f"s{SA.TILE['paving']}":'#a2584a',f"w{SA.TILE['paving']}":'#c9c2b2',f"w{SA.TILE['sand']}":'#e2d6b8','w0':'#7f9f73','s0':'#4d6650'}
+school['floorplanSource']='data/school_layout.json'
 save(school)
-for f in range(1,5):
- m=new(f'floor{f}',f'서라벌여중 · {f}층',96,96,'floor',f);m['spawn']=[58,45]
- rect(m,0,0,96,96,7,1);rect(m,15,40,72,12,5);rect(m,15,10,12,42,5)
- rect(m,14,9,1,43,9,1);rect(m,15,9,12,1,9,1);rect(m,27,39,60,1,9,1)
- rooms=[(t[0],t) for t in teachers if int(t[0][0])+1==f]+[(n,None) for n in floors[f-1]]+ [('화장실',None)]
- for k,(name,t) in enumerate(rooms):
-  x,y=(31+(k%8)*7,40 if k<8 else 51) if k<16 else (16,14+(k-16)*7)
-  rid=f'room-{f}-{k}';label=f'{name[0]}학년 {name[-1]}반' if t else name
-  portal(m,x,y,rid,label,[16,26]);obj(m,5,x-1,y-2,64,64,False)
-  typ='classroom' if t else 'science' if '과학' in name else 'technology' if any(s in name for s in ['기술','컴퓨터','정보']) else 'library' if any(s in name for s in ['도서','자료','국어']) else 'music' if '음악' in name else 'art' if '미술' in name else 'hospital' if '보건' in name else 'home' if '가정' in name else 'office'
-  room(rid,label,typ,m['id'],[x,y+2 if y==40 else y-2],t,seed=f*100+k)
- for dest in range(1,5):
-  if dest!=f:portal(m,18+(dest-1)*2,46,f'floor{dest}',f'엘리베이터 · {dest}층',[25,46])
- if f==1:portal(m,58,51,'school','교정으로',[64,49])
- for x in range(31,85,14):obj(m,11,x,47,48,64)
+# ---------------- floors 1~4 (┌자 복도, 1 tile = 1 m) ----------------
+FMG=4;FW=FMG+int(SA.L1)+FMG;FH_=FMG+int(SA.D+SA.L2)+6
+CAT_TILE={'classroom':SA.TILE['room_classroom'],'office':SA.TILE['room_office'],'special':SA.TILE['room_special'],'care':SA.TILE['room_care'],'service':SA.TILE['room_service'],'restroom':SA.TILE['restroom']}
+def mrect(m,r,t,s):
+ x0,y0,x1,y1=[FMG+int(round(v)) for v in r];rect(m,x0,y0,x1-x0,y1-y0,t,s);return x0,y0,x1,y1
+def room_type(name,t):
+ return 'classroom' if t else 'science' if '과학' in name else 'technology' if any(s in name for s in ['기술','컴퓨터','정보']) else 'library' if any(s in name for s in ['도서','자료','글빛']) else 'music' if '음악' in name else 'art' if '미술' in name else 'hospital' if '보건' in name else 'home' if '가정' in name else 'office'
+CORR_ROW=FMG+int(SA.OUTER_W+SA.CORR_W/2)        # main corridor middle row (12)
+CORR_COL=CORR_ROW                               # west corridor middle column (12)
+def corridor_tile(e,offset=0):
+ """tile on the corridor in front of item e (door side), and the middle-of-corridor arrival tile"""
+ if e['wing'] in ('main','corner'):
+  cx=FMG+int(math.floor(e['door'][0]))+offset;row=FMG+int(SA.OUTER_W) if e['side']=='outer' else FMG+int(SA.OUTER_W+SA.CORR_W)-1
+  return (cx,row),(cx,CORR_ROW)
+ cy=FMG+int(math.floor(e['door'][1]))+offset;col=FMG+int(SA.OUTER_W) if e['side']=='outer' else FMG+int(SA.OUTER_W+SA.CORR_W)-1
+ return (col,cy),(CORR_COL,cy)
+def door_tile(e):
+ (px,py),_=corridor_tile(e)
+ if e['wing'] in ('main','corner'):return px,py+(1 if e['side']=='inner' else -1)
+ return px+(1 if e['side']=='inner' else -1),py
+PLANS=SA.all_plans(LAYOUT)
+NFLOORS=len(PLANS)
+floor_rooms={}
+for f,plan in PLANS.items():
+ m=new(f'floor{f}',f'서라벌여중 · {f}층',FW,FH_,'floor',f)
+ rect(m,0,0,FW,FH_,7,1)
+ m['layout']='data/school_layout.json'
+ for r in plan['corridors']:mrect(m,r,SA.TILE['corridor'],0)
+ stairs={}
+ for e in plan['items']:
+  k=e['kind'];r=e['rect']
+  if k=='gap':mrect(m,r,SA.TILE['wall'],1);continue
+  if k=='void':mrect(m,r,SA.TILE['void'],1);continue
+  if k=='lobby':
+   x0,y0,x1,y1=mrect(m,r,SA.TILE['lobby'],0);cx=FMG+int(math.floor(e['door'][0]))
+   m['spawn']=[cx,y0+3];portal(m,cx,y1-1,'school','교정으로',[ENTRANCE_TILE[0],ENTRANCE_TILE[1]+2])
+   continue
+  if k in ('stair','ev'):
+   mrect(m,r,SA.TILE['stair' if k=='stair' else 'ev'],1);stairs[e['id']]=e;continue
+  # rooms
+  x0,y0,x1,y1=mrect(m,r,CAT_TILE.get(e.get('category'),SA.TILE['room_service']),1)
+  if e['wing']=='main' and x1-x0>=3:rect(m,x0,y0,1,y1-y0,SA.TILE['wall'],1)
+  if e['wing']=='west' and y1-y0>=3:rect(m,x0,y0,x1-x0,1,SA.TILE['wall'],1)
+  dx,dy=door_tile(e);rect(m,dx,dy,1,1,SA.TILE['door'],1)
+  (px,py),arr=corridor_tile(e)
+  rid=e['id'];t=next((t for t in teachers if t[0]==e['name']),None) if e.get('category')=='classroom' else None
+  label=SA.room_label(e);portal(m,px,py,rid,label,[16,26])
+  if e['wing']=='main' and e['side']=='outer':obj(m,5,px-1,py-2,64,64,False)
+  room(rid,label,room_type(e['name'],t),m['id'],list(arr),t,seed=f*100+int(rid.split('-')[-1]))
+  floor_rooms.setdefault(f,[]).append(rid)
+ for sid,e in stairs.items():
+  dests=[d for d in range(1,NFLOORS+1) if d!=f and sid in {i['id'] for i in PLANS[d]['items']} and (e['kind']=='ev' or abs(d-f)==1)]
+  offs={1:[0],2:[-1,1],3:[-1,0,1]}[len(dests)]
+  for d,o in zip(dests,offs):
+   (px,py),_=corridor_tile(e,o);de=next(i for i in PLANS[d]['items'] if i['id']==sid);_,arr=corridor_tile(de,o)
+   portal(m,px,py,f'floor{d}',f"{e['name']} · {d}층"+('으로' if e['kind']=='stair' else ''),list(arr))
+ if f!=1:m['spawn']=list(corridor_tile(stairs['stair-centralStair'])[1])
  save(m)
+# arrival for the school's 중앙현관 portal = just inside the floor-1 lobby
+_lobby=next(e for e in PLANS[1]['items'] if e['kind']=='lobby')
+school['portals'][0]['arrival']=[FMG+int(math.floor(_lobby['door'][0])),FMG+int(SA.D)-2]
+write(DATA/'maps'/'school.json',school)
 town=new('town','미래마을 · 느린 내일의 거리',256,256,'town');town['spawn']=[128,122]
 rect(town,0,0,256,256,0)
 for y in (48,92,132,180,222):rect(town,12,y,232,7,1);rect(town,12,y+3,232,1,2)
@@ -140,7 +345,7 @@ for j in range(1300):
 for x,y in [(115,121),(140,121),(116,137),(142,137),(178,135),(178,177)]:obj(town,9,x,y,96,64)
 for x,y in [(111,117),(142,114),(112,129),(140,130)]:obj(town,1,x,y,96,128)
 for x,y in [(119,117),(135,117),(120,131),(136,131)]:obj(town,47,x,y,32,96);obj(town,46,x+1,y+2,64,48)
-portal(town,128,111,'school','학교로 돌아가기',[64,116]);save(town)
+portal(town,128,111,'school','학교로 돌아가기',[gcx-2,gcy]);save(town)
 write(DATA/'catalog.json',catalog);write(DATA/'teachers.json',[dict(classroom=a,name=b,subject=c,fictionalAppearance=True) for a,b,c in teachers])
 quests=[
  dict(id='job',title='나에게 맞는 일',place='career',concept='고용 불안정 · 청년 일자리',story='채용 공고는 많지만 계약 기간과 근무 시간이 모두 다르다. 게시판과 책장을 살펴보고 나의 조건을 정해 보자.',choices=[['배우며 일하는 기술 직무','학습 기회가 늘고 당분간 여유 시간은 줄어든다.',{'money':8,'time':-7,'leisure':-3},'기술을 배우는 일'],['지역 협동조합의 일','소득의 상승 폭은 작지만 주민과 함께 결정할 수 있다.',{'money':3,'relations':8,'community':9},'협동조합의 일'],['유연근무가 가능한 일','일정 조정이 쉽다. 안정적인 계약인지 확인하는 과정도 필요하다.',{'time':8,'money':2,'care':5},'유연근무의 일']]),
@@ -152,7 +357,9 @@ quests=[
  dict(id='policy',title='한정된 예산, 함께 정하는 우선순위',place='hall',concept='사회적 책임 · 가족 친화 문화',story='이번 마을 예산으로 모든 사업을 동시에 확대하기는 어렵다. 의견 자료를 조사하고 먼저 추진할 조합을 정하자.',choices=[['주거 지원 + 청년 일자리','경제적 독립을 돕는다. 돌봄과 의료는 다음 예산에서도 논의해야 한다.',{'money':10,'support':10,'community':4},'주거·일자리 우선'],['돌봄 + 이동·의료 접근','일과 생활의 조화, 고령 주민의 일상을 지원한다.',{'care':10,'health':8,'support':10},'돌봄·의료 우선'],['문화·여가 + 세대 협력','관계와 참여 기회를 넓힌다. 주거 부담 해결도 계속 필요하다.',{'leisure':12,'relations':10,'community':10},'문화·협력 우선']]),
  dict(id='retire',title='미래의 내가 보내온 편지',place='home',concept='노후 준비: 재무·건강·여가·대인 관계',story='시간이 흘러 미래의 집에 도착했다. 네 영역의 기록을 살펴보고 앞으로 이어 갈 계획을 정하자.',choices=[['네 영역을 고르게 돌보는 주간 계획','작은 저축, 산책, 취미, 만남을 일상에 배치한다.',{'money':4,'health':4,'leisure':4,'relations':4},'작게 꾸준히 준비하기'],['사회적 지원과 이웃 관계를 먼저 찾는다','혼자 감당하기 어려운 부분은 상담과 지역 자원을 연결한다.',{'support':10,'relations':8,'care':5},'연결하며 준비하기'],['새로운 활동을 배우며 계획을 조정한다','지금의 상황과 관심에 맞추어 미래 계획을 다시 쓴다.',{'leisure':10,'health':4,'time':-3,'community':5},'배우며 다시 설계하기']])]
 write(DATA/'quests.json',quests)
-write(ASSETS/'manifest.json',dict(tileSize=32,characterFrame=[32,48],provenance='Original assets produced for this project; AI environment and character sheets, deterministic terrain authored in build_world.py.',assets=['terrain.png','environment.png','characters.png'],mapCount=len(catalog),referenceComparison='PENDING: reference images not attached',schoolPlan='PROVISIONAL: exact plan not supplied'))
+_mp=ASSETS/'manifest.json';_man=json.loads(_mp.read_text(encoding='utf-8')) if _mp.exists() else dict(tileSize=32,characterFrame=[32,48],assets=[])
+_man.update(mapCount=len(catalog),schoolPlan='data/school_layout.json (교실배치도 기준 ┌자; 4층 서쪽 끝 구역 confirmed:false)',schoolArt='tools/school_art.py (code pixel art; school.png, school-ruin.png, school-hero.png, floor-plan-1~4, props)')
+_man.pop('referenceComparison',None);_mp.write_text(json.dumps(_man,ensure_ascii=False,indent=2),encoding='utf-8')
 print(f'Built {len(catalog)} maps and {len(teachers)} teacher records')
 
 from world_v2 import upgrade

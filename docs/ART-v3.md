@@ -15,3 +15,7 @@ Six original characters are authored in `tools/build_avatars.py`. `avatars.png` 
 Additional source photos, current floor plans, reference art comparison and physical school-tablet testing are still required for those acceptance criteria.
 
 The production environment alpha was cleaned per cell to remove detached fringe fragments, and the final school screenshot was visually checked after that cleanup. This preserves the generated source separately.
+
+## v6 school art (code pixel art)
+
+The school exterior is no longer an AI sheet. `tools/school_art.py` draws it procedurally (flat palette, no anti-aliasing, integer nearest scaling): `school.png` is pixel-identical to the reference `docs/kiosk/art-v1/school-sprite-1x.png`; `school-ruin.png`, the 목련관/gates/급수대/playground sprites, the floor plans and 15 palette terrain tiles (indices 48–62) come from the same script. Room layout: `data/school_layout.json`. See `docs/V6-LSHAPE-REPORT.md`.

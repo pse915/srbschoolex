@@ -1,7 +1,21 @@
 import {isLifeState} from './life.js';
 export const STAT_NAMES={money:'재무',health:'건강',leisure:'여가',relations:'대인 관계',time:'시간 여유',care:'돌봄 자원',community:'지역 참여',support:'사회적 지원'};
+/** v6: the school grounds and floors were rebuilt as the real ┌-shaped building (data/school_layout.json). */
+export const LAYOUT_VERSION=6;
+export const RETIRED_MAPS={'room-1-0':'floor1'};
+/** Old saves: retired/unknown maps go to their replacement; positions on the rebuilt school/floor maps restart at the map spawn. */
+export function migrateSavedPlace(s,catalog){
+ const list=catalog||[],ids=new Set(list.map(m=>m.id));
+ const spawnOf=id=>(list.find(m=>m.id===id)?.spawn)||(id==='school'?[64,52]:null);
+ const moveTo=id=>{const sp=spawnOf(id);if(sp){s.map=id;s.x=sp[0]*32;s.y=sp[1]*32;}};
+ if(RETIRED_MAPS[s.map])moveTo(RETIRED_MAPS[s.map]);
+ else if(ids.size&&!ids.has(s.map))moveTo('school');
+ else if((s.layoutVersion||0)<LAYOUT_VERSION&&(s.map==='school'||/^floor[1-4]$/.test(s.map)))moveTo(s.map);
+ if(Array.isArray(s.visited))s.visited=s.visited.map(id=>RETIRED_MAPS[id]||id).filter((id,i,a)=>a.indexOf(id)===i);
+ s.layoutVersion=LAYOUT_VERSION;return s;
+}
 export const STORY_IDS=['life','day','care','policy','retire'];
-export function freshState(){return {version:2,id:crypto.randomUUID(),token:crypto.randomUUID(),revision:0,map:'school',x:64*32,y:52*32,avatar:0,stage:'학교',intro:false,teacherMet:false,guideOn:true,completed:[],choices:{},diary:[],visited:['school'],stats:Object.fromEntries(Object.keys(STAT_NAMES).map(k=>[k,45])),ending:false,reflection:'',playSeconds:0,home:'home',work:'cafe'};}
+export function freshState(){return {version:2,id:crypto.randomUUID(),token:crypto.randomUUID(),revision:0,map:'school',x:64*32,y:52*32,avatar:0,stage:'학교',intro:false,teacherMet:false,guideOn:true,completed:[],choices:{},diary:[],visited:['school'],stats:Object.fromEntries(Object.keys(STAT_NAMES).map(k=>[k,45])),ending:false,reflection:'',playSeconds:0,home:'home',work:'cafe',layoutVersion:LAYOUT_VERSION};}
 export function isState(s){return !!s&&s.version===2&&typeof s.map==='string'&&s.map.length<=64&&Number.isInteger(s.avatar)&&s.avatar>=0&&s.avatar<6&&typeof s.stage==='string'&&typeof s.intro==='boolean'&&typeof s.ending==='boolean'&&(!s.life||isLifeState(s.life))&&typeof s.id==='string'&&s.id.length===36&&typeof s.token==='string'&&s.token.length===36&&Number.isFinite(s.x)&&s.x>=0&&s.x<=8192&&Number.isFinite(s.y)&&s.y>=0&&s.y<=8192&&Number.isInteger(s.revision)&&s.revision>=0&&Array.isArray(s.completed)&&s.completed.length<=5&&s.completed.every((x,i)=>x===STORY_IDS[i])&&Array.isArray(s.diary)&&s.diary.length===s.completed.length&&s.diary.every((d,i)=>d&&d.id===s.completed[i]&&['id','title','choice','consequence','concept'].every(k=>typeof d[k]==='string'))&&Array.isArray(s.visited)&&s.stats&&Object.keys(STAT_NAMES).every(k=>Number.isFinite(s.stats[k])&&s.stats[k]>=0&&s.stats[k]<=100)&&s.choices&&s.completed.every(id=>Number.isInteger(s.choices[id])&&s.choices[id]>=0&&s.choices[id]<3)&&typeof s.reflection==='string'&&s.reflection.length<=2000&&(!s.ending||(s.completed.length===5&&s.reflection.trim().length>0));}
 export function choose(s,q,index){if(!s.intro||q.id!==STORY_IDS[s.completed.length])return false;const c=q.choices[index];if(!c)return false;for(const [key,val]of Object.entries(c[2]))s.stats[key]=Math.max(0,Math.min(100,s.stats[key]+val));s.completed.push(q.id);s.choices[q.id]=index;s.diary.push({id:q.id,title:q.title,choice:c[3],consequence:c[1],concept:q.concept});s.stage=s.completed.length>=4?'노년기':s.completed.length>=2?'성인기':'청년기';if(q.id==='life'){s.home=['rental','shared','home'][index];s.work=['office','culture','cafe'][index];}s.ending=false;return true;}
 export function futureFlags(s){return {earning:s.choices.day===0,balanced:s.choices.day===1,resting:s.choices.day===2,home:s.completed.length>0,care:s.completed.includes('care'),access:s.choices.policy===1||s.choices.care===0,community:s.choices.policy===2||s.choices.life===1,learning:s.choices.policy===0,older:s.stage==='노년기'};}
