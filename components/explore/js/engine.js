@@ -185,7 +185,12 @@
   }
   function drawObject(o) {
     var x = Math.round(o.x * T - camera.x), y = Math.round(o.y * T - camera.y);
-    if (o.image) { var im = U.images[o.image]; if (im) ctx.drawImage(im, x, y, o.w, o.h); return; }
+    if (o.image) {
+      var im = U.images[o.image]; if (!im) return;
+      if (o.src) ctx.drawImage(im, o.src[0], o.src[1], o.src[2], o.src[3], x, y, o.w, o.h);
+      else ctx.drawImage(im, x, y, o.w, o.h);
+      return;
+    }
     var a = atlas(o.asset); if (!a[0]) return;
     var cw = a[0].width / 4, ch = a[0].height / 4, j = a[1];
     ctx.drawImage(a[0], (j % 4) * cw, Math.floor(j / 4) * ch, cw, ch, x, y, o.w, o.h);
@@ -199,6 +204,15 @@
     ctx.fillStyle = strong ? '#96483aee' : '#463c52d8'; ctx.fillRect(lx, ly - 13, w, 17);
     ctx.fillStyle = '#fff'; ctx.fillText(text, lx + 5, ly);
   }
+  // teal room plate above a door (like the real signs in the corridor)
+  function sign(text, x, y) {
+    ctx.font = 'bold 9px "Malgun Gothic","Apple SD Gothic Neo",sans-serif';
+    var w = Math.ceil(ctx.measureText(text).width) + 8, lx = Math.round(x - camera.x - w / 2), ly = Math.round(y - camera.y);
+    ctx.fillStyle = '#0f5f5c'; ctx.fillRect(lx - 1, ly - 1, w + 2, 15);
+    ctx.fillStyle = '#17837f'; ctx.fillRect(lx, ly, w, 13);
+    ctx.fillStyle = '#5fb8b2'; ctx.fillRect(lx, ly, w, 1);
+    ctx.fillStyle = '#fff'; ctx.fillText(text, lx + 4, ly + 10);
+  }
   function draw() {
     var m = E.map; if (!m) return;
     var p = E.player, W = cv.width, H = cv.height;
@@ -206,15 +220,18 @@
     camera.y = m.height * T <= H ? (m.height * T - H) / 2 : Math.max(0, Math.min(m.height * T - H, p.y - H * 0.55));
     camera.x = Math.round(camera.x); camera.y = Math.round(camera.y);
     ctx.fillStyle = '#263b3c'; ctx.fillRect(0, 0, W, H);
-    var terr = U.images.terrain;
+    var terr = U.images.terrain, inter = U.images['interior-tiles'];
     var x0 = Math.max(0, Math.floor(camera.x / T)), y0 = Math.max(0, Math.floor(camera.y / T));
     var x1 = Math.min(m.width, Math.ceil((camera.x + W) / T) + 1), y1 = Math.min(m.height, Math.ceil((camera.y + H) / T) + 1);
     for (var ty = y0; ty < y1; ty++) for (var tx = x0; tx < x1; tx++) {
       if (tx < 0 || ty < 0) continue;
-      ctx.drawImage(terr, m.tiles[ty * m.width + tx] * T, 0, T, T, tx * T - camera.x, ty * T - camera.y, T, T);
+      var t = m.tiles[ty * m.width + tx];
+      if (t >= 100) ctx.drawImage(inter, (t - 100) * T, 0, T, T, tx * T - camera.x, ty * T - camera.y, T, T);
+      else ctx.drawImage(terr, t * T, 0, T, T, tx * T - camera.x, ty * T - camera.y, T, T);
     }
-    var list = [];
+    var list = [], signs = [];
     m.objects.forEach(function (o) {
+      if (o.sign) { signs.push(o); return; }
       if (o.x * T > camera.x + W || o.y * T > camera.y + H || o.x * T + o.w < camera.x || o.y * T + o.h < camera.y) return;
       list.push({ y: o.ground ? -1e9 : (o.sortY != null ? o.sortY * T : o.y * T + o.h - 8), o: o });
     });
@@ -228,12 +245,16 @@
     } });
     list.sort(function (a, b) { return a.y - b.y; });
     list.forEach(function (it) { if (it.o) drawObject(it.o); else it.fn(); });
+    signs.forEach(function (o) {
+      if (o.x * T > camera.x - 80 && o.x * T < camera.x + W + 80 && o.y * T > camera.y - 20 && o.y * T < camera.y + H) sign(o.sign, o.x * T, o.y * T);
+    });
     if (E.tapMark) {
       ctx.strokeStyle = 'rgba(255,255,255,' + Math.min(1, E.tapMark.t * 3) + ')'; ctx.lineWidth = 2;
       ctx.strokeRect(E.tapMark.x * T + 6 - camera.x, E.tapMark.y * T + 6 - camera.y, 20, 20);
     }
     // door / stair / person name tags near the player
     m.portals.forEach(function (pt) {
+      if (pt.signed) return;                       // the teal sign already names this door
       var px = (pt.type === 'door' ? pt.x : pt.tiles[0][0]) * T + 16, py = (pt.type === 'door' ? pt.y : pt.tiles[0][1]) * T + 4;
       if (Math.abs(px - p.x) > 260 || Math.abs(py - p.y) > 200) return;
       label(pt.type === 'door' ? pt.label : pt.name, px, py, pt.type !== 'door');

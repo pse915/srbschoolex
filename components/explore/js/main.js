@@ -4,7 +4,8 @@
   var U = SRB.U;
   var IMAGES = ['terrain', 'environment', 'furniture', 'facilities', 'details', 'avatars', 'npcs', 'school', 'school-ground',
     'school-annex', 'school-gate-east', 'school-gate-north', 'school-fountain', 'map-pin', 'stamp',
-    'floor-plan-1', 'floor-plan-2', 'floor-plan-3', 'floor-plan-4', 'stack-floor-1', 'stack-floor-2', 'stack-floor-3', 'stack-floor-4'];
+    'floor-plan-1', 'floor-plan-2', 'floor-plan-3', 'floor-plan-4', 'stack-floor-1', 'stack-floor-2', 'stack-floor-3', 'stack-floor-4',
+    'interior-tiles', 'interior-props'];
   var mapOnly = /[?&]map\b/.test(location.search), booted = false, data = null;
 
   function frameHeight() { U.bridge('streamlit:setFrameHeight', { height: Math.max(640, Math.min(980, (window.screen && screen.height ? screen.height : 900) - 140)) }); }

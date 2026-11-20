@@ -8,6 +8,7 @@ Outputs (generated; do not edit by hand):
   components/explore/data/places.json      places, floors, corridor graph, school-map placement
   components/explore/data/maps/*.json      maps WITHOUT the life-design story (no npcs/interactions/futureLayers)
   components/explore/assets/*.png          copies of the source PNGs (+ assets.json with sha256)
+  components/explore/assets/interior-*.png corridor / entrance / broadcasting-room art (tools/interior_art.py)
 Deterministic: the same inputs always give byte-identical outputs.
 """
 import hashlib, json, math, shutil, sys
@@ -18,6 +19,7 @@ SRC = ROOT / 'components' / 'rpg_game'
 OUT = ROOT / 'components' / 'explore'
 sys.path.insert(0, str(ROOT / 'tools'))
 import school_art as SA  # noqa: E402
+import interior_art as IA  # noqa: E402
 
 ASSETS = ['school.png', 'school-ground.png', 'school-annex.png', 'school-gate-east.png', 'school-gate-north.png',
           'school-fountain.png', 'school-hero.png', 'terrain.png', 'environment.png', 'furniture.png', 'facilities.png',
@@ -77,6 +79,162 @@ def intro(p):
 
 def centroid(poly):
     return [round(sum(p[0] for p in poly) / len(poly), 3), round(sum(p[1] for p in poly) / len(poly), 3)]
+
+
+# ---------- interior look (from the school photos; tools/interior_art.py) ----------
+N4 = ((0, -1), (0, 1), (-1, 0), (1, 0))
+STAIR, EV, VOID, DOOR, WALLT, CORR, LOBBY, OUTSIDE = 53, 60, 61, 52, 62, 50, 51, 7
+
+
+def _tid(k):
+    return IA.TILE_BASE + IA.TILE[k]
+
+
+def _prop(name, x, y, **kw):
+    sx, sy, w, h = IA.prop_rects()[name]
+    o = {'image': 'interior-props', 'src': [sx, sy, w, h], 'x': round(x, 4), 'y': round(y, 4), 'w': w, 'h': h}
+    o.update(kw)
+    return o
+
+
+def decorate_floor(m):
+    """Terrazzo corridor, white walls with a wooden rail, lime pillars/door frames, teal room signs."""
+    W, H = m['width'], m['height']
+    orig, tiles, solid = list(m['tiles']), m['tiles'], m['solid']
+
+    def at(x, y):
+        return orig[y * W + x] if 0 <= x < W and 0 <= y < H else OUTSIDE
+
+    def walk(x, y):
+        return 0 <= x < W and 0 <= y < H and not solid[y * W + x]
+
+    doors, objs = {}, []
+    for pt in m['portals']:
+        if pt['type'] != 'door' or pt['target'] == 'school':
+            continue
+        for dx, dy in N4:
+            x, y = pt['x'] + dx, pt['y'] + dy
+            if at(x, y) == DOOR:
+                doors[(x, y)] = (dx, dy, '화장실' in pt['label'])
+                pt['signed'] = True
+                objs.append({'sign': pt['label'], 'x': x + 0.5, 'y': y - 0.3 if dy else y - 0.45})
+                break
+    face_above = set()
+    for y in range(H):
+        for x in range(W):
+            i = y * W + x
+            t = orig[i]
+            if not solid[i]:
+                if t == CORR:
+                    tact = any(at(x + a, y + b) in (STAIR, EV) for a, b in N4)
+                    tiles[i] = _tid('tactile') if tact else IA.TILE_BASE + (x * 7 + y * 13) % 4
+                elif t == LOBBY:
+                    tiles[i] = _tid('lobby')
+                continue
+            if t in (OUTSIDE, STAIR, VOID):
+                continue
+            nb = [(a, b) for a, b in N4 if walk(x + a, y + b)]
+            if t == EV:
+                tiles[i] = _tid('evDoor' if any(b for a, b in nb) else 'top')
+                continue
+            lobby_side = any(at(x + a, y + b) == LOBBY for a, b in nb)
+            if (x, y) in doors:
+                dx, dy, rest = doors[(x, y)]
+                if dy:
+                    tiles[i] = _tid('frost' if rest else 'door')
+                else:
+                    tiles[i] = _tid(('sideFrost' if rest else 'sideDoor') + ('L' if dx == -1 else 'R'))
+            elif any(b for a, b in nb):
+                single = t == WALLT and (at(x - 1, y) != WALLT or at(x + 1, y) != WALLT)
+                tiles[i] = _tid('pillar' if single else 'wall')
+                if (0, 1) in nb:
+                    face_above.add((x, y))
+            elif nb:
+                right = nb[0][0] == 1
+                tiles[i] = _tid(('panel' if lobby_side else 'side') + ('L' if right else 'R'))
+            else:
+                tiles[i] = _tid('top')
+    # green notice boards on long plain stretches of the wall above the corridor
+    plain = _tid('wall')
+    for y in range(H):
+        x = 0
+        while x < W:
+            if (x, y) in face_above and tiles[y * W + x] == plain:
+                x0 = x
+                while x < W and (x, y) in face_above and tiles[y * W + x] == plain:
+                    x += 1
+                if x - x0 >= 6:
+                    c = x0 + (x - x0) // 2 - 1
+                    tiles[y * W + c], tiles[y * W + c + 1] = _tid('boardL'), _tid('boardR')
+            x += 1
+    m['objects'] = objs          # the old arched brick doorways are replaced by the door tiles
+
+
+def decorate_lobby(m):
+    """중앙현관: polished floor, wooden walls, glass double doors with a clock, signage kiosk, plant, banner."""
+    W = m['width']
+    pts = [(i % W, i // W) for i, t in enumerate(m['tiles']) if t == _tid('lobby')]
+    x0, x1 = min(p[0] for p in pts), max(p[0] for p in pts)
+    y0, y1 = min(p[1] for p in pts), max(p[1] for p in pts)
+    door = next(p for p in m['portals'] if p['type'] == 'door' and p['target'] == 'school')
+    keep = {(door['x'], door['y']), tuple(m['spawn']), (door['x'], door['y'] - 1)}
+    objs = [_prop('glassFront', x0 - 1, y1 + 1, sortY=y1 + 3)]
+
+    def stand(name, tx, ty):
+        if (tx, ty) in keep:
+            return
+        w, h = IA.prop_rects()[name][2:]
+        objs.append(_prop(name, tx + (32 - w) / 64, ty + 1 - h / 32 - 0.05, sortY=ty + 0.9))
+        m['solid'][ty * W + tx] = 1
+
+    stand('kiosk', x1, y0 + 2)
+    stand('plant', x0, y1 - 1)
+    stand('xbanner', x1, y1 - 2)
+    objs.append(_prop('calligraphy', x1 + 1 + 9 / 32, y0 + 1, ground=True))
+    m['objects'] = m['objects'] + objs
+
+
+def decorate_studio(m):
+    """방송실: dark floor, booth window with ON AIR, booth door, console desk, rack, wall panels, chairs."""
+    W = m['width']
+    orig, tiles, solid = list(m['tiles']), m['tiles'], m['solid']
+    floor = [i for i, t in enumerate(orig) if t in (20, 21, 22, 23)]
+    rx0, rx1 = min(i % W for i in floor), max(i % W for i in floor)
+    ry0 = min(i // W for i in floor)
+    for i, t in enumerate(orig):
+        x, y = i % W, i // W
+        if t in (20, 21, 22, 23):
+            tiles[i] = _tid('studioFloor')
+            solid[i] = 0
+        elif t == 32:
+            tiles[i] = _tid('studioWallU' if orig[i - W] == OUTSIDE else 'studioWallD')
+        elif t == 33:
+            tiles[i] = _tid('studioSideL' if x < rx0 else 'studioSideR')
+        elif t == 40:
+            tiles[i] = IA.TILE_BASE + (x * 7 + y * 13) % 4
+    wy = ry0 - 2                                  # top wall row
+    bx = rx0 + 0.5
+    objs = [_prop('boothWindow', bx, wy + 0.4, ground=True),
+            _prop('onAir', bx + (124 - 38) / 64, wy + 0.06, ground=True),
+            _prop('boothDoor', bx + 4.6, wy + 2 - 54 / 32, ground=True),
+            _prop('wallPanels', rx1 - 3.2, wy + 0.45, ground=True),
+            _prop('console', rx0 + 0.6, ry0 + 1, sortY=ry0 + 3),
+            _prop('rack', rx0 + 7.05, ry0 + 1, sortY=ry0 + 3),
+            _prop('chair', rx0 + 2.2, ry0 + 2.6, sortY=ry0 + 3.6),
+            _prop('chair', rx0 + 4.6, ry0 + 2.6, sortY=ry0 + 3.6)]
+    for y in (ry0 + 1, ry0 + 2):
+        for x in range(rx0, rx0 + 8):
+            solid[y * W + x] = 1
+    m['objects'] = objs
+
+
+def decorate(out_maps):
+    IA.build(OUT / 'assets')
+    for mid, m in out_maps.items():
+        if mid.startswith('floor'):
+            decorate_floor(m)
+    decorate_lobby(out_maps['floor1'])
+    decorate_studio(out_maps['room-1-9'])
 
 
 def build():
@@ -213,6 +371,7 @@ def build():
                 xx, yy = x + dx, y + dy
                 if not sm['solid'][yy * sm['width'] + xx]:
                     sm['people'].append({'x': xx, 'y': yy, 'variant': 10 + k * 7, 'name': ['체육부 학생', '급식 도우미', '안내 선생님'][k], 'text': txt}); break
+    decorate(out_maps)
     # ---------- school (교정) placement for the full map ----------
     imgs = fp['images']
     so = imgs['school']['origin']
