@@ -130,3 +130,7 @@ button.go{border:0;min-height:0;cursor:pointer}
 .book-grid span{padding:4px 8px;border-radius:8px;border:1px solid rgba(0,0,0,0.13);font-size:14px}
 .book-grid span.locked{background:#eee8de;color:#9c94a6}
 .result-title{font-size:26px;color:var(--brick);font-weight:800}
+.lang{margin-left:auto;white-space:nowrap}
+.lang span{opacity:.45}
+.lang span.on{opacity:1;font-weight:800;color:var(--brick-d)}
+.lang+.close{margin-left:8px}

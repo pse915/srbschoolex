@@ -11,7 +11,7 @@ Outputs (generated; do not edit by hand):
   components/explore/assets/interior-*.png corridor / entrance / broadcasting-room art (tools/interior_art.py)
 Deterministic: the same inputs always give byte-identical outputs.
 """
-import hashlib, json, math, shutil, sys
+import hashlib, json, math, re, shutil, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -75,6 +75,92 @@ def intro(p):
         'outdoor': f'{n}{josa(n, "은", "는")} 교정에 있는 장소예요.',
     }.get(cat, f'{n}이에요.')
     return f'{base} ({where})'
+
+
+# ---------- English (map screen 한국어/English switch) ----------
+# name_en in data/school_layout.json wins; otherwise these names are used.
+EN_NAMES = {
+    'Wee클래스': 'Wee Class', '가정실': 'Home Economics Room', '계단': 'Stairs', '계단(동쪽 끝)': 'Stairs (East End)',
+    '계단(서쪽 동)': 'Stairs (West Wing)', '계단(서쪽 동)·출입구': 'Stairs & Exit (West Wing)', '계단·출입구': 'Stairs & Exit',
+    '과학교과연구실': "Science Teachers' Room", '과학실1': 'Science Lab 1', '과학실2': 'Science Lab 2', '과학실3': 'Science Lab 3',
+    '과학준비실': 'Science Prep Room', '교무센터': 'Academic Affairs Center', '교육공무직원실': 'Support Staff Room',
+    '교장실': "Principal's Office", '교직원화장실': 'Staff Restroom', '글빛도서관': 'Geulbit Library',
+    '글빛소회의실': 'Geulbit Meeting Room', '급수대': 'Water Fountain', '기술실': 'Technology Room', '꺾임 계단': 'Corner Stairs',
+    '다목적실': 'Multipurpose Room', '목련관': 'Mongnyeon Hall (Cafeteria & Auditorium)', '문서고': 'Archive',
+    '미술교과연구실': "Art Teachers' Room", '미술실': 'Art Room', '방송실': 'Broadcasting Room', '보건실': "Nurse's Office",
+    '복지실': 'Welfare Room', '서쪽 동 끝 구역(배치도 미표기)': 'West Wing End (unconfirmed)', '수학교과지원실': 'Math Support Room',
+    '숙직실': 'Night Duty Room', '엘리베이터': 'Elevator', '여교사휴게실': "Female Teachers' Lounge",
+    '영어활동실': 'English Activity Room', '운동장': 'Playground', '음악교과연구실': "Music Teachers' Room",
+    '음악실1': 'Music Room 1', '음악실2': 'Music Room 2', '인쇄실': 'Print Room', '자기주도배움터': 'Self-Directed Learning Space',
+    '자료실': 'Resource Room', '정문': 'Main Gate', '정보교과연구실': "IT Teachers' Room", '조회대': 'Assembly Stage',
+    '중앙계단': 'Central Stairs', '중앙현관': 'Main Entrance', '즉시분리공간/주제선택수업실': 'Time-out Room / Elective Class Room',
+    '진로상담실': 'Career Counseling Room', '체력단련실': 'Fitness Room', '체육교과연구실': "PE Teachers' Room",
+    '컴퓨터실': 'Computer Lab', '탈의실': 'Changing Room', '학생자치공간': 'Student Council Room',
+    '학습지원실1': 'Learning Support Room 1', '학습지원실2': 'Learning Support Room 2', '행정실': 'Administration Office',
+    '행정자료실': 'Administrative Records Room', '홈베이스': 'Home Base', '화장실': 'Restroom',
+    '회의실/민원면담실': 'Meeting Room / Visitor Consultation', '후문': 'Back Gate',
+    '본관': 'Main Building', '서쪽 동': 'West Wing',
+}
+CAT_EN = {'classroom': 'Classroom', 'office': 'Office', 'special': 'Special room', 'care': 'Student support',
+          'service': 'Support space', 'restroom': 'Restroom', 'lobby': 'Entrance', 'stair': 'Stairs', 'ev': 'Elevator',
+          'outdoor': 'Grounds'}
+WING_EN = {'main': 'Main Building', 'west': 'West Wing', 'corner': 'Corner', 'site': 'Grounds'}
+SIDE_EN = {'inner': 'playground side', 'outer': 'outer side'}
+
+
+def en_name(label, name_en=''):
+    if name_en:
+        return name_en
+    m = re.match(r'^(\d)학년 (\d+)반$', label)
+    if m:
+        return f'Grade {m.group(1)}, Class {m.group(2)}'
+    m = re.match(r'^(\d)학년 교무실$', label)
+    if m:
+        return f"Grade {m.group(1)} Teachers' Office"
+    return EN_NAMES.get(label, label)
+
+
+def intro_en(p):
+    if p.get('description_en'):
+        return p['description_en']
+    n, cat = p['label_en'], p['category']
+    where = 'school grounds' if p['floor'] == 0 else f"{p['floor']}F, {WING_EN.get(p['wing'], '')}" + (f", {SIDE_EN[p['side']]}" if p.get('side') in SIDE_EN else '')
+    base = {
+        'classroom': f'{n} is a homeroom where students spend most of the school day.',
+        'office': f'{n} is where teachers and staff work. Please knock before you go in.',
+        'special': f'{n} is used for special classes and activities.',
+        'care': f'{n} is a place that supports students. Visit when you need help.',
+        'service': f'{n} is a support space for school life.',
+        'restroom': 'This is a restroom. Please keep it clean.',
+        'outdoor': f'{n} is on the school grounds.',
+    }.get(cat, f'{n}.')
+    return f'{base} ({where})'
+
+
+def add_english(data, layout):
+    src = {}
+    for fl in layout['floors']:
+        for wing in ('west', 'main'):
+            for side in ('inner', 'outer'):
+                for it in fl[wing][side]:
+                    if it.get('id'):
+                        src[it['id']] = it
+    for o in layout.get('outdoor', []):
+        src[o['id']] = o
+    for p in data['places']:
+        s = src.get(p['id'], {})
+        p['label_en'] = en_name(p['label'], s.get('name_en') or p.get('name_en', ''))
+        if s.get('description_en'):
+            p['description_en'] = s['description_en']
+        p['intro_en'] = intro_en(p)
+    for k, c in data['categories'].items():
+        c['label_en'] = CAT_EN.get(k, c['label'])
+    for f in data['floors']:
+        f['name_en'] = f"{f['floor']}F"
+    for a in data['school'].get('areas', []):
+        a['name_en'] = EN_NAMES.get(a['name'], a['name'])
+    for l in data['school'].get('labels', []):
+        l['text_en'] = EN_NAMES.get(l['text'], l['text'])
 
 
 def centroid(poly):
@@ -429,6 +515,7 @@ def build():
         {'text': '서쪽 동', 'tile': w2t(g['D'] * 0.5, g['D'] + 22, g['H4'] + 1)},
         {'text': '중앙현관', 'tile': w2t(g['XE'], g['D'] + 4, 4.6)},
     ]
+    add_english(data, layout)
     # ---------- write ----------
     write(OUT / 'data' / 'places.json', data)
     mdir = OUT / 'data' / 'maps'

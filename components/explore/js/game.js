@@ -38,6 +38,7 @@
   function checkIdle() {
     if (Date.now() - G.idle.last < G.idle.ms) return;
     G.idle.last = Date.now();
+    if (MV.lang !== 'ko') MV.setLang('ko');            // next visitor starts in Korean
     if (MV.open && MV.standalone) { if (MV.tab !== 0) MV.setTab(0); return; }
     if (U.modalOpen()) U.closeModal();
     if (MV.open) MV.close();

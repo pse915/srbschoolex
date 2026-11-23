@@ -2,7 +2,22 @@
 (function () {
   'use strict';
   var U = SRB.U;
-  var MV = { open: false, tab: 1, selected: null, pin: null, standalone: false, route: null };
+  var MV = { open: false, tab: 1, selected: null, pin: null, standalone: false, route: null, lang: 'ko', titleKey: 'map' };
+  // 한국어 / English (map screen only). Place names come from places.json (label / label_en).
+  var TXT = {
+    ko: { map: '학교 전체 지도', guide: '서라벌여중 길 안내', close: '닫기', grounds: '교정', stack: '입체', search: '장소 찾기 (예: 위클래스, 도서관)',
+      hint: '지도에서 장소를 누르거나 검색해 보세요.', guideHint: '가고 싶은 곳을 검색하거나 지도에서 누르면, 현관에서 가는 길을 알려 드려요.',
+      route: '현관에서 가는 길 보기', ev: '엘리베이터로 가기', unconfirmed: '확인 필요', here: '지금 여기', stairs: '계단', numbers: '번호로 표시한 좁은 칸',
+      none: '찾는 장소가 없어요.', next: '양옆: ', nearest: '가까운 계단·EV: ', checking: '이 구역은 실제 배치를 확인하는 중이에요.', noRoute: '가는 길을 계산하지 못했어요.' },
+    en: { map: 'School Map', guide: "Seorabeol Girls' Middle School · Directions", close: 'Close', grounds: 'Grounds', stack: '3D', search: 'Find a place (e.g. library, Wee Class)',
+      hint: 'Tap a place on the map or search for it.', guideHint: 'Search for a place or tap it on the map to see the way from the main entrance.',
+      route: 'Show the way from the entrance', ev: 'Use the elevator', unconfirmed: 'To be confirmed', here: 'You are here', stairs: 'Stairs', numbers: 'Small rooms (numbered)',
+      none: 'No matching place.', next: 'Next door: ', nearest: 'Nearest stairs/EV: ', checking: 'The actual layout of this area is still being checked.', noRoute: 'Could not find a route.' }
+  };
+  function tr(k) { return TXT[MV.lang][k]; }
+  function en() { return MV.lang === 'en'; }
+  function nm(p) { return en() ? (p.label_en || p.label) : p.label; }
+  function fl(n) { return en() ? n + 'F' : n + '층'; }
   var D, cv, ctx, stage, view = null, blink = 0, raf = 0;
   var DIRS = ['north', 'east', 'south', 'west'], DIRK = { north: '북쪽', east: '동쪽', south: '남쪽', west: '서쪽' };
 
@@ -15,17 +30,44 @@
       tabs.appendChild(b);
     });
     U.$('mapClose').onclick = function () { MV.close(); };
+    U.$('mapLang').onclick = function () { MV.setLang(en() ? 'ko' : 'en'); };
+    try { if (localStorage.getItem('srb.explore.lang') === 'en') MV.lang = 'en'; } catch (x) {}
     U.$('mapSearch').addEventListener('input', search);
     U.$('routeToggle').onchange = function () { refreshRoute(); };
     U.$('evToggle').onchange = function () { refreshRoute(); };
     cv.addEventListener('pointerup', onTap);
     window.addEventListener('resize', function () { if (MV.open) render(); });
-    var lg = U.$('mapLegend');
+    texts();
+  };
+  // static texts of the map screen in the current language
+  function texts() {
+    U.$('mapTitle').textContent = tr(MV.titleKey);
+    U.$('mapClose').textContent = tr('close');
+    U.$('mapSearch').setAttribute('placeholder', tr('search'));
+    U.$('routeLabel').textContent = tr('route'); U.$('evLabel').textContent = tr('ev');
+    var on = U.$('mapLang').children; on[0].className = en() ? '' : 'on'; on[1].className = en() ? 'on' : '';
+    U.$('mapLang').setAttribute('aria-label', en() ? '한국어로 바꾸기' : 'Switch to English');
+    document.documentElement.lang = MV.lang;
+    var bs = U.$('mapTabs').querySelectorAll('button');
+    for (var i = 0; i < bs.length; i++) {
+      var k = bs[i].getAttribute('data-tab');
+      bs[i].textContent = k === '0' ? tr('grounds') : k === 'stack' ? tr('stack') : fl(+k);
+    }
+    var lg = U.$('mapLegend'); lg.innerHTML = '';
     ['classroom', 'office', 'special', 'care', 'service', 'restroom', 'stair', 'ev'].forEach(function (k) {
-      var c = D.categories[k]; var s = U.el('span', { 'class': 'chip' }, c.label);
+      var c = D.categories[k]; var s = U.el('span', { 'class': 'chip' }, en() ? (c.label_en || c.label) : c.label);
       s.style.background = c.color; if (k === 'ev') s.style.color = '#fff'; lg.appendChild(s);
     });
-    var un = U.el('span', { 'class': 'chip' }, '확인 필요'); un.style.background = 'repeating-linear-gradient(45deg,#9a9ea0 0 4px,#80848a 4px 8px)'; un.style.color = '#fff'; lg.appendChild(un);
+    var un = U.el('span', { 'class': 'chip' }, tr('unconfirmed')); un.style.background = 'repeating-linear-gradient(45deg,#9a9ea0 0 4px,#80848a 4px 8px)'; un.style.color = '#fff'; lg.appendChild(un);
+  }
+  function hint() { U.$('mapInfo').innerHTML = ''; U.$('mapInfo').appendChild(U.el('p', { 'class': 'muted' }, tr(MV.titleKey === 'guide' ? 'guideHint' : 'hint'))); }
+  MV.setLang = function (l) {
+    MV.lang = l === 'en' ? 'en' : 'ko';
+    try { localStorage.setItem('srb.explore.lang', MV.lang); } catch (x) {}
+    if (!D) return;
+    texts(); search();
+    if (MV.selected) info(MV.selected); else if (MV.wing) wingInfo(MV.wing); else hint();
+    refreshRoute();
   };
 
   MV.show = function (opts) {
@@ -33,8 +75,9 @@
     MV.open = true; MV.standalone = !!opts.standalone; MV.pin = opts.pin || null; MV.wing = null;
     U.$('mapview').hidden = false; U.$('mapClose').hidden = MV.standalone;
     U.$('routeToggle').checked = !!opts.route; U.$('routeSteps').innerHTML = '';
-    U.$('mapTitle').textContent = opts.title || '학교 전체 지도';
-    if (opts.route) U.$('mapInfo').innerHTML = '<p class="muted">가고 싶은 곳을 검색하거나 지도에서 누르면, 현관에서 가는 길을 알려 드려요.</p>';
+    MV.titleKey = opts.title ? 'guide' : 'map';
+    texts();
+    if (opts.route) hint();
     var tab = opts.tab != null ? opts.tab : (MV.pin ? MV.pin.floor : 1);
     MV.setTab(tab);
     if (opts.focus) MV.select(byId(opts.focus));
@@ -75,7 +118,7 @@
     var im = U.images['map-pin']; if (!im) return;
     var s = Math.max(2, Math.round(k));
     ctx.drawImage(im, Math.round(x - 6 * s), Math.round(y - 18 * s), 12 * s, 18 * s);
-    tag('지금 여기', x, y - 18 * s - 12, true);
+    tag(tr('here'), x, y - 18 * s - 12, true);
   }
   function render() {
     if (!D) return;
@@ -98,18 +141,18 @@
       var im = U.images[i.image]; if (!im) return;
       ctx.drawImage(im, Math.round(px(i.x)), Math.round(py(i.y)), Math.round(i.w / sc * k), Math.round(i.h / sc * k));
     });
-    (S.labels || []).forEach(function (l) { tag(l.text, px(l.tile[0]), py(l.tile[1]), false); });
+    (S.labels || []).forEach(function (l) { tag(en() ? (l.text_en || l.text) : l.text, px(l.tile[0]), py(l.tile[1]), false); });
     D.places.forEach(function (p) {
       if (p.floor !== 0 || !p.tile || !p.visible) return;
       var x = px(p.tile[0] + 0.5), y = py(p.tile[1]);
       var out = x < 10 || y < 10 || x > cv.width - 10 || y > cv.height - 10;
       if (out) {                                   // gates outside the frame: edge markers
         var ex = Math.max(60, Math.min(cv.width - 60, x)), ey = Math.max(24, Math.min(cv.height - 10, y));
-        tag(p.label + (x > cv.width ? ' →' : y < 0 ? ' ↑' : ''), ex, ey, MV.selected === p);
-      } else tag(p.label, x, y - 4, MV.selected === p && blink % 40 < 20);
+        tag(nm(p) + (x > cv.width ? ' →' : y < 0 ? ' ↑' : ''), ex, ey, MV.selected === p);
+      } else tag(nm(p), x, y - 4, MV.selected === p && blink % 40 < 20);
     });
     if (MV.pin && MV.pin.floor === 0 && MV.pin.tile) pinAt(px(MV.pin.tile[0] + 0.5), py(MV.pin.tile[1] + 0.8), k);
-    if (MV.pin && MV.pin.floor >= 1) tag('지금 ' + MV.pin.floor + '층에 있어요', cv.width / 2, 24, true);
+    if (MV.pin && MV.pin.floor >= 1) tag(en() ? 'You are on ' + fl(MV.pin.floor) : '지금 ' + MV.pin.floor + '층에 있어요', cv.width / 2, 24, true);
   }
 
   // N층: floor-plan PNG (no text inside) + names drawn on top
@@ -130,22 +173,24 @@
         ctx.strokeStyle = '#6c7076'; ctx.lineWidth = 1;
         for (var t = -(y1 - y0); t < x1 - x0; t += 8) { ctx.beginPath(); ctx.moveTo(x0 + t, y1); ctx.lineTo(x0 + t + (y1 - y0), y0); ctx.stroke(); }
         ctx.restore();
-        tag('확인 필요', (x0 + x1) / 2, (y0 + y1) / 2 + 6, false); return;
+        tag(tr('unconfirmed'), (x0 + x1) / 2, (y0 + y1) / 2 + 6, false); return;
       }
       if (MV.selected === p) {
         ctx.fillStyle = blink % 40 < 20 ? 'rgba(150,72,58,0.4)' : 'rgba(150,72,58,0.13)'; ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
         ctx.strokeStyle = '#7c3a30'; ctx.lineWidth = 3; ctx.strokeRect(x0 + 1.5, y0 + 1.5, x1 - x0 - 3, y1 - y0 - 3);
       }
       if (!p.visible) return;
-      var text = p.kind === 'ev' ? 'EV' : p.kind === 'stair' ? '계단' : p.label;
+      var text = p.kind === 'ev' ? 'EV' : p.kind === 'stair' ? tr('stairs') : nm(p);
       var w = x1 - x0 - 4, h = y1 - y0 - 4, cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
       ctx.fillStyle = p.kind === 'ev' ? '#fff' : '#3b3244';
       var done = false, sizes = [13, 11, 10];
       for (var s = 0; s < sizes.length && !done; s++) {
         font(sizes[s], p.kind !== 'stair');
         if (ctx.measureText(text).width <= w && sizes[s] + 2 <= h) { ctx.fillText(text, Math.round(cx - ctx.measureText(text).width / 2), Math.round(cy + sizes[s] / 2 - 1)); done = true; }
-        else if (text.length > 3 && sizes[s] * 2 + 4 <= h) {     // two lines
-          var cut = Math.ceil(text.length / 2), a = text.slice(0, cut), b = text.slice(cut);
+        else if (text.length > 3 && sizes[s] * 2 + 4 <= h && (!en() || text.indexOf(' ') > 0)) {     // two lines
+          var cut = Math.ceil(text.length / 2);
+          if (text.indexOf(' ') > 0) { var sp = text.lastIndexOf(' ', cut); if (sp < 1) sp = text.indexOf(' '); cut = sp + 1; }
+          var a = text.slice(0, cut).replace(/\s+$/, ''), b = text.slice(cut);
           if (Math.max(ctx.measureText(a).width, ctx.measureText(b).width) <= w) {
             ctx.fillText(a, Math.round(cx - ctx.measureText(a).width / 2), Math.round(cy - 1));
             ctx.fillText(b, Math.round(cx - ctx.measureText(b).width / 2), Math.round(cy + sizes[s]));
@@ -160,8 +205,8 @@
       }
     });
     if (nums.length) {
-      var box = U.$('mapNumbers'); box.appendChild(U.el('b', null, '번호로 표시한 좁은 칸'));
-      nums.forEach(function (it) { var d = U.el('div', null, it[0] + '. ' + it[1].label); d.onclick = function () { MV.select(it[1]); }; box.appendChild(d); });
+      var box = U.$('mapNumbers'); box.appendChild(U.el('b', null, tr('numbers')));
+      nums.forEach(function (it) { var d = U.el('div', null, it[0] + '. ' + nm(it[1])); d.onclick = function () { MV.select(it[1]); }; box.appendChild(d); });
     }
     if (MV.wing && !MV.selected && MV.wing.floor === f) {
       var bx0 = 1e9, by0 = 1e9, bx1 = -1e9, by1 = -1e9;
@@ -189,11 +234,11 @@
       ctx.drawImage(im, 0, 0, w * k, h * k);
       ctx.globalAlpha = 1;
     });
-    D.floors.forEach(function (fl) { var a = P(0, 0, fl.floor); tag(fl.name, a[0] - 34, a[1] + 8, fl.floor === focus); });
+    D.floors.forEach(function (f) { var a = P(0, 0, f.floor); tag(fl(f.floor), a[0] - 34, a[1] + 8, f.floor === focus); });
     if (MV.selected && MV.selected.floor >= 1 && MV.selected.center) {
       var c = P(MV.selected.center[0], MV.selected.center[1], MV.selected.floor);
       ctx.fillStyle = '#96483a'; ctx.beginPath(); ctx.arc(c[0], c[1], 6, 0, 7); ctx.fill();
-      tag(MV.selected.label, c[0], c[1] - 12, true);
+      tag(nm(MV.selected), c[0], c[1] - 12, true);
     }
     if (MV.pin && MV.pin.floor >= 1 && MV.pin.m) { var q = P(MV.pin.m[0], MV.pin.m[1], MV.pin.floor); pinAt(q[0], q[1], k / 2); }
   }
@@ -237,11 +282,16 @@
     MV.selected = null; MV.wing = area; MV.lastFloor = area.floor;
     U.$('routeSteps').innerHTML = ''; MV.route = null;
     MV.setTab(area.floor);
-    var box = U.$('mapInfo'); box.innerHTML = '';
-    box.appendChild(U.el('h3', null, area.name + ' ' + area.floor + '층'));
-    var n = D.places.filter(function (p) { return p.floor === area.floor && p.wing === area.wing && (p.kind === 'room' || p.kind === 'restroom') && p.visible; }).length;
-    box.appendChild(U.el('p', null, area.name + ' ' + area.floor + '층에는 실이 ' + n + '곳 있어요. 지도에서 실을 누르면 정보가 나와요. 다른 층은 위 탭에서 고르세요.'));
+    wingInfo(area);
   };
+  function wingInfo(area) {
+    var box = U.$('mapInfo'); box.innerHTML = '';
+    var an = en() ? (area.name_en || area.name) : area.name;
+    box.appendChild(U.el('h3', null, en() ? an + ' ' + fl(area.floor) : an + ' ' + area.floor + '층'));
+    var n = D.places.filter(function (p) { return p.floor === area.floor && p.wing === area.wing && (p.kind === 'room' || p.kind === 'restroom') && p.visible; }).length;
+    box.appendChild(U.el('p', null, en() ? an + ' ' + fl(area.floor) + ' has ' + n + ' rooms. Tap a room on the map for details, or pick another floor with the tabs above.'
+      : an + ' ' + area.floor + '층에는 실이 ' + n + '곳 있어요. 지도에서 실을 누르면 정보가 나와요. 다른 층은 위 탭에서 고르세요.'));
+  }
   MV.select = function (p) {
     if (!p) return;
     MV.selected = p; MV.wing = null;
@@ -255,26 +305,28 @@
     var q = norm(U.$('mapSearch').value), box = U.$('mapResults'); box.innerHTML = '';
     if (!q) return;
     D.places.filter(function (p) {
-      return p.visible && p.kind !== 'gap' && [p.name, p.label].concat(p.aliases || []).some(function (s) { return norm(s).indexOf(q) >= 0; });
+      return p.visible && p.kind !== 'gap' && [p.name, p.label, p.label_en].concat(p.aliases || []).some(function (s) { return norm(s).indexOf(q) >= 0; });
     }).slice(0, 8).forEach(function (p) {
-      var b = U.el('button', { type: 'button' }, p.label + ' · ' + (p.floor ? p.floor + '층' : '교정'));
+      var b = U.el('button', { type: 'button' }, nm(p) + ' · ' + (p.floor ? fl(p.floor) : tr('grounds')));
       b.onclick = function () { MV.select(p); };
       box.appendChild(b);
     });
-    if (!box.children.length) box.appendChild(U.el('p', { 'class': 'muted' }, '찾는 장소가 없어요.'));
+    if (!box.children.length) box.appendChild(U.el('p', { 'class': 'muted' }, tr('none')));
   }
   var WING = { main: '본관', west: '서쪽 동', corner: '꺾임부', site: '교정' }, SIDE = { inner: '운동장 쪽', outer: '바깥쪽' };
+  var WING_EN = { main: 'Main Building', west: 'West Wing', corner: 'Corner', site: 'Grounds' }, SIDE_EN = { inner: 'playground side', outer: 'outer side' };
   function info(p) {
     var box = U.$('mapInfo'); box.innerHTML = '';
-    box.appendChild(U.el('h3', null, p.label));
-    var c = D.categories[p.category] || D.categories.service, chip = U.el('span', { 'class': 'chip' }, c.label);
+    box.appendChild(U.el('h3', null, nm(p)));
+    var c = D.categories[p.category] || D.categories.service, chip = U.el('span', { 'class': 'chip' }, en() ? (c.label_en || c.label) : c.label);
     chip.style.background = c.color; if (p.category === 'ev') chip.style.color = '#fff';
     box.appendChild(chip);
-    box.appendChild(U.el('span', null, p.floor ? p.floor + '층 · ' + (WING[p.wing] || '') + (SIDE[p.side] ? ' · ' + SIDE[p.side] : '') : '교정'));
-    box.appendChild(U.el('p', null, p.intro));
-    if (p.neighbors && p.neighbors.length) box.appendChild(U.el('p', { 'class': 'muted' }, '양옆: ' + p.neighbors.map(function (id) { var q = byId(id); return q ? q.label : id; }).join(', ')));
-    if (p.nearest && p.nearest.length) box.appendChild(U.el('p', { 'class': 'muted' }, '가까운 계단·EV: ' + p.nearest.map(function (n) { var q = byId(n.id); return (q ? q.name : n.id) + ' (' + Math.round(n.m) + 'm)'; }).join(', ')));
-    if (!p.confirmed) box.appendChild(U.el('p', null, '이 구역은 실제 배치를 확인하는 중이에요.'));
+    var W = en() ? WING_EN : WING, S = en() ? SIDE_EN : SIDE;
+    box.appendChild(U.el('span', null, p.floor ? fl(p.floor) + ' · ' + (W[p.wing] || '') + (S[p.side] ? ' · ' + S[p.side] : '') : tr('grounds')));
+    box.appendChild(U.el('p', null, en() ? (p.intro_en || p.intro) : p.intro));
+    if (p.neighbors && p.neighbors.length) box.appendChild(U.el('p', { 'class': 'muted' }, tr('next') + p.neighbors.map(function (id) { var q = byId(id); return q ? nm(q) : id; }).join(', ')));
+    if (p.nearest && p.nearest.length) box.appendChild(U.el('p', { 'class': 'muted' }, tr('nearest') + p.nearest.map(function (n) { var q = byId(n.id); return (q ? (en() ? (q.label_en || q.name) : q.name) : n.id) + ' (' + Math.round(n.m) + 'm)'; }).join(', ')));
+    if (!p.confirmed) box.appendChild(U.el('p', null, tr('checking')));
   }
 
   /* ---------- 현관에서 가는 길 (map screen only) ---------- */
@@ -313,7 +365,8 @@
   }
   MV.routeTo = function (p, evOnly) {
     if (!p) return null;
-    if (p.floor === 0) return { steps: ['이 화면 뒤의 중앙현관 문으로 나가 교정으로 가요.', p.label + josaWa(p.label) + ' 교정에 있어요. 교정 탭에서 위치를 확인하세요.'], nodes: [] };
+    if (p.floor === 0) return { steps: en() ? ['Go out through the main entrance doors behind this screen to the school grounds.', nm(p) + ' is on the school grounds. Check the Grounds tab for where it is.']
+      : ['이 화면 뒤의 중앙현관 문으로 나가 교정으로 가요.', p.label + josaWa(p.label) + ' 교정에 있어요. 교정 탭에서 위치를 확인하세요.'], nodes: [] };
     if (!p.node) return null;
     var G = graph(evOnly), kiosk = D.graph.kiosk, path = shortest(G, kiosk.node, p.node);
     if (!path) return null;
@@ -339,13 +392,15 @@
         var sj = si + 1;
         while (sj < lastSeg && segments[sj].length === 1) sj++;          // floors we only pass through
         var stairNode = seg[seg.length - 1], sp = byId(stairNode.id.split(':').slice(1).join(':'));
-        var toFloor = segments[sj][0].floor, verb = toFloor > seg[0].floor ? '올라가요' : '내려가요';
-        var sname = sp ? sp.name : '계단';
+        var toFloor = segments[sj][0].floor, up = toFloor > seg[0].floor, verb = up ? '올라가요' : '내려가요';
+        var sname = sp ? sp.name : '계단', snameEn = sp ? (sp.label_en || sp.name).replace(' & Exit', '') : 'the stairs';
         if (si === 0 && sp && sp.id === 'stair-centralStair' && !legs.length) {
-          steps.push('이 화면 바로 뒤 중앙계단으로 ' + toFloor + '층까지 ' + verb + '.' + (U.$('evToggle').checked ? '' : ' (엘리베이터는 왼쪽 복도 쪽에 있어요)'));
+          steps.push(en() ? 'Take the Central Stairs right behind this screen ' + (up ? 'up' : 'down') + ' to ' + fl(toFloor) + '.' + (U.$('evToggle').checked ? '' : ' (The elevator is along the corridor to your left.)')
+            : '이 화면 바로 뒤 중앙계단으로 ' + toFloor + '층까지 ' + verb + '.' + (U.$('evToggle').checked ? '' : ' (엘리베이터는 왼쪽 복도 쪽에 있어요)'));
         } else {
           legs.forEach(function (l) { steps.push(legText(l, facing)); facing = l.dir; });
-          steps.push(sp && sp.kind === 'ev' ? '엘리베이터를 타고 ' + toFloor + '층으로 가요.' : sname + U.josa(sname, '으로', '로') + ' ' + toFloor + '층까지 ' + verb + '.');
+          if (en()) steps.push(sp && sp.kind === 'ev' ? 'Take the elevator to ' + fl(toFloor) + '.' : 'Take the ' + snameEn + ' ' + (up ? 'up' : 'down') + ' to ' + fl(toFloor) + '.');
+          else steps.push(sp && sp.kind === 'ev' ? '엘리베이터를 타고 ' + toFloor + '층으로 가요.' : sname + U.josa(sname, '으로', '로') + ' ' + toFloor + '층까지 ' + verb + '.');
         }
         var arrive = segments[sj];
         facing = (arrive.length > 1 && dirOf(arrive[0], arrive[1])) || 'south';
@@ -355,14 +410,27 @@
         var door = seg[seg.length - 1], cn = seg[seg.length - 2];
         var side = cn ? rel(facing, dirOf(cn, door) || facing) : '앞';
         var ord = ordinal(seg, facing, side);
-        steps.push(p.label + U.josa(p.label, '은', '는') + ' 복도 ' + side + (ord ? ' ' + ord + ' 문' : '') + '이에요.');
+        if (en()) {
+          var sideEn = REL_EN[side], ordEn = ordinalEn(ord);
+          steps.push(nm(p) + (side === '앞' ? ' is straight ahead in the corridor.' : ' is ' + (ordEn ? 'the ' + ordEn + ' door ' : '') + 'on your ' + sideEn + ' in the corridor.'));
+        } else steps.push(p.label + U.josa(p.label, '은', '는') + ' 복도 ' + side + (ord ? ' ' + ord + ' 문' : '') + '이에요.');
       }
     }
     return { steps: steps, nodes: N };
   };
   function josaWa(w) { return U.josa(w, '은', '는'); }
+  var REL_EN = { '앞': 'ahead', '오른쪽': 'right', '뒤': 'behind', '왼쪽': 'left' };
+  var ORD_KO = ['첫', '두', '세', '네', '다섯', '여섯', '일곱', '여덟', '아홉'], ORD_EN = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth'];
+  function ordinalEn(ord) { if (!ord) return ''; var i = ORD_KO.indexOf(ord.split(' ')[0]); return i >= 0 ? ORD_EN[i] : ''; }
   function legText(l, facing) {
-    var r = rel(facing, l.dir), where = l.dir === 'south' || l.dir === 'north' ? '서쪽 동 복도' : '본관 복도';
+    var r = rel(facing, l.dir);
+    if (en()) {
+      var whereEn = l.dir === 'south' || l.dir === 'north' ? 'the West Wing corridor' : 'the Main Building corridor';
+      if (r === '앞') return 'Go straight ' + l.dir + ' along ' + whereEn + '.';
+      if (l.from.kind === 'corner') return 'At the corner, turn ' + REL_EN[r] + ' (' + l.dir + ') into ' + whereEn + '.';
+      return 'Turn ' + REL_EN[r] + ' (' + l.dir + ') and follow ' + whereEn + '.';
+    }
+    var where = l.dir === 'south' || l.dir === 'north' ? '서쪽 동 복도' : '본관 복도';
     if (r === '앞') return where + '를 따라 ' + DIRK[l.dir] + '으로 쭉 가요.';
     if (l.from.kind === 'corner') return '꺾임부에서 ' + r + '(' + DIRK[l.dir] + ')으로 돌아 ' + where + '로 가요.';
     return r + '(' + DIRK[l.dir] + ')으로 ' + where + '를 따라가요.';
@@ -392,7 +460,7 @@
     if (U.$('routeToggle').checked && MV.selected) {
       MV.route = MV.routeTo(MV.selected, U.$('evToggle').checked);
       if (MV.route) MV.route.steps.forEach(function (s) { box.appendChild(U.el('li', null, s)); });
-      else box.appendChild(U.el('li', null, '가는 길을 계산하지 못했어요.'));
+      else box.appendChild(U.el('li', null, tr('noRoute')));
     }
     render();
   }

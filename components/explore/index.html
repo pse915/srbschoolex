@@ -62,6 +62,7 @@
     <header class="map-head">
       <h2 id="mapTitle">학교 전체 지도</h2>
       <div class="tabs" id="mapTabs" role="tablist"></div>
+      <button id="mapLang" class="lang" type="button" aria-label="Switch to English"><span class="on">한국어</span> / <span>English</span></button>
       <button id="mapClose" class="close" type="button">닫기</button>
     </header>
     <div class="map-body">
@@ -70,8 +71,8 @@
         <input id="mapSearch" type="search" placeholder="장소 찾기 (예: 위클래스, 도서관)" autocomplete="off" aria-label="장소 검색">
         <div id="mapResults" class="results"></div>
         <div id="mapInfo" class="info"><p class="muted">지도에서 장소를 누르거나 검색해 보세요.</p></div>
-        <label class="route-toggle"><input type="checkbox" id="routeToggle"> 현관에서 가는 길 보기</label>
-        <label class="route-toggle"><input type="checkbox" id="evToggle"> 엘리베이터로 가기</label>
+        <label class="route-toggle"><input type="checkbox" id="routeToggle"> <span id="routeLabel">현관에서 가는 길 보기</span></label>
+        <label class="route-toggle"><input type="checkbox" id="evToggle"> <span id="evLabel">엘리베이터로 가기</span></label>
         <ol id="routeSteps" class="steps"></ol>
         <div id="mapLegend" class="legend"></div>
         <div id="mapNumbers" class="numbers"></div>
