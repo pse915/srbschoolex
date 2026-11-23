@@ -18,7 +18,7 @@
     U.$('mapSearch').addEventListener('input', search);
     U.$('routeToggle').onchange = function () { refreshRoute(); };
     U.$('evToggle').onchange = function () { refreshRoute(); };
-    U.press(cv, { up: function (p) { onTap({ clientX: p.x, clientY: p.y }); } });   // touch/mouse fallback on old browsers
+    cv.addEventListener('pointerup', onTap);
     window.addEventListener('resize', function () { if (MV.open) render(); });
     var lg = U.$('mapLegend');
     ['classroom', 'office', 'special', 'care', 'service', 'restroom', 'stair', 'ev'].forEach(function (k) {

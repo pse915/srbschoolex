@@ -11,11 +11,12 @@
     G.data = data; G.save = U.load();
     data.places.forEach(function (p) { places[p.id] = p; if (p.game) gamePlaces.push(p); });
     buildAvatars();
-    var halves = { btnStart: function () { G.start(); }, btnTitleMap: function () { openMap(true); } };
-    Object.keys(halves).forEach(function (id) {                 // the halves are role=button: tap, click, Enter/Space
-      U.tap(U.$(id), function () { if (!U.$('title').hidden) halves[id](); });
-      U.$(id).onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); halves[id](); } };
-    });
+    U.$('btnStart').onclick = G.start;
+    U.$('btnTitleMap').onclick = function () { openMap(true); };
+    U.$('titlePlay').onclick = function (e) {   // the rest of the left half also starts (buttons inside handle themselves)
+      for (var n = e.target; n && n !== U.$('titlePlay'); n = n.parentNode) if (n.tagName === 'BUTTON') return;
+      G.start();
+    };
     U.$('btnMap').onclick = function () { openMap(false); };
     U.$('btnBook').onclick = book;
     U.$('btnMission').onclick = missionMenu;
@@ -30,7 +31,7 @@
     MV.onClose = function () { if (!U.$('play').hidden) E.paused = false; };
     updateCount(); titleNote();
     // 2분 동안 아무 조작이 없으면 처음 화면(탐방하기 / 길 안내)으로 돌아간다. 단독 지도 화면은 교정 탭으로.
-    ['pointerdown', 'mousedown', 'keydown', 'wheel', 'touchstart'].forEach(function (ev) { document.addEventListener(ev, function () { G.idle.last = Date.now(); }, true); });
+    ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (ev) { document.addEventListener(ev, function () { G.idle.last = Date.now(); }, true); });
     setInterval(checkIdle, 1000);
   };
   G.idle = { last: Date.now(), ms: 120000 };

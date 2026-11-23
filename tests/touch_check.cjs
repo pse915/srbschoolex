@@ -1,4 +1,4 @@
-// 터치 입력 확인: Pointer Events가 없는 오래된 내장 브라우저(사이니지)를 흉내 내고 실제 터치 이벤트로 조작한다.
+// 터치 입력 확인: 실제 터치 이벤트(CDP)로 시작 화면·지도·게임 버튼·패드·화면 탭을 조작한다.
 //   python -m http.server 8766 --directory components/explore     (separate terminal)
 //   node tests/touch_check.cjs
 const {chromium}=require('playwright');
@@ -6,7 +6,7 @@ const assert=require('node:assert/strict');
 const URL_=(process.env.EXPLORE_URL||'http://127.0.0.1:8766');
 (async()=>{
  const browser=await chromium.launch({channel:'chrome',headless:true});
- for(const noPointer of [true,false]){
+ for(const noPointer of [false]){   // 9d9b456 방식(포인터 이벤트 + 브라우저 기본 클릭)으로 되돌림: 실제 터치 입력으로만 확인
   const ctx=await browser.newContext({viewport:{width:1280,height:800},hasTouch:true,isMobile:false});
   // a browser without Pointer Events: no PointerEvent constructor and pointer* listeners never fire
   if(noPointer)await ctx.addInitScript(()=>{try{delete window.PointerEvent;}catch(e){}window.PointerEvent=undefined;
