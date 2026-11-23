@@ -31,7 +31,7 @@ ESTAIR_W = 5.5          # main-wing east-end stair width
 # floor bands (plans / floor maps): outer support rooms | corridor | inner rooms (rest of D, toward the field)
 OUTER_W, CORR_W = 7.0, 3.0
 EV_X = (D + 8.0, D + 12.0)          # elevator, west of the central stair near the corner
-CORNER_STAIR = (OUTER_W + CORR_W, D, OUTER_W + CORR_W, D)   # x0, x1, y0, y1 (inner corner, under the stair tower)
+CORNER_STAIR_W = 8.0     # 꺾임 계단: first space of the main wing's inner row, right after the corner (x = D .. D + 8)
 
 # ---------------- site (outside the building, meters, same axes) ----------------
 FIELD = (D + 3.0, L1 - 2.0, D + 3.0, D + L2 + 30.0)          # sand playground x0, x1, y0, y1
@@ -862,6 +862,7 @@ def ground_tiles():
 
 # ---------------- room layout (data/school_layout.json) ----------------
 ANCHOR_POS = {   # wing, side, start, end (meters along the wing axis)
+    'cornerStair': ('main', 'inner', D, D + CORNER_STAIR_W),
     'centralStair': ('main', 'outer', XE - 2.5, XE + 2.5),
     'ev': ('main', 'outer', EV_X[0], EV_X[1]),
     'staffWC': ('main', 'outer', XE + 2.5, XE + 7.5),
@@ -949,6 +950,8 @@ def plan_floor(layout, f):
 
     for side in ('inner', 'outer'):
         lo, hi = WING_RANGE['west']
+        if side == 'inner':
+            lo = OUTER_W + CORR_W          # the inner corner square belongs to the west wing's first room
         if side == 'outer':
             hi = west_end
         for it, a, b in _distribute(fl['west'][side], 'west', side, lo, hi, f'{f}F west {side}'):
@@ -959,10 +962,6 @@ def plan_floor(layout, f):
         lo, hi = WING_RANGE['main']
         for it, a, b in _distribute(fl['main'][side], 'main', side, lo, hi, f'{f}F main {side}'):
             add(it, 'main', side, a, b)
-    x0, x1, y0, y1 = CORNER_STAIR
-    items.append({'id': 'stair-cornerStair', 'name': meta['cornerStair']['name'], 'kind': 'stair', 'anchor': 'cornerStair',
-                  'category': 'service', 'wing': 'corner', 'side': 'inner', 'rect': [x0, y0, x1, y1],
-                  'door': [(x0 + x1) / 2, y0], 'node': [(x0 + x1) / 2, CORR_MID]})
     items.append({'id': f'gap-{f}-corner-n', 'kind': 'gap', 'wing': 'corner', 'side': 'outer', 'rect': [0.0, 0.0, D, OUTER_W]})
     items.append({'id': f'gap-{f}-corner-w', 'kind': 'gap', 'wing': 'corner', 'side': 'outer', 'rect': [0.0, OUTER_W, OUTER_W, D]})
     corridors = [[OUTER_W, OUTER_W, L1, OUTER_W + CORR_W], [OUTER_W, OUTER_W, OUTER_W + CORR_W, west_end]]

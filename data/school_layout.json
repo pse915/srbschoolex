@@ -21,7 +21,7 @@
     "lobby": "현관"
   },
   "anchors": {
-    "cornerStair": {"name": "꺾임 계단", "kind": "stair", "note": "본관과 서쪽 동이 만나는 안쪽 모서리. 옥상 위 계단탑"},
+    "cornerStair": {"name": "꺾임 계단", "kind": "stair", "note": "본관 안쪽(운동장 쪽) 줄 맨 앞, 꺾임부 바로 동쪽. 모서리 칸은 서쪽 동 첫 실"},
     "centralStair": {"name": "중앙계단", "kind": "stair", "note": "중앙현관 바로 북쪽"},
     "ev": {"name": "엘리베이터", "kind": "ev", "note": "중앙계단보다 서쪽, 꺾임부 가까이"},
     "mainMidStair": {"name": "계단", "kind": "stair", "note": "본관 동쪽 중간 계단(1층은 출입구)"},
@@ -52,6 +52,7 @@
       },
       "main": {
         "inner": [
+          {"anchor": "cornerStair"},
           {"id": "room-1-8", "name": "학습지원실2", "category": "care"},
           {"id": "room-1-2", "name": "교장실", "category": "office"},
           {"id": "room-1-1", "name": "행정실", "category": "office"},
@@ -99,6 +100,7 @@
       },
       "main": {
         "inner": [
+          {"anchor": "cornerStair"},
           {"id": "room-2-1", "name": "1-2", "category": "classroom"},
           {"id": "room-2-0", "name": "1-1", "category": "classroom"},
           {"id": "room-2-5", "name": "1학년 교무실", "category": "office"},
@@ -139,6 +141,7 @@
       },
       "main": {
         "inner": [
+          {"anchor": "cornerStair"},
           {"id": "room-3-0", "name": "2-1", "category": "classroom"},
           {"id": "room-3-1", "name": "2-2", "category": "classroom"},
           {"id": "room-3-6", "name": "2학년 교무실", "category": "office"},
@@ -183,6 +186,7 @@
       },
       "main": {
         "inner": [
+          {"anchor": "cornerStair"},
           {"id": "room-4-0", "name": "3-1", "category": "classroom"},
           {"id": "room-4-1", "name": "3-2", "category": "classroom"},
           {"id": "room-4-6", "name": "3학년 교무실", "category": "office"},
