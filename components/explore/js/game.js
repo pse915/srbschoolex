@@ -11,10 +11,10 @@
     G.data = data; G.save = U.load();
     data.places.forEach(function (p) { places[p.id] = p; if (p.game) gamePlaces.push(p); });
     buildAvatars();
-    U.$('btnStart').onclick = G.start;
-    U.$('btnTitleMap').onclick = function () { openMap(true); };
-    ['btnStart', 'btnTitleMap'].forEach(function (id) {          // the halves are role=button: Enter/Space too
-      U.$(id).onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); U.$(id).onclick(); } };
+    var halves = { btnStart: function () { G.start(); }, btnTitleMap: function () { openMap(true); } };
+    Object.keys(halves).forEach(function (id) {                 // the halves are role=button: tap, click, Enter/Space
+      U.tap(U.$(id), function () { if (!U.$('title').hidden) halves[id](); });
+      U.$(id).onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); halves[id](); } };
     });
     U.$('btnMap').onclick = function () { openMap(false); };
     U.$('btnBook').onclick = book;
@@ -30,7 +30,7 @@
     MV.onClose = function () { if (!U.$('play').hidden) E.paused = false; };
     updateCount(); titleNote();
     // 1분 동안 아무 조작이 없으면 학교 전체 지도(교정)를 보여 준다
-    ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (ev) { document.addEventListener(ev, function () { G.idle.last = Date.now(); }, true); });
+    ['pointerdown', 'mousedown', 'keydown', 'wheel', 'touchstart'].forEach(function (ev) { document.addEventListener(ev, function () { G.idle.last = Date.now(); }, true); });
     setInterval(checkIdle, 1000);
   };
   G.idle = { last: Date.now(), ms: 60000 };

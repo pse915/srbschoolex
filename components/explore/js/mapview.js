@@ -18,7 +18,7 @@
     U.$('mapSearch').addEventListener('input', search);
     U.$('routeToggle').onchange = function () { refreshRoute(); };
     U.$('evToggle').onchange = function () { refreshRoute(); };
-    cv.addEventListener('pointerup', onTap);
+    U.press(cv, { up: function (p) { onTap({ clientX: p.x, clientY: p.y }); } });   // touch/mouse fallback on old browsers
     window.addEventListener('resize', function () { if (MV.open) render(); });
     var lg = U.$('mapLegend');
     ['classroom', 'office', 'special', 'care', 'service', 'restroom', 'stair', 'ev'].forEach(function (k) {
@@ -68,7 +68,7 @@
   function font(px, bold) { ctx.font = (bold ? 'bold ' : '') + px + 'px "Malgun Gothic","Apple SD Gothic Neo",sans-serif'; }
   function tag(text, x, y, strong) {
     font(13, true); var w = ctx.measureText(text).width + 12;
-    ctx.fillStyle = strong ? '#96483aee' : '#463c52e0'; ctx.fillRect(Math.round(x - w / 2), Math.round(y - 15), w, 20);
+    ctx.fillStyle = strong ? 'rgba(150,72,58,0.93)' : 'rgba(70,60,82,0.88)'; ctx.fillRect(Math.round(x - w / 2), Math.round(y - 15), w, 20);
     ctx.fillStyle = '#fff'; ctx.fillText(text, Math.round(x - w / 2 + 6), Math.round(y));
   }
   function pinAt(x, y, k) {
@@ -133,7 +133,7 @@
         tag('확인 필요', (x0 + x1) / 2, (y0 + y1) / 2 + 6, false); return;
       }
       if (MV.selected === p) {
-        ctx.fillStyle = blink % 40 < 20 ? '#96483a66' : '#96483a22'; ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
+        ctx.fillStyle = blink % 40 < 20 ? 'rgba(150,72,58,0.4)' : 'rgba(150,72,58,0.13)'; ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
         ctx.strokeStyle = '#7c3a30'; ctx.lineWidth = 3; ctx.strokeRect(x0 + 1.5, y0 + 1.5, x1 - x0 - 3, y1 - y0 - 3);
       }
       if (!p.visible) return;

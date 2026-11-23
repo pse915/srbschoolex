@@ -65,31 +65,34 @@
     });
     window.addEventListener('keyup', function (e) { E.keys[e.key.toLowerCase()] = false; });
     window.addEventListener('blur', function () { E.keys = {}; E.pad = null; });
+    // direction pad and tap-to-move use U.press (Pointer Events, or touch/mouse on older browsers)
     var pad = U.$('pad'), padId = null;
-    pad.addEventListener('pointerdown', function (e) {
-      var b = e.target.closest ? e.target.closest('button') : e.target;
-      if (!b || padId !== null) return;                  // first finger only
-      padId = e.pointerId; E.pad = b.getAttribute('data-dir'); E.path = [];
-      try { pad.setPointerCapture(e.pointerId); } catch (x) {}
-      e.preventDefault();
-    });
-    function padUp(e) { if (e.pointerId === padId) { padId = null; E.pad = null; } }
-    pad.addEventListener('pointerup', padUp); pad.addEventListener('pointercancel', padUp);
-    pad.addEventListener('pointermove', function (e) {
-      if (e.pointerId !== padId) return;
-      var el = document.elementFromPoint(e.clientX, e.clientY);
-      var d = el && el.getAttribute && el.getAttribute('data-dir'); if (d) E.pad = d;
+    function dirAt(p) {
+      var el = document.elementFromPoint(p.x, p.y) || p.target;
+      for (; el && el !== pad; el = el.parentNode) if (el.getAttribute && el.getAttribute('data-dir')) return el.getAttribute('data-dir');
+      return null;
+    }
+    U.press(pad, {
+      down: function (p) {
+        var d = dirAt(p);
+        if (!d || padId !== null) return;                // first finger only
+        padId = p.id; E.pad = d; E.path = [];
+      },
+      move: function (p) { if (p.id !== padId) return; var d = dirAt(p); if (d) E.pad = d; },
+      up: function (p) { if (p.id === padId) { padId = null; E.pad = null; } }
     });
     var tapId = null;
-    cv.addEventListener('pointerdown', function (e) { if (tapId === null) tapId = e.pointerId; });
-    cv.addEventListener('pointerup', function (e) {
-      if (e.pointerId !== tapId) return; tapId = null;
-      if (E.paused || U.modalOpen() || !E.map) return;
-      var r = cv.getBoundingClientRect();
-      var wx = (e.clientX - r.left) / E.zoom + camera.x, wy = (e.clientY - r.top) / E.zoom + camera.y;
-      E.walkTo(Math.floor(wx / T), Math.floor(wy / T));
+    U.press(cv, {
+      down: function (p) { if (tapId === null) tapId = p.id; },
+      up: function (p) {
+        if (p.id !== tapId) return; tapId = null;
+        if (E.paused || U.modalOpen() || !E.map) return;
+        var r = cv.getBoundingClientRect();
+        var wx = (p.x - r.left) / E.zoom + camera.x, wy = (p.y - r.top) / E.zoom + camera.y;
+        E.walkTo(Math.floor(wx / T), Math.floor(wy / T));
+      },
+      cancel: function () { tapId = null; }
     });
-    cv.addEventListener('pointercancel', function () { tapId = null; });
   }
 
   /* ---------- tap-to-move (movement only; no guidance is drawn) ---------- */
@@ -201,7 +204,7 @@
   function label(text, x, y, strong) {
     ctx.font = (strong ? 'bold ' : '') + '12px "Malgun Gothic","Apple SD Gothic Neo",sans-serif';
     var w = ctx.measureText(text).width + 10, lx = Math.round(x - camera.x - w / 2), ly = Math.round(y - camera.y);
-    ctx.fillStyle = strong ? '#96483aee' : '#463c52d8'; ctx.fillRect(lx, ly - 13, w, 17);
+    ctx.fillStyle = strong ? 'rgba(150,72,58,0.93)' : 'rgba(70,60,82,0.85)'; ctx.fillRect(lx, ly - 13, w, 17);
     ctx.fillStyle = '#fff'; ctx.fillText(text, lx + 5, ly);
   }
   // teal room plate above a door (like the real signs in the corridor)
@@ -240,7 +243,7 @@
       list.push({ y: n.y * T + 24, fn: function () { drawActor(U.images.npcs, (v % 7) * 32, Math.floor(v / 7) * 48, n.x * T + 16, n.y * T + 24); } });
     });
     list.push({ y: p.y, fn: function () {
-      ctx.fillStyle = '#24372f44'; ctx.beginPath(); ctx.ellipse(p.x - camera.x, p.y - camera.y, 11, 4, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = 'rgba(36,55,47,0.27)'; ctx.beginPath(); ctx.ellipse(p.x - camera.x, p.y - camera.y, 11, 4, 0, 0, 7); ctx.fill();
       drawActor(U.images.avatars, (p.moving ? Math.floor(p.anim) % 4 : 0) * 32, (E.avatar * 4 + p.dir) * 48, p.x, p.y);
     } });
     list.sort(function (a, b) { return a.y - b.y; });

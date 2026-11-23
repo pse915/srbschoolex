@@ -21,6 +21,49 @@ window.SRB = SRB;
     });
     return fetch(url).then(function (r) { if (!r.ok) throw new Error(url + ' ' + r.status); return r.json(); });
   };
+  /* Press input that works on every browser: Pointer Events when the browser has them, otherwise touch
+     events (older built-in browsers such as the signage display) plus mouse. Handlers get {x, y, id, target}. */
+  U.press = function (el, h) {
+    function fire(fn, x, y, id, target) { if (fn) fn({ x: x, y: y, id: id, target: target }); }
+    if (window.PointerEvent) {
+      el.addEventListener('pointerdown', function (e) {
+        try { el.setPointerCapture(e.pointerId); } catch (x) {}
+        fire(h.down, e.clientX, e.clientY, e.pointerId, e.target); e.preventDefault();
+      });
+      el.addEventListener('pointermove', function (e) { fire(h.move, e.clientX, e.clientY, e.pointerId, e.target); });
+      el.addEventListener('pointerup', function (e) { fire(h.up, e.clientX, e.clientY, e.pointerId, e.target); });
+      el.addEventListener('pointercancel', function (e) { fire(h.cancel || h.up, e.clientX, e.clientY, e.pointerId, e.target); });
+      return;
+    }
+    var lastTouch = 0, mouseDown = false;
+    function each(e, fn) {
+      lastTouch = Date.now();
+      for (var i = 0; i < e.changedTouches.length; i++) {
+        var t = e.changedTouches[i];
+        fire(fn, t.clientX, t.clientY, t.identifier, document.elementFromPoint(t.clientX, t.clientY) || e.target);
+      }
+    }
+    el.addEventListener('touchstart', function (e) { each(e, h.down); e.preventDefault(); }, false);
+    el.addEventListener('touchmove', function (e) { each(e, h.move); e.preventDefault(); }, false);
+    el.addEventListener('touchend', function (e) { each(e, h.up); e.preventDefault(); }, false);
+    el.addEventListener('touchcancel', function (e) { each(e, h.cancel || h.up); }, false);
+    el.addEventListener('mousedown', function (e) {
+      if (Date.now() - lastTouch < 800) return;           // the browser's copy of a touch
+      mouseDown = true; fire(h.down, e.clientX, e.clientY, 'mouse', e.target); e.preventDefault();
+    });
+    window.addEventListener('mousemove', function (e) { if (mouseDown) fire(h.move, e.clientX, e.clientY, 'mouse', e.target); });
+    window.addEventListener('mouseup', function (e) { if (!mouseDown) return; mouseDown = false; fire(h.up, e.clientX, e.clientY, 'mouse', e.target); });
+  };
+  // a plain tap on a non-button element (title halves): click everywhere, plus touchend where click may not come
+  U.tap = function (el, fn) {
+    var t0 = 0;
+    function inButton(n) { for (; n && n !== el; n = n.parentNode) if (n.tagName === 'BUTTON') return true; return false; }
+    el.addEventListener('touchend', function (e) {
+      if (e.changedTouches.length !== 1 || inButton(e.target)) return;   // e.g. a character button inside the half
+      t0 = Date.now(); e.preventDefault(); fn(e);
+    }, false);
+    el.addEventListener('click', function (e) { if (Date.now() - t0 > 800) fn(e); });
+  };
   U.images = {};
   U.loadImage = function (name) {
     return new Promise(function (ok, fail) {
