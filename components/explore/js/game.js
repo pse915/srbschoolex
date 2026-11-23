@@ -29,18 +29,18 @@
     });
     MV.onClose = function () { if (!U.$('play').hidden) E.paused = false; };
     updateCount(); titleNote();
-    // 1분 동안 아무 조작이 없으면 학교 전체 지도(교정)를 보여 준다
+    // 2분 동안 아무 조작이 없으면 처음 화면(탐방하기 / 길 안내)으로 돌아간다. 단독 지도 화면은 교정 탭으로.
     ['pointerdown', 'mousedown', 'keydown', 'wheel', 'touchstart'].forEach(function (ev) { document.addEventListener(ev, function () { G.idle.last = Date.now(); }, true); });
     setInterval(checkIdle, 1000);
   };
-  G.idle = { last: Date.now(), ms: 60000 };
+  G.idle = { last: Date.now(), ms: 120000 };
   function checkIdle() {
     if (Date.now() - G.idle.last < G.idle.ms) return;
     G.idle.last = Date.now();
-    if (MV.open) { if (MV.tab !== 0) MV.setTab(0); return; }
+    if (MV.open && MV.standalone) { if (MV.tab !== 0) MV.setTab(0); return; }
     if (U.modalOpen()) U.closeModal();
-    if (!U.$('play').hidden) { E.paused = true; E.keys = {}; E.pad = null; E.path = []; MV.show({ pin: pinFromPlayer(), tab: 0 }); }
-    else MV.show({ pin: kioskPin(), tab: 0 });
+    if (MV.open) MV.close();
+    if (!U.$('play').hidden) { E.keys = {}; E.pad = null; E.path = []; G.toTitle(); }
   }
 
   /* ---------- title ---------- */

@@ -75,10 +75,14 @@ const OUT='docs/screenshots-explore', URL_=(process.env.EXPLORE_URL||'http://127
  await page.check('#routeToggle');await shot('16-map-search-route');
  assert.ok((await page.locator('#routeSteps li').count())>=2);
  await page.locator('#mapClose').click();
- // 1 minute without input -> school map (교정 tab)
- await page.evaluate(()=>{__explore.G.idle.last=Date.now()-61000;});
- await page.waitForFunction(()=>!document.getElementById('mapview').hidden&&document.querySelector('#mapTabs button[aria-selected=true]').dataset.tab==='0',null,{timeout:5000});
- await shot('18-idle-to-school-map');
+ // 2 minutes without input -> back to the title screen (탐방하기 / 길 안내)
+ await page.evaluate(()=>{__explore.G.idle.last=Date.now()-61000;});await page.waitForTimeout(1500);
+ assert.ok(await page.evaluate(()=>document.getElementById('title').hidden),'not yet after 1 minute');
+ await page.evaluate(()=>{__explore.G.idle.last=Date.now()-121000;});
+ await page.waitForFunction(()=>!document.getElementById('title').hidden&&document.getElementById('play').hidden&&document.getElementById('mapview').hidden&&document.getElementById('modal').hidden,null,{timeout:5000});
+ await shot('18-idle-to-title');
+ // open the guide map from the title, 교정 tab
+ await page.locator('#btnTitleMap').click();await page.evaluate(()=>__explore.MV.setTab(0));await page.waitForTimeout(300);
  // tap 본관 on the 교정 map -> 1층 plan with the main wing highlighted
  const xy=await page.evaluate(()=>{const S=__explore.data.school,sc=S.displayScale,a=S.areas.find(a=>a.name==='본관');
    const imgs=S.images.filter(i=>i.image.indexOf('gate')<0);let X0=1e9,Y0=1e9,X1=-1e9;imgs.forEach(i=>{X0=Math.min(X0,i.x*32);Y0=Math.min(Y0,i.y*32);X1=Math.max(X1,i.x*32+i.w);});X0-=40;Y0-=30;X1+=40;
