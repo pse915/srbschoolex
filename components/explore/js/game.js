@@ -63,13 +63,17 @@
   }
   function titleNote() {
     var n = Object.keys(G.save.cards).length;
+    if (complete()) { U.$('titleNote').textContent = '장소를 모두 찾았어요! 눌러서 학번과 이름을 적어 주세요.'; return; }
     U.$('titleNote').textContent = n ? '지금까지 모은 장소 카드 ' + n + ' / ' + gamePlaces.length + '장' : '장소 ' + gamePlaces.length + '곳이 기다리고 있어요.';
   }
   G.start = function () {
     U.$('title').hidden = true; U.$('play').hidden = false; E.resize();
     E.avatar = G.save.avatar; G.save.plays += 1; U.save(G.save);
     var s = G.data.school.entrance;
-    E.loadMap('school', [s.x, s.y + 2]).then(function () { E.paused = false; U.toast('중앙현관 앞이에요. 학교 곳곳을 찾아가 보세요!'); });
+    E.loadMap('school', [s.x, s.y + 2]).then(function () {
+      E.paused = false;
+      if (complete()) prize(); else U.toast('중앙현관 앞이에요. 학교 곳곳을 찾아가 보세요!');
+    });
   };
   G.toTitle = function () {
     stopMission(); E.paused = true; U.$('play').hidden = true; U.$('title').hidden = false; titleNote(); markAvatar();
@@ -117,6 +121,7 @@
     var fresh = p.game && !G.save.cards[id];
     if (fresh) { G.save.cards[id] = Date.now(); U.save(G.save); updateCount(); }
     var hit = missionHit(id);
+    if (fresh && complete()) { prize(); return; }         // 마지막 장소: 학번·이름 받기
     if (fresh) showCard(p, hit);
     else if (hit) U.toast('찾았다! ' + p.label);
     else if (!E.map.place || E.map.place === id) U.toast(p.label);
@@ -140,6 +145,13 @@
     wrap.appendChild(t);
     U.modal('새 장소 카드 · ' + p.label, wrap, [{ label: '계속 탐방', primary: true }, { label: '도감 보기', fn: book }]);
   }
+  function complete() { return gamePlaces.length > 0 && Object.keys(G.save.cards).length >= gamePlaces.length; }
+  // 모두 찾으면: 학번·이름 → GitHub 기록 → "2층 교무실 선생님에게 찾아가세요" → 카드를 비우고 처음 화면(다음 학생 차례)
+  function prize() {
+    stopMission();
+    SRB.P.form(gamePlaces.length, function () { G.save.cards = {}; U.save(G.save); updateCount(); G.toTitle(); });
+  }
+  G.complete = complete;
   function updateCount() { U.$('bookCount').textContent = Object.keys(G.save.cards).length + '/' + gamePlaces.length; }
   function book() {
     var wrap = U.el('div');

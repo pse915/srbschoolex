@@ -60,6 +60,15 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges}
 .go-guide{background:#fff;color:#22704b;box-shadow:0 4px 0 rgba(0,0,0,.2)}
 .half:active .go{-webkit-transform:translateY(3px);transform:translateY(3px);box-shadow:none}
 .half-play .note{margin-top:16px}
+.prize-badge{display:inline-block;margin:0 0 12px;padding:10px 26px;background:#f6c945;color:#7a2e22;font-size:30px;font-weight:900;border-radius:14px;border:3px solid #7a2e22;box-shadow:0 4px 0 #7a2e22;-webkit-transform:rotate(-3deg);transform:rotate(-3deg);-webkit-animation:prizePulse 1.6s ease-in-out infinite;animation:prizePulse 1.6s ease-in-out infinite}
+@-webkit-keyframes prizePulse{0%,100%{-webkit-transform:rotate(-3deg) scale(1)}50%{-webkit-transform:rotate(-3deg) scale(1.06)}}
+@keyframes prizePulse{0%,100%{transform:rotate(-3deg) scale(1)}50%{transform:rotate(-3deg) scale(1.06)}}
+.prize-form label{display:block;font-weight:700;margin:10px 0 4px}
+.prize-form input{display:block;width:100%;box-sizing:border-box;font-size:22px;padding:10px 12px;border:2px solid var(--line);border-radius:10px;background:#fff}
+.prize-big{font-size:22px;font-weight:800;color:var(--brick-d);margin:0 0 6px}
+.prize-go{font-size:30px;font-weight:900;color:#1f7a50;margin:14px 0;line-height:1.3}
+.prize-msg{color:#b03a2e;font-weight:700;min-height:1.2em}
+.prize-list{max-height:180px;overflow:auto;font-size:14px;padding-left:22px}
 .avatars{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-justify-content:center;justify-content:center;-webkit-flex-wrap:wrap;flex-wrap:wrap;margin:0 0 22px}
 .avatars button{width:64px;height:84px;padding:4px;margin:4px;background:var(--paper);text-align:center}
 .avatars canvas{width:48px;height:72px;display:block;margin:0 auto}

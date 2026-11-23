@@ -88,6 +88,10 @@ window.SRB = SRB;
       if (start && t && (Math.abs(t.clientX - start.x) > 14 || Math.abs(t.clientY - start.y) > 14)) start = null;
     }, true);
     document.addEventListener('touchend', function (e) {
+      var tg = e.target;                                   // text boxes (학번·이름, search): focus so the on-screen keyboard opens
+      if (tg && (tg.tagName === 'TEXTAREA' || (tg.tagName === 'INPUT' && !/^(checkbox|radio|button)$/.test(tg.type))) && document.activeElement !== tg) {
+        try { tg.focus(); } catch (x) {}
+      }
       var s = start; start = null;
       if (!s || !s.el || Date.now() - s.at > 900 || s.el.disabled) return;
       var t = e.changedTouches[0], el = clickable(document.elementFromPoint(t.clientX, t.clientY) || e.target);

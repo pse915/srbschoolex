@@ -30,6 +30,7 @@
     SRB.G.init(data);
     booted = true;
     if (mapOnly) openMapOnly();
+    if (/[?&]setup\b/.test(location.search)) SRB.P.setup();      // 선생님: GitHub 기록 설정
     window.__explore = { data: data, E: SRB.E, MV: SRB.MV, G: SRB.G };
   }).catch(function (err) {
     U.$('titleNote').textContent = '불러오지 못했어요: ' + err.message;
