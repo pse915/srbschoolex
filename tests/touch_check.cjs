@@ -11,7 +11,9 @@ const URL_=(process.env.EXPLORE_URL||'http://127.0.0.1:8766');
   // a browser without Pointer Events: no PointerEvent constructor and pointer* listeners never fire
   if(noPointer)await ctx.addInitScript(()=>{try{delete window.PointerEvent;}catch(e){}window.PointerEvent=undefined;
     const add=EventTarget.prototype.addEventListener;EventTarget.prototype.addEventListener=function(t,f,o){if(/^pointer/.test(t))return;return add.call(this,t,f,o);};
-    for(const k of ['onpointerdown','onpointerup','onpointermove'])try{Object.defineProperty(HTMLElement.prototype,k,{set(){},get(){return null;}});}catch(e){}});
+    for(const k of ['onpointerdown','onpointerup','onpointermove'])try{Object.defineProperty(HTMLElement.prototype,k,{set(){},get(){return null;}});}catch(e){}
+    // ...and, like the signage browser, a touch never becomes a click (only el.click() from script gets through)
+    window.addEventListener('click',e=>{if(e.isTrusted){e.stopImmediatePropagation();e.preventDefault();}},true);});
   const page=await ctx.newPage();
   const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
   const cdp=await ctx.newCDPSession(page);
@@ -35,7 +37,17 @@ const URL_=(process.env.EXPLORE_URL||'http://127.0.0.1:8766');
   let picked=false;
   for(let k=0;k<30&&!picked;k++){await tap(box.x+box.width*(0.15+0.7*((k*7)%30)/30),box.y+box.height*(0.2+0.6*((k*11)%30)/30));picked=await page.evaluate(()=>!!__explore.MV.selected);}
   assert.ok(picked,tag+' map tap selects a place');
-  await page.locator('#mapClose').click();await page.waitForTimeout(200);
+  // 지도 위쪽 탭 버튼(2층)과 닫기 버튼도 터치로 눌린다
+  const t2=await page.locator('#mapTabs button[data-tab="2"]').boundingBox();
+  await tap(t2.x+t2.width/2,t2.y+t2.height/2);
+  assert.equal(await page.evaluate(()=>__explore.MV.tab),2,tag+' map tab touch');
+  const rt=await page.locator('#routeToggle').boundingBox();
+  const before=await page.evaluate(()=>document.getElementById('routeToggle').checked);
+  await tap(rt.x+rt.width/2,rt.y+rt.height/2);
+  assert.equal(await page.evaluate(()=>document.getElementById('routeToggle').checked),!before,tag+' checkbox touch');
+  const cl=await page.locator('#mapClose').boundingBox();
+  await tap(cl.x+cl.width/2,cl.y+cl.height/2);
+  assert.ok(await page.evaluate(()=>!__explore.MV.open),tag+' close button touch');
   // 왼쪽 절반: 게임 시작
   await tap(320,120);
   await page.waitForFunction(()=>!document.getElementById('play').hidden&&__explore.E.map&&!__explore.E.paused,null,{timeout:5000});
@@ -45,6 +57,17 @@ const URL_=(process.env.EXPLORE_URL||'http://127.0.0.1:8766');
   await hold(right.x+right.width/2,right.y+right.height/2,700);
   const x1=await page.evaluate(()=>__explore.E.player.x);
   assert.ok(x1>x0+20,tag+' pad moves right '+x0+' -> '+x1);
+  // 게임 위쪽 버튼(지도·도감)도 터치로 눌린다
+  const bm=await page.locator('#btnMap').boundingBox();
+  await tap(bm.x+bm.width/2,bm.y+bm.height/2);
+  assert.ok(await page.evaluate(()=>__explore.MV.open),tag+' 지도 button touch');
+  const cl2=await page.locator('#mapClose').boundingBox();await tap(cl2.x+cl2.width/2,cl2.y+cl2.height/2);
+  const bb=await page.locator('#btnBook').boundingBox();
+  await tap(bb.x+bb.width/2,bb.y+bb.height/2);
+  assert.ok(await page.evaluate(()=>!document.getElementById('modal').hidden),tag+' 도감 button touch');
+  const mb=await page.locator('#modalActions button').first().boundingBox();
+  await tap(mb.x+mb.width/2,mb.y+mb.height/2);
+  assert.ok(await page.evaluate(()=>document.getElementById('modal').hidden),tag+' window button touch');
   // 화면을 터치하면 그곳으로 걸어간다
   await page.waitForTimeout(300);
   const y0=await page.evaluate(()=>__explore.E.player.y);

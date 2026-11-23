@@ -64,6 +64,39 @@ window.SRB = SRB;
     }, false);
     el.addEventListener('click', function (e) { if (Date.now() - t0 > 800) fn(e); });
   };
+  /* Some signage browsers deliver touch events but never turn a tap into a click, so ordinary buttons
+     (map tabs, 지도/도감/메뉴, window buttons) did nothing. A short tap on a button-like element is
+     turned into a click here; the browser's own click (if any) is cancelled so nothing fires twice. */
+  (function tapToClick() {
+    var start = null;
+    function clickable(n) {
+      for (; n && n !== document; n = n.parentNode) {
+        if (n.getAttribute && n.getAttribute('data-notap') != null) return null;   // handled elsewhere (pad, title halves)
+        var tag = n.tagName;
+        if (tag === 'BUTTON' || tag === 'A' || tag === 'LABEL' || tag === 'SELECT') return n;
+        if (tag === 'INPUT') return n.type === 'checkbox' || n.type === 'radio' || n.type === 'button' ? n : null;   // text fields keep the keyboard
+        if (n.onclick) return n;
+      }
+      return null;
+    }
+    document.addEventListener('touchstart', function (e) {
+      var t = e.touches.length === 1 ? e.touches[0] : null;
+      start = t ? { x: t.clientX, y: t.clientY, at: Date.now(), el: clickable(e.target) } : null;
+    }, true);
+    document.addEventListener('touchmove', function (e) {
+      var t = e.touches[0];
+      if (start && t && (Math.abs(t.clientX - start.x) > 14 || Math.abs(t.clientY - start.y) > 14)) start = null;
+    }, true);
+    document.addEventListener('touchend', function (e) {
+      var s = start; start = null;
+      if (!s || !s.el || Date.now() - s.at > 900 || s.el.disabled) return;
+      var t = e.changedTouches[0], el = clickable(document.elementFromPoint(t.clientX, t.clientY) || e.target);
+      if (el !== s.el) return;
+      e.preventDefault();
+      if (el.tagName === 'LABEL' && el.control) el = el.control;
+      el.click();
+    }, true);
+  })();
   U.images = {};
   U.loadImage = function (name) {
     return new Promise(function (ok, fail) {

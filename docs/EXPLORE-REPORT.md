@@ -46,7 +46,7 @@
   - 중앙현관: 큰 바닥 타일, 양옆 나무 벽, 유리 출입문 두 쌍과 가운데 시계, 사이니지 거치대, 화분, 안내 배너, "힘써 배우고 바르게 행하자" 액자.
   - 방송실: 어두운 바닥, ON AIR 등이 달린 부스 창, 부스 문, 모니터가 놓인 방송 책상, 장비 랙, 벽 패널, 연두색 의자.
   - 생성은 `tools/build_explore_data.py`가 함께 합니다(그림 `assets/interior-tiles.png`, `interior-props.png`). 스크린샷 `docs/screenshots-explore/20~24`, 확인 스크립트 `tests/interior_screens.cjs`.
-- **터치:** 오래된 내장 브라우저(Pointer Events 없음)에서도 터치가 되도록 모든 입력을 `U.press`(Pointer Events → 없으면 터치·마우스)로 받습니다. 방향 패드·창 배치는 CSS Grid 대신 절대 위치·flex, 색은 8자리 HEX 대신 rgba를 씁니다. 확인: `tests/touch_check.cjs`.
+- **터치:** 오래된 내장 브라우저(Pointer Events 없음)에서도 터치가 되도록 모든 입력을 `U.press`(Pointer Events → 없으면 터치·마우스)로 받습니다. 방향 패드·창 배치는 CSS Grid 대신 절대 위치·flex, 색은 8자리 HEX 대신 rgba를 씁니다. 또 사이니지 브라우저는 터치를 클릭으로 바꿔 주지 않아서, 버튼(지도 탭·지도/도감/메뉴·창 버튼·체크박스)은 짧은 터치를 클릭으로 바꾸는 처리(`util.js`의 tapToClick)를 거칩니다. 확인: `tests/touch_check.cjs`(포인터 이벤트 없음 + 터치가 클릭이 되지 않는 브라우저 흉내).
 - **저장:** 이 기기 localStorage에만 익명으로 저장합니다(도감, 최고 기록, 캐릭터). 메뉴에서 지울 수 있습니다.
 
 ## 4. 학교 전체 지도
