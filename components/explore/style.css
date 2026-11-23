@@ -34,9 +34,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges}
 .mission b{color:var(--brick)}
 .mission .done{color:var(--hedge);text-decoration:line-through}
 #mini{position:absolute;right:10px;top:70px;width:144px;height:144px;border:3px solid var(--paper);border-radius:12px;box-shadow:var(--shadow);background:#536254}
-.pad{position:absolute;left:14px;bottom:14px;width:168px;height:168px;touch-action:none;-ms-touch-action:none}
-.pad button{position:absolute;width:54px;height:54px;font-size:22px;opacity:.88;padding:0}
-.pad [data-dir=up]{left:57px;top:0}.pad [data-dir=left]{left:0;top:57px}.pad [data-dir=right]{left:114px;top:57px}.pad [data-dir=down]{left:57px;top:114px}
+.pad{position:absolute;left:14px;bottom:14px;width:168px;height:168px;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);gap:4px;touch-action:none}
+.pad button{font-size:22px;opacity:.88;padding:0}
+.pad [data-dir=up]{grid-area:1/2}.pad [data-dir=left]{grid-area:2/1}.pad [data-dir=right]{grid-area:2/3}.pad [data-dir=down]{grid-area:3/2}
 .act{position:absolute;right:18px;bottom:24px;width:120px;height:120px;border-radius:60px;font-size:20px;background:var(--brick);color:#fff}
 .toast{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);background:rgba(70,60,82,0.9);color:#fff;padding:8px 16px;border-radius:20px;opacity:0;transition:opacity .25s;pointer-events:none;max-width:80%;text-align:center}
 .toast.show{opacity:1}
