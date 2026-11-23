@@ -46,9 +46,7 @@
           {"id": "room-1-4", "name": "학생자치공간", "category": "care"},
           {"id": "room-1-17", "name": "체육교과연구실", "category": "office", "span": 1.2}
         ],
-        "outer": [
-          {"gap": 1}
-        ]
+        "outer": []
       },
       "main": {
         "inner": [
@@ -94,9 +92,7 @@
           {"id": "room-2-4", "name": "1-5", "category": "classroom"},
           {"id": "room-2-13", "name": "체력단련실", "category": "special", "span": 1.5}
         ],
-        "outer": [
-          {"gap": 1}
-        ]
+        "outer": []
       },
       "main": {
         "inner": [
@@ -135,9 +131,7 @@
           {"anchor": "westMidStair"},
           {"id": "room-3-11", "name": "다목적실", "category": "special", "span": 2}
         ],
-        "outer": [
-          {"gap": 1}
-        ]
+        "outer": []
       },
       "main": {
         "inner": [
@@ -180,9 +174,7 @@
           {"id": "void-4-west", "name": "서쪽 동 끝 구역(배치도 미표기)", "kind": "void", "confirmed": false, "visible": false, "game": false,
            "description": "아치 지붕 구역으로 4층이 없는 것으로 추정. 교사 확인 필요"}
         ],
-        "outer": [
-          {"gap": 1}
-        ]
+        "outer": []
       },
       "main": {
         "inner": [

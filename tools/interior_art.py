@@ -166,6 +166,14 @@ def tiles():
     d.rectangle((0, 0, T - 1, T - 1), fill=(120, 124, 128)); d.rectangle((2, 2, 29, 29), fill=(138, 142, 146))
     d.line((2, 2, 29, 29), fill=(120, 124, 128)); d.line((29, 2, 2, 29), fill=(120, 124, 128))
     out.append(im)
+    im, d, r = tile(52)                                             # 28 window wall (corridor east of it): outside view + glass
+    d.rectangle((0, 0, 19, T - 1), fill=(150, 186, 120)); speckle(d, (0, 0, 20, T), 30, r, [(120, 160, 96), (176, 206, 140), (104, 140, 84)])
+    d.ellipse((2, 4, 13, 15), fill=(96, 146, 80)); d.ellipse((5, 18, 17, 29), fill=(110, 158, 88))         # trees outside
+    d.rectangle((20, 0, 31, T - 1), fill=(236, 236, 230))                                                   # frame
+    for y0 in (2, 18):
+        d.rectangle((22, y0, 29, y0 + 12), fill=(176, 208, 222)); d.line((23, y0 + 1, 23, y0 + 11), fill=(222, 238, 244))
+    d.line((31, 0, 31, T - 1), fill=(150, 145, 136))
+    out.append(im)
     sheet = Image.new('RGB', (T * len(out), T))
     for i, im in enumerate(out):
         sheet.paste(im, (i * T, 0))
@@ -175,7 +183,7 @@ def tiles():
 TILE = {'terrazzo': 0, 'lobby': 4, 'wall': 5, 'pillar': 6, 'door': 7, 'frost': 8, 'top': 9, 'sideL': 10, 'sideR': 11,
         'tactile': 12, 'boardL': 13, 'boardR': 14, 'panelL': 15, 'panelR': 16, 'studioFloor': 17, 'studioWallU': 18,
         'studioWallD': 19, 'studioSideL': 20, 'studioSideR': 21, 'sideDoorL': 22, 'sideDoorR': 23,
-        'sideFrostL': 24, 'sideFrostR': 25, 'evDoor': 26, 'evTop': 27}
+        'sideFrostL': 24, 'sideFrostR': 25, 'evDoor': 26, 'evTop': 27, 'windowL': 28}
 
 GLYPH = {'O': ['0110', '1001', '1001', '1001', '0110'], 'N': ['1001', '1101', '1011', '1001', '1001'],
          'A': ['0110', '1001', '1111', '1001', '1001'], 'I': ['111', '010', '010', '010', '111'],

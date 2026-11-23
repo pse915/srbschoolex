@@ -31,6 +31,7 @@ ESTAIR_W = 5.5          # main-wing east-end stair width
 # floor bands (plans / floor maps): outer support rooms | corridor | inner rooms (rest of D, toward the field)
 OUTER_W, CORR_W = 7.0, 3.0
 EV_X = (D + 8.0, D + 12.0)          # elevator, west of the central stair near the corner
+WEST_X0 = OUTER_W         # west outer wall: the west wing has no outer rooms; its corridor runs along windows (x = 7 m)
 CORNER_STAIR_W = 8.0     # 꺾임 계단: first space of the main wing's inner row, right after the corner (x = D .. D + 8)
 
 # ---------------- site (outside the building, meters, same axes) ----------------
@@ -943,7 +944,7 @@ def plan_floor(layout, f):
             e.setdefault('kind', 'restroom' if it.get('category') == 'restroom' else 'room')
         e.update(wing=wing, side=side, rect=rect)
         if e['kind'] == 'void':
-            e['rect'] = [0.0, a, D, D + L2]
+            e['rect'] = [WEST_X0, a, D, D + L2]
         else:
             e['door'], e['node'] = _door(wing, side, c)
         items.append(e)
@@ -962,10 +963,10 @@ def plan_floor(layout, f):
         lo, hi = WING_RANGE['main']
         for it, a, b in _distribute(fl['main'][side], 'main', side, lo, hi, f'{f}F main {side}'):
             add(it, 'main', side, a, b)
-    items.append({'id': f'gap-{f}-corner-n', 'kind': 'gap', 'wing': 'corner', 'side': 'outer', 'rect': [0.0, 0.0, D, OUTER_W]})
-    items.append({'id': f'gap-{f}-corner-w', 'kind': 'gap', 'wing': 'corner', 'side': 'outer', 'rect': [0.0, OUTER_W, OUTER_W, D]})
+    items.append({'id': f'gap-{f}-corner-n', 'kind': 'gap', 'wing': 'corner', 'side': 'outer', 'rect': [WEST_X0, 0.0, D, OUTER_W]})
     corridors = [[OUTER_W, OUTER_W, L1, OUTER_W + CORR_W], [OUTER_W, OUTER_W, OUTER_W + CORR_W, west_end]]
-    return {'floor': f, 'items': items, 'corridors': corridors, 'westEnd': west_end}
+    windows = [[WEST_X0, OUTER_W, WEST_X0, west_end]]      # west wall along the west corridor: windows to the outside
+    return {'floor': f, 'items': items, 'corridors': corridors, 'westEnd': west_end, 'windows': windows}
 
 
 def all_plans(layout):
@@ -994,7 +995,7 @@ def render_floor_plan(plan, ppm=PLAN_PPM):
         d.rectangle((X(r[0]), X(r[1]), X(r[2]) - 1, X(r[3]) - 1), fill=fill, outline=outline)
 
     # outer wall slab (┌)
-    for r in ([0, 0, L1, D], [0, D, D, D + L2]):
+    for r in ([WEST_X0, 0, L1, D], [WEST_X0, D, D, D + L2]):
         d.rectangle((X(r[0]) - 2, X(r[1]) - 2, X(r[2]) + 1, X(r[3]) + 1), fill=BRICK_D)
     for r in plan['corridors']:
         rect(r, PLAN_FLOOR)
@@ -1038,6 +1039,11 @@ def render_floor_plan(plan, ppm=PLAN_PPM):
                 x = X(dx) - (1 if sgn > 0 else 0)
                 d.line((x, X(dy - hw), x, X(dy + hw)), fill=PLAN_FLOOR)
                 d.line((x + sgn, X(dy - hw), x + sgn * 3, X(dy - hw)), fill=FRAME)
+    for x0, y0, x1, y1 in plan.get('windows', []):      # glass panes in the west wall (outside is visible)
+        y = y0 + 0.6
+        while y + 1.6 <= y1:
+            d.rectangle((X(x0) - 2, X(y), X(x0) - 1, X(y + 1.6) - 1), fill=GLASS_HI)
+            y += 2.4
     return im
 
 
@@ -1170,7 +1176,7 @@ def render_stack_layer(plan, f):
     z = (f - 1) * STACK_GAP
     t = 0.8                                        # slab thickness (m)
     quad = lambda r, zz: [P(r[0], r[1], zz), P(r[2], r[1], zz), P(r[2], r[3], zz), P(r[0], r[3], zz)]
-    wings = [[0, 0, L1, D], [0, D, D, plan['westEnd'] if f == 4 else D + L2]]
+    wings = [[WEST_X0, 0, L1, D], [WEST_X0, D, D, plan['westEnd'] if f == 4 else D + L2]]
     for r in wings:                                 # slab edges (south and east faces)
         d.polygon([P(r[0], r[3], z), P(r[2], r[3], z), P(r[2], r[3], z - t), P(r[0], r[3], z - t)], fill=shade(BRICK, 0.9))
         d.polygon([P(r[2], r[1], z), P(r[2], r[3], z), P(r[2], r[3], z - t), P(r[2], r[1], z - t)], fill=shade(BRICK, 0.75))

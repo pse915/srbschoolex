@@ -131,6 +131,9 @@ def decorate_floor(m):
                 elif t == LOBBY:
                     tiles[i] = _tid('lobby')
                 continue
+            if t == OUTSIDE and walk(x + 1, y) and at(x + 1, y) == CORR:
+                tiles[i] = _tid('windowL')          # west corridor: windows to the outside
+                continue
             if t in (OUTSIDE, STAIR, VOID):
                 continue
             nb = [(a, b) for a, b in N4 if walk(x + a, y + b)]
