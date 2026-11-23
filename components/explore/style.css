@@ -39,15 +39,30 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges}
 .toast.show{opacity:1}
 
 /* title */
-.title-screen{position:absolute;top:0;right:0;bottom:0;left:0;display:grid;place-items:center;background:#7aa18b url(assets/school-hero.png) center/cover no-repeat;image-rendering:pixelated}
-.title-card{background:#fffaf0f0;border:3px solid var(--brick);border-radius:18px;padding:22px 28px;max-width:640px;width:calc(100% - 32px);text-align:center;box-shadow:var(--shadow)}
-.title-card h1{margin:4px 0 6px;font-size:40px;color:var(--brick-d);letter-spacing:2px}
-.title-card small{color:var(--muted)}
-.avatars{display:flex;gap:8px;justify-content:center;margin:14px 0}
-.avatars button{width:64px;height:84px;padding:4px;display:grid;place-items:center;background:var(--paper)}
-.avatars canvas{width:48px;height:72px}
-.title-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.title-actions button{min-width:180px;min-height:56px;font-size:19px}
+/* 화면을 반으로: 왼쪽(흰색) 서라벌 탐방하기 / 오른쪽(색이 바뀌는 초록) 서라벌여중 길 안내.
+   오래된 내장 브라우저를 위해 grid·gap 없이 flex와 margin만 씁니다. */
+.title-screen{position:absolute;top:0;right:0;bottom:0;left:0;display:-webkit-box;display:-webkit-flex;display:flex;background:#fff}
+.half{position:relative;-webkit-box-flex:1;-webkit-flex:1 1 0;flex:1 1 0;width:50%;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-align:center;-webkit-align-items:center;align-items:center;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;overflow:hidden}
+.half-in{padding:24px;max-width:520px}
+.half small{display:block;font-size:20px;margin-bottom:10px}
+.half h1{margin:0 0 22px;font-size:64px;line-height:1.18;letter-spacing:2px}
+.half-play{background:#fff;color:var(--brick-d);border-right:3px solid #e4ddd0}
+.half-play small{color:var(--muted)}
+.half-guide{color:#fff;background:#2f8a5e;-webkit-animation:guideHue 9s ease-in-out infinite;animation:guideHue 9s ease-in-out infinite}
+.half-guide small{color:#e6f6ec}
+.half-guide h1{text-shadow:0 3px 0 rgba(0,0,0,.18)}
+@-webkit-keyframes guideHue{0%{background-color:#2f8a5e}33%{background-color:#1f8f8a}66%{background-color:#5f9e3a}100%{background-color:#2f8a5e}}
+@keyframes guideHue{0%{background-color:#2f8a5e}33%{background-color:#1f8f8a}66%{background-color:#5f9e3a}100%{background-color:#2f8a5e}}
+.guide-pin{display:block;width:64px;height:auto;margin:0 auto 14px;image-rendering:pixelated}
+.go{display:inline-block;padding:14px 34px;border-radius:40px;font-size:24px;font-weight:800}
+.go-play{background:var(--brick);color:#fff;box-shadow:0 4px 0 var(--brick-d)}
+.go-guide{background:#fff;color:#22704b;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.half:active .go{-webkit-transform:translateY(3px);transform:translateY(3px);box-shadow:none}
+.half-play .note{margin-top:16px}
+.avatars{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-justify-content:center;justify-content:center;-webkit-flex-wrap:wrap;flex-wrap:wrap;margin:0 0 22px}
+.avatars button{width:64px;height:84px;padding:4px;margin:4px;background:var(--paper);text-align:center}
+.avatars canvas{width:48px;height:72px;display:block;margin:0 auto}
+@media (max-width:760px){.half h1{font-size:40px}.half small{font-size:16px}.go{font-size:19px;padding:12px 24px}.avatars button{width:48px;height:64px}.avatars canvas{width:36px;height:54px}}
 .note{color:var(--muted);font-size:14px;min-height:1em}
 
 /* map view */

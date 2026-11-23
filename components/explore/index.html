@@ -35,23 +35,31 @@
 
   <!-- 시작 화면 -->
   <section id="title" class="title-screen">
-    <div class="title-card">
-      <small>우리 학교를 직접 걸어 보는</small>
-      <h1>서라벌 탐방</h1>
-      <p>캐릭터를 고르고 학교 곳곳을 찾아가 장소 카드를 모아 보세요.</p>
-      <div id="avatars" class="avatars" role="radiogroup" aria-label="캐릭터 고르기"></div>
-      <div class="title-actions">
-        <button id="btnStart" class="primary" type="button">탐방 시작</button>
-        <button id="btnTitleMap" type="button">학교 전체 지도</button>
+    <!-- 왼쪽 절반: 게임 -->
+    <div id="btnStart" class="half half-play" role="button" tabindex="0" aria-label="서라벌 탐방하기">
+      <div class="half-in">
+        <small>우리 학교를 직접 걸어 보는 게임</small>
+        <h1>서라벌<br>탐방하기</h1>
+        <div id="avatars" class="avatars" role="radiogroup" aria-label="캐릭터 고르기"></div>
+        <span class="go go-play">눌러서 시작</span>
+        <p class="note" id="titleNote"></p>
       </div>
-      <p class="note" id="titleNote"></p>
+    </div>
+    <!-- 오른쪽 절반: 길 안내 -->
+    <div id="btnTitleMap" class="half half-guide" role="button" tabindex="0" aria-label="서라벌여중 길 안내">
+      <div class="half-in">
+        <small>가고 싶은 곳을 찾아 드려요</small>
+        <img class="guide-pin" src="assets/map-pin.png" alt="">
+        <h1>서라벌여중<br>길 안내</h1>
+        <span class="go go-guide">눌러서 찾기</span>
+      </div>
     </div>
   </section>
 
   <!-- 학교 전체 지도 -->
   <section id="mapview" class="mapview" hidden>
     <header class="map-head">
-      <h2>학교 전체 지도</h2>
+      <h2 id="mapTitle">학교 전체 지도</h2>
       <div class="tabs" id="mapTabs" role="tablist"></div>
       <button id="mapClose" class="close" type="button">닫기</button>
     </header>

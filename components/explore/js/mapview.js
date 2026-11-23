@@ -32,7 +32,9 @@
     opts = opts || {};
     MV.open = true; MV.standalone = !!opts.standalone; MV.pin = opts.pin || null; MV.wing = null;
     U.$('mapview').hidden = false; U.$('mapClose').hidden = MV.standalone;
-    U.$('routeToggle').checked = false; U.$('routeSteps').innerHTML = '';
+    U.$('routeToggle').checked = !!opts.route; U.$('routeSteps').innerHTML = '';
+    U.$('mapTitle').textContent = opts.title || '학교 전체 지도';
+    if (opts.route) U.$('mapInfo').innerHTML = '<p class="muted">가고 싶은 곳을 검색하거나 지도에서 누르면, 현관에서 가는 길을 알려 드려요.</p>';
     var tab = opts.tab != null ? opts.tab : (MV.pin ? MV.pin.floor : 1);
     MV.setTab(tab);
     if (opts.focus) MV.select(byId(opts.focus));

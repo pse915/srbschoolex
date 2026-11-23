@@ -13,6 +13,9 @@
     buildAvatars();
     U.$('btnStart').onclick = G.start;
     U.$('btnTitleMap').onclick = function () { openMap(true); };
+    ['btnStart', 'btnTitleMap'].forEach(function (id) {          // the halves are role=button: Enter/Space too
+      U.$(id).onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); U.$(id).onclick(); } };
+    });
     U.$('btnMap').onclick = function () { openMap(false); };
     U.$('btnBook').onclick = book;
     U.$('btnMission').onclick = missionMenu;
@@ -49,7 +52,7 @@
       var cx = c.getContext('2d'); cx.imageSmoothingEnabled = false;
       cx.drawImage(U.images.avatars, 0, i * 4 * 48, 32, 48, 0, 0, 32, 48);
       b.appendChild(c);
-      b.onclick = function () { G.save.avatar = i; U.save(G.save); markAvatar(); };
+      b.onclick = function (e) { if (e) e.stopPropagation(); G.save.avatar = i; U.save(G.save); markAvatar(); };   // choose only; the half starts the game
       box.appendChild(b);
     })(i);
     markAvatar();
@@ -265,7 +268,7 @@
     return p && p.center ? { floor: p.floor, m: p.center } : null;
   }
   function openMap(fromTitle) {
-    if (fromTitle) { MV.show({ standalone: false, pin: kioskPin(), tab: 1 }); return; }
+    if (fromTitle) { MV.show({ standalone: false, pin: kioskPin(), tab: 1, route: true, title: '서라벌여중 길 안내' }); return; }
     E.paused = true;
     var pin = pinFromPlayer();
     MV.show({ pin: pin, tab: pin ? pin.floor : 1 });
