@@ -30,6 +30,36 @@ window.SRB = SRB;
       im.src = 'assets/' + name + '.png';
     });
   };
+  /* ---------- 계절 (봄·여름·가을·겨울 그림) ---------- */
+  U.SEASONS = ['spring', 'summer', 'autumn', 'winter'];
+  U.SEASON_KO = { auto: '자동', spring: '봄', summer: '여름', autumn: '가을', winter: '겨울' };
+  U.SEASON_IMAGES = ['terrain', 'trees', 'school', 'school-ground', 'school-annex', 'school-gate-east', 'school-gate-north'];
+  var SEASON_KEY = 'srb.explore.season';
+  U.autoSeason = function (d) {           // 3~5월 봄, 6~8월 여름, 9~11월 가을, 12~2월 겨울
+    var m = (d || new Date()).getMonth() + 1;
+    return m >= 3 && m <= 5 ? 'spring' : m >= 6 && m <= 8 ? 'summer' : m >= 9 && m <= 11 ? 'autumn' : 'winter';
+  };
+  U.seasonChoice = function () {          // 'auto' or a season; ?season=winter wins for this visit
+    var q = /[?&]season=(\w+)/.exec(location.search);
+    if (q && U.SEASONS.indexOf(q[1]) >= 0) return q[1];
+    try { var v = localStorage.getItem(SEASON_KEY); if (v && (v === 'auto' || U.SEASONS.indexOf(v) >= 0)) return v; } catch (e) {}
+    return 'auto';
+  };
+  U.season = 'summer';
+  U.loadSeason = function (s) {
+    return Promise.all(U.SEASON_IMAGES.map(function (n) {
+      return U.images[n + '-' + s] ? U.images[n + '-' + s] : U.loadImage(n + '-' + s);
+    }));
+  };
+  // choice: 'auto' | season. Loads that season's pictures, then switches.
+  U.setSeason = function (choice, remember) {
+    if (remember) { try { localStorage.setItem(SEASON_KEY, choice); } catch (e) {} }
+    var s = choice === 'auto' ? U.autoSeason() : choice;
+    U.seasonPick = choice;
+    return U.loadSeason(s).then(function () { U.season = s; if (U.onSeason) U.onSeason(s); return s; });
+  };
+  U.img = function (name) { return U.images[name + '-' + U.season] || U.images[name]; };
+
   // 받침에 따라 조사 고르기 (은/는, 이/가, 을/를, 으로/로, 이에요/예요)
   U.josa = function (word, a, b) {
     for (var i = word.length - 1; i >= 0; i--) {

@@ -20,6 +20,7 @@ OUT = ROOT / 'components' / 'explore'
 sys.path.insert(0, str(ROOT / 'tools'))
 import school_art as SA  # noqa: E402
 import interior_art as IA  # noqa: E402
+import season_art as SEASON  # noqa: E402
 
 ASSETS = ['school.png', 'school-ground.png', 'school-annex.png', 'school-gate-east.png', 'school-gate-north.png',
           'school-fountain.png', 'school-hero.png', 'terrain.png', 'environment.png', 'furniture.png', 'facilities.png',
@@ -534,6 +535,7 @@ def build():
             shutil.copyfile(src, dst)
         sums[name] = hashlib.sha256(src.read_bytes()).hexdigest()
     write(adir / 'assets.json', {'source': 'components/rpg_game/assets (copied by tools/build_explore_data.py)', 'sha256': sums})
+    SEASON.build(adir)                     # 봄·여름·가을·겨울 그림 (<name>-<season>.png)
     return data, out_maps
 
 

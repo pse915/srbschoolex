@@ -23,7 +23,8 @@
   U.bridge('streamlit:componentReady', { apiVersion: 1 });
   frameHeight();
 
-  Promise.all([U.getJSON('data/places.json')].concat(IMAGES.map(U.loadImage))).then(function (r) {
+  var pick = U.seasonChoice();
+  Promise.all([U.getJSON('data/places.json'), U.setSeason(pick)].concat(IMAGES.map(U.loadImage))).then(function (r) {
     data = r[0];
     SRB.E.init(U.$('world'), U.$('mini'));
     SRB.MV.init(data);
@@ -31,7 +32,7 @@
     booted = true;
     if (mapOnly) openMapOnly();
     if (/[?&]setup\b/.test(location.search)) SRB.P.setup();      // 선생님: GitHub 기록 설정
-    window.__explore = { data: data, E: SRB.E, MV: SRB.MV, G: SRB.G };
+    window.__explore = { data: data, E: SRB.E, MV: SRB.MV, G: SRB.G, U: U };
   }).catch(function (err) {
     U.$('titleNote').textContent = '불러오지 못했어요: ' + err.message;
     console.error(err);

@@ -95,6 +95,7 @@
   };
   function byId(id) { for (var i = 0; i < D.places.length; i++) if (D.places[i].id === id) return D.places[i]; return null; }
   MV.byId = byId;
+  MV.redraw = function () { if (MV.open) render(); };
   function loop() { blink += 1; if ((MV.selected || MV.wing) && blink % 20 === 0) render(); raf = requestAnimationFrame(loop); }
 
   /* ---------- layout & drawing ---------- */
@@ -136,9 +137,10 @@
     setCanvas(bw * k, bh * k);
     var px = function (tx) { return (tx * 32 - X0) / sc * k; }, py = function (ty) { return (ty * 32 - Y0) / sc * k; };
     view = { kind: 'school', px: px, py: py, k: k };
-    ctx.fillStyle = '#8dab78'; ctx.fillRect(0, 0, cv.width, cv.height);
+    ctx.fillStyle = { spring: '#98bb82', summer: '#7fa36c', autumn: '#b2a872', winter: '#e3eaf1' }[U.season] || '#8dab78';
+    ctx.fillRect(0, 0, cv.width, cv.height);
     S.images.forEach(function (i) {
-      var im = U.images[i.image]; if (!im) return;
+      var im = U.img(i.image); if (!im) return;
       ctx.drawImage(im, Math.round(px(i.x)), Math.round(py(i.y)), Math.round(i.w / sc * k), Math.round(i.h / sc * k));
     });
     (S.labels || []).forEach(function (l) { tag(en() ? (l.text_en || l.text) : l.text, px(l.tile[0]), py(l.tile[1]), false); });

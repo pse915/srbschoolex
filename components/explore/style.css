@@ -77,6 +77,20 @@ button.go{border:0;min-height:0;cursor:pointer}
 .avatars canvas{width:48px;height:72px;display:block;margin:0 auto}
 @media (max-width:760px){.half h1,.half .h1{font-size:40px}.half small{font-size:16px}.go{font-size:19px;padding:12px 24px}.avatars button{width:48px;height:64px}.avatars canvas{width:36px;height:54px}}
 .note{color:var(--muted);font-size:14px;min-height:1em}
+/* 계절 고르기 (자동 / 봄 / 여름 / 가을 / 겨울) */
+.seasons{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-justify-content:center;justify-content:center;-webkit-flex-wrap:wrap;flex-wrap:wrap;margin:-12px 0 20px}
+.seasons button{min-height:36px;padding:4px 12px;margin:3px;font-size:15px;border-radius:18px;border-width:2px;box-shadow:none;opacity:.6}
+.seasons button.on{opacity:1;box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.ss-auto{border-color:#7c7189;color:#5a5068}.ss-auto.on{background:#7c7189;color:#fff}
+.ss-spring{border-color:#e48aa8;color:#b8476e}.ss-spring.on{background:#f3a9c0;color:#7a2346}
+.ss-summer{border-color:#3f8f4a;color:#2d6e37}.ss-summer.on{background:#3f8f4a;color:#fff}
+.ss-autumn{border-color:#d0762e;color:#a4521c}.ss-autumn.on{background:#e08a2c;color:#fff}
+.ss-winter{border-color:#7fa6c9;color:#3f6f99}.ss-winter.on{background:#cfe2f3;color:#2b5579}
+.half-play.season-spring{box-shadow:inset 0 10px 0 #f3a9c0}
+.half-play.season-summer{box-shadow:inset 0 10px 0 #5fae63}
+.half-play.season-autumn{box-shadow:inset 0 10px 0 #e08a2c}
+.half-play.season-winter{box-shadow:inset 0 10px 0 #b9d4ec}
+@media (max-width:760px){.seasons button{font-size:13px;padding:2px 9px;min-height:30px}}
 
 /* map view */
 .mapview{position:absolute;top:0;right:0;bottom:0;left:0;background:var(--cream);display:flex;flex-direction:column;z-index:20}

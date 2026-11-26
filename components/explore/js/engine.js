@@ -186,10 +186,14 @@
   function drawObject(o) {
     var x = Math.round(o.x * T - camera.x), y = Math.round(o.y * T - camera.y);
     if (o.image) {
-      var im = U.images[o.image]; if (!im) return;
+      var im = U.img(o.image); if (!im) return;
       if (o.src) ctx.drawImage(im, o.src[0], o.src[1], o.src[2], o.src[3], x, y, o.w, o.h);
       else ctx.drawImage(im, x, y, o.w, o.h);
       return;
+    }
+    if (o.asset === 0 || o.asset === 1) {            // trees: this season's leaves / blossoms / snow
+      var tr = U.images['trees-' + U.season];
+      if (tr) { var tw = tr.width / 2; ctx.drawImage(tr, o.asset * tw, 0, tw, tr.height, x, y, o.w, o.h); return; }
     }
     var a = atlas(o.asset); if (!a[0]) return;
     var cw = a[0].width / 4, ch = a[0].height / 4, j = a[1];
@@ -220,7 +224,7 @@
     camera.y = m.height * T <= H ? (m.height * T - H) / 2 : Math.max(0, Math.min(m.height * T - H, p.y - H * 0.55));
     camera.x = Math.round(camera.x); camera.y = Math.round(camera.y);
     ctx.fillStyle = '#263b3c'; ctx.fillRect(0, 0, W, H);
-    var terr = U.images.terrain, inter = U.images['interior-tiles'];
+    var terr = U.img('terrain'), inter = U.images['interior-tiles'];
     var x0 = Math.max(0, Math.floor(camera.x / T)), y0 = Math.max(0, Math.floor(camera.y / T));
     var x1 = Math.min(m.width, Math.ceil((camera.x + W) / T) + 1), y1 = Math.min(m.height, Math.ceil((camera.y + H) / T) + 1);
     for (var ty = y0; ty < y1; ty++) for (var tx = x0; tx < x1; tx++) {
@@ -262,6 +266,7 @@
     (m.people || []).forEach(function (n) {
       if (Math.abs(n.x * T - p.x) < 220 && Math.abs(n.y * T - p.y) < 180) label(n.name, n.x * T + 16, n.y * T - 26);
     });
+    if (m.kind === 'outside') weather(W, H);
     if (E.extraDraw) E.extraDraw(ctx, camera);
     drawMini();
   }
@@ -269,7 +274,8 @@
     var m = E.map, w = mini.width, h = mini.height;
     if (!miniBase) {
       miniBase = document.createElement('canvas'); miniBase.width = w; miniBase.height = h;
-      var o = miniBase.getContext('2d'), colors = m.minimapColors || {};
+      var o = miniBase.getContext('2d'), colors = m.minimapColors || {}, sc = m.kind === 'outside' && MINI[U.season];
+      if (sc) { var c2 = {}; for (var ck in colors) c2[ck] = colors[ck]; for (ck in sc) c2[ck] = sc[ck]; colors = c2; }
       o.fillStyle = '#536254'; o.fillRect(0, 0, w, h);
       var s = Math.min(w / m.width, h / m.height), ox = (w - m.width * s) / 2, oy = (h - m.height * s) / 2;
       for (var y = 0; y < m.height; y++) for (var x = 0; x < m.width; x++) {
@@ -285,8 +291,60 @@
     mctx.beginPath(); mctx.arc(miniBase.ox + E.player.x / T * miniBase.s, miniBase.oy + E.player.y / T * miniBase.s, 3.5, 0, 7);
     mctx.fill(); mctx.stroke();
   }
+  /* ---------- 계절 날씨: 봄 꽃잎, 여름 햇살, 가을 낙엽, 겨울 눈 (outdoors only) ---------- */
+  var MINI = {
+    spring: { w0: '#93b97c', s0: '#5d7a55' }, summer: { w0: '#6c9a5c', s0: '#3f5f3e' },
+    autumn: { w0: '#aca56c', s0: '#8a5a3a', w48: '#e2d3b0' }, winter: { w0: '#e6edf3', s0: '#b9c6cf', w48: '#eef2f6', w49: '#dfe5ea' }
+  };
+  var FALL = {
+    spring: { n: 34, c: ['#f7c4d4', '#fbd9e4', '#f3a9c0', '#fff'], vy: [14, 26], sway: 22, size: [2, 3] },
+    summer: { n: 14, c: ['rgba(255,250,200,0.9)', 'rgba(255,255,255,0.8)'], vy: [-5, 5], sway: 8, size: [1, 2], glint: true },
+    autumn: { n: 26, c: ['#c8502c', '#e08a2c', '#e6b83a', '#9b3f24'], vy: [18, 32], sway: 26, size: [2, 3] },
+    winter: { n: 70, c: ['#fff', '#f2f7ff', '#e6eefa'], vy: [16, 34], sway: 12, size: [1, 3] }
+  };
+  var flakes = [], flakeSeason = '', lastW = 0;
+  function seed(f, W, H, top) {
+    var sp = FALL[U.season];
+    f.x = Math.random() * W; f.y = top ? -4 : Math.random() * H;
+    f.vy = sp.vy[0] + Math.random() * (sp.vy[1] - sp.vy[0]); f.ph = Math.random() * 6.3;
+    f.s = sp.size[0] + Math.floor(Math.random() * (sp.size[1] - sp.size[0] + 1));
+    f.c = sp.c[Math.floor(Math.random() * sp.c.length)]; f.life = 2 + Math.random() * 3;
+    return f;
+  }
+  function weather(W, H) {
+    var sp = FALL[U.season]; if (!sp) return;
+    var n = Math.min(90, Math.round(sp.n * W * H / 160000));
+    if (flakeSeason !== U.season || lastW !== W) { flakes = []; flakeSeason = U.season; lastW = W; }
+    while (flakes.length < n) flakes.push(seed({}, W, H, false));
+    flakes.length = n;
+    var dt = E.weatherDt || 0.016, t = performance.now() / 1000;
+    for (var i = 0; i < flakes.length; i++) {
+      var f = flakes[i];
+      if (sp.glint) {                                  // summer: slow twinkling sunlight specks
+        f.life -= dt; f.y += f.vy * dt;
+        if (f.life <= 0) seed(f, W, H, false);
+        ctx.globalAlpha = Math.max(0, Math.sin(f.life * 1.6)) * 0.8;
+        ctx.fillStyle = f.c; ctx.fillRect(Math.round(f.x), Math.round(f.y), f.s, f.s);
+        if (f.s > 1) { ctx.fillRect(Math.round(f.x) - 1, Math.round(f.y) + 0.5, f.s + 2, 1); }
+        continue;
+      }
+      f.y += f.vy * dt; f.x += Math.sin(t * 1.3 + f.ph) * sp.sway * dt;
+      if (f.y > H + 4 || f.x < -6 || f.x > W + 6) seed(f, W, H, true);
+      ctx.fillStyle = f.c;
+      if (U.season === 'winter') ctx.fillRect(Math.round(f.x), Math.round(f.y), f.s, f.s);
+      else {                                           // petal / leaf: flips as it falls
+        var flip = Math.abs(Math.sin(t * 2.2 + f.ph));
+        ctx.fillRect(Math.round(f.x), Math.round(f.y), Math.max(1, Math.round(f.s * 1.5 * flip)), f.s);
+      }
+    }
+    ctx.globalAlpha = 1;
+    if (U.season === 'summer') { ctx.fillStyle = 'rgba(255,214,120,0.06)'; ctx.fillRect(0, 0, W, H); }
+    else if (U.season === 'winter') { ctx.fillStyle = 'rgba(200,220,255,0.07)'; ctx.fillRect(0, 0, W, H); }
+  }
+  E.seasonChanged = function () { miniBase = null; flakes = []; };
+
   function frame(t) {
-    var dt = Math.min(0.05, (t - last) / 1000 || 0); last = t;
+    var dt = Math.min(0.05, (t - last) / 1000 || 0); last = t; E.weatherDt = dt;
     if (!E.paused && !U.modalOpen()) step(dt);
     if (E.map && !E.hidden) draw();
     requestAnimationFrame(frame);

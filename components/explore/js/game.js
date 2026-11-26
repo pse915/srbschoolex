@@ -10,7 +10,8 @@
   G.init = function (data) {
     G.data = data; G.save = U.load();
     data.places.forEach(function (p) { places[p.id] = p; if (p.game) gamePlaces.push(p); });
-    buildAvatars();
+    buildAvatars(); buildSeasons();
+    U.onSeason = function () { E.seasonChanged(); MV.redraw(); markSeason(); };
     U.$('btnStart').onclick = G.start;
     U.$('btnTitleMap').onclick = function () { openMap(true); };
     U.$('titlePlay').onclick = function (e) {   // the rest of the left half also starts (buttons inside handle themselves)
@@ -63,6 +64,31 @@
     var bs = U.$('avatars').children;
     for (var i = 0; i < bs.length; i++) { bs[i].setAttribute('aria-checked', i === G.save.avatar ? 'true' : 'false'); bs[i].className = i === G.save.avatar ? 'on' : ''; }
   }
+  // 계절: 자동(오늘 날짜) / 봄 / 여름 / 가을 / 겨울 — this device remembers the choice
+  function buildSeasons() {
+    var box = U.$('seasons'); box.innerHTML = '';
+    ['auto'].concat(U.SEASONS).forEach(function (k) {
+      var b = U.el('button', { type: 'button', role: 'radio', 'data-season': k, 'class': 'ss-' + k },
+        k === 'auto' ? '자동(' + U.SEASON_KO[U.autoSeason()] + ')' : U.SEASON_KO[k]);
+      b.onclick = function (e) { if (e) e.stopPropagation(); pickSeason(k); };
+      box.appendChild(b);
+    });
+    markSeason();
+  }
+  function pickSeason(k) {
+    U.setSeason(k, true).then(null, function () { U.toast('계절 그림을 불러오지 못했어요.'); });
+    U.seasonPick = k; markSeason();
+  }
+  function markSeason() {
+    var bs = U.$('seasons').children, pick = U.seasonPick || 'auto';
+    for (var i = 0; i < bs.length; i++) {
+      var on = bs[i].getAttribute('data-season') === pick;
+      bs[i].setAttribute('aria-checked', on ? 'true' : 'false');
+      bs[i].className = 'ss-' + bs[i].getAttribute('data-season') + (on ? ' on' : '');
+    }
+    U.$('titlePlay').className = 'half half-play season-' + U.season;
+  }
+  G.pickSeason = pickSeason;
   function titleNote() {
     var n = Object.keys(G.save.cards).length;
     if (complete()) { U.$('titleNote').textContent = '장소를 모두 찾았어요! 눌러서 학번과 이름을 적어 주세요.'; return; }
@@ -265,6 +291,9 @@
     w.appendChild(U.el('p', null, '장소 카드 ' + Object.keys(G.save.cards).length + ' / ' + gamePlaces.length + ' · 이 기기에만 저장돼요(서버 저장 없음).'));
     U.modal('메뉴', w, [
       { label: '찾아가기 제한 시간: ' + (G.save.timer ? '켜짐' : '꺼짐'), keep: true, fn: function () { G.save.timer = !G.save.timer; U.save(G.save); menu(); } },
+      { label: '계절: ' + U.SEASON_KO[U.season] + (U.seasonPick === 'auto' ? '(자동)' : '') + ' → ' + U.SEASON_KO[U.SEASONS[(U.SEASONS.indexOf(U.season) + 1) % 4]], keep: true, fn: function () {
+        U.setSeason(U.SEASONS[(U.SEASONS.indexOf(U.season) + 1) % 4], true).then(menu);
+      } },
       { label: '중앙현관으로 돌아가기', fn: function () { var s = G.data.school.entrance; E.loadMap('school', [s.x, s.y + 2]); } },
       { label: '기록 지우기', fn: function () { U.modal('기록 지우기', '이 기기의 장소 카드와 최고 기록을 모두 지울까요?', [{ label: '지우기', fn: function () { U.clear(); G.save = U.load(); updateCount(); U.toast('기록을 지웠어요.'); } }, { label: '취소' }]); } },
       { label: '처음 화면', fn: G.toTitle },
