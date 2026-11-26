@@ -21,6 +21,11 @@ const KO={spring:'봄',summer:'여름',autumn:'가을',winter:'겨울'};
   await page.locator(`#seasons [data-season="${s}"]`).click();
   await page.waitForFunction(s=>__explore.U.season===s,s);
   assert.ok(await page.evaluate(()=>!document.getElementById('title').hidden),'chip click keeps the title');
+  // title: season line, scenery strip and falling fx, touches still reach the buttons
+  assert.match(await page.locator('#seasonLine').innerText(),new RegExp(KO[s]+' 교정'));
+  assert.ok(await page.evaluate(()=>__explore.U&&SRB.TF.running()),'title fx running');
+  await page.waitForTimeout(600);
+  await page.screenshot({path:`${OUT}/title-${s}.png`});
   if(s==='spring') await page.screenshot({path:`${OUT}/${n++}-title-season.png`});
   await page.locator('#btnStart').click();
   await page.waitForFunction(()=>__explore.E.map&&__explore.E.map.id==='school'&&!__explore.E.paused);
@@ -28,6 +33,7 @@ const KO={spring:'봄',summer:'여름',autumn:'가을',winter:'겨울'};
   const ok=await page.evaluate(s=>['terrain','trees','school','school-ground','school-annex'].every(k=>__explore.U.images[k+'-'+s]&&__explore.U.img(k==='trees'?'terrain':k)===__explore.U.images[(k==='trees'?'terrain':k)+'-'+s]),s);
   assert.ok(ok,'season images in use: '+s);
   await page.screenshot({path:`${OUT}/${n++}-season-${s}.png`});
+  assert.ok(await page.evaluate(()=>!SRB.TF.running()),'title fx stops during the game');
   await page.evaluate(()=>__explore.G.toTitle());
  }
  // remembered after reload; ?season= wins for one visit

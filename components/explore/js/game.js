@@ -11,7 +11,8 @@
     G.data = data; G.save = U.load();
     data.places.forEach(function (p) { places[p.id] = p; if (p.game) gamePlaces.push(p); });
     buildAvatars(); buildSeasons();
-    U.onSeason = function () { E.seasonChanged(); MV.redraw(); markSeason(); };
+    U.onSeason = function () { E.seasonChanged(); MV.redraw(); markSeason(); SRB.TF.redraw(); };
+    SRB.TF.init();
     U.$('btnStart').onclick = G.start;
     U.$('btnTitleMap').onclick = function () { openMap(true); };
     U.$('titlePlay').onclick = function (e) {   // the rest of the left half also starts (buttons inside handle themselves)
@@ -104,7 +105,7 @@
     });
   };
   G.toTitle = function () {
-    stopMission(); E.paused = true; U.$('play').hidden = true; U.$('title').hidden = false; titleNote(); markAvatar();
+    stopMission(); E.paused = true; U.$('play').hidden = true; U.$('title').hidden = false; titleNote(); markAvatar(); SRB.TF.start();
   };
 
   /* ---------- map events ---------- */

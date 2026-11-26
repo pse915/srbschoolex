@@ -41,11 +41,13 @@
         <div class="prize-badge">상품이 있습니다!</div>
         <small>장소 79곳을 모두 찾으면 선물을 드려요</small>
         <h1>서라벌<br>탐방하기</h1>
+        <p id="seasonLine" class="season-line"></p>
         <div id="avatars" class="avatars" role="radiogroup" aria-label="캐릭터 고르기"></div>
         <div id="seasons" class="seasons" role="radiogroup" aria-label="계절 고르기"></div>
         <button id="btnStart" class="go go-play" type="button">눌러서 시작</button>
         <p class="note" id="titleNote"></p>
       </div>
+      <canvas id="titleScene" class="title-scene" aria-hidden="true"></canvas>
     </div>
     <!-- 오른쪽 절반: 길 안내 -->
     <button id="btnTitleMap" class="half half-guide" type="button" aria-label="서라벌여중 길 안내">
@@ -56,6 +58,7 @@
         <span class="go go-guide">눌러서 찾기</span>
       </span>
     </button>
+    <canvas id="titleFx" class="title-fx" aria-hidden="true"></canvas>
   </section>
 
   <!-- 학교 전체 지도 -->
@@ -94,6 +97,7 @@
 <script src="js/prize.js"></script>
 <script src="js/engine.js"></script>
 <script src="js/mapview.js"></script>
+<script src="js/titlefx.js"></script>
 <script src="js/game.js"></script>
 <script src="js/main.js"></script>
 </body>
